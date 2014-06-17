@@ -1,41 +1,17 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title></title>
+		<title>SimpleJ</title>
 		<link type="text/css" rel="stylesheet" href="css/style.css" />
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/underscore.js"></script>
 		<script type="text/javascript" src="js/backbone.js"></script>
+		<script type="text/javascript" src="js/models/user.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 	</head>
 	<body>
 		<div id="block" class="block">
-
+			<h1>SimpleJ</h1>
 		</div>
-
-		<script type="text/template" id="start">
-			<div class="start">
-				<div class="userplace">
-					<label for="username">Имя пользователя: </label>
-					<input type="text" id="username"/>
-				</div>
-				<div class="buttonplace">
-					<input type="button" value="Проверить"/>
-				</div>
-			</div>
-		</script>
-
-		<script type="text/template" id="error">
-			<div class="error">
-				Ошибка. Пользователь <%= username %> не найден.
-				<a href="#!/">Go back</a>
-			</div>
-		</script>
-		<script type="text/template" id="success">
-			<div class="success">
-				Пользователь найден.
-				<a href="#!/">Go back</a>
-			</div>
-		</script>
 	</body>
 </html>
