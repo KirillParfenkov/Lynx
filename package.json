@@ -5,11 +5,8 @@
     "start": "server.js"
   },
   "version": "0.0.0-20",
-  "engines": {
-    "node": "0.6.x"
-  },
   "dependencies": {
-    "express": "2.5.x",
-    "connect": "2.2.x"
+    "express": "4.x",
+    "connect": "2.x"
   }
 }
