@@ -1,0 +1,10 @@
+{
+	"port": 80,
+	"database" : {
+		"uri" : "localhost",
+		"name" : "nodeDB",
+		"user" : "root",
+		"password" : "@erbnruqp",
+		"connectionLimit" : 10
+	}
+}

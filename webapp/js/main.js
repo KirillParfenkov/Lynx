@@ -33,25 +33,4 @@ require([
   Router.initialize({appView: appView});
   appView.render();
   Backbone.history.start();
-    var user = new User({ id: 4 });
-    //var userDetail = { id: 1 };
-    /*user.save({
-      success: function ( user ) {
-        console.log(user.toJSON());
-      } 
-    });*/
-    /*user.fetch({
-      success : function ( user ) {
-        console.log(user.toJSON());
-      },
-      faile: function () {
-        console.log('faile');
-      }
-    });*/
-
-    user.destroy({
-      success : function ( result ) {
-        console.log( result.toJSON );
-      }
-    });
 });

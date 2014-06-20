@@ -1,20 +1,31 @@
 var express = require('express');
 var connect = require('connect');
+var nconf = require('nconf');
+var mysql = require('mysql');
+var session = require('cookie-session')
+var bodyParser = require('body-parser');
+var serveStatic = require('serve-static');
 
-var corsOptions = {
-  origin: 'http://localhost'
-};
+nconf.argv()
+	.env()
+	.file({file: './config.json'});
 
-var app = express.createServer();
-
-
-app.configure(function() {
-    
-    app.use(express.cookieParser());
-    app.use(express.bodyParser());
-    app.use(connect.static('webapp'));
+var pool = mysql.createPool({
+	connectionLimit : nconf.get('database:connectionLimit'),
+	host : nconf.get('database:uri'),
+	database: nconf.get('database:name'),
+	user: nconf.get('database:user'),
+	password: nconf.get('database:password')
 });
 
-app.listen(8000);
+var app = express();
+app.use(session({
+	keys : ['secret1', 'secret2']
+}));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(serveStatic('webapp'));
 
-console.log('Server running at 8000 port');
+
+app.listen(nconf.get('port'), function() {
+	console.log('Server running at ' + nconf.get('port') + 'port');
+});
