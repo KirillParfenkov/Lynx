@@ -9,11 +9,3 @@ body {
 .page {
   margin: 10px 0 10px 0;
 }
-.submenu {
-  width: 200px;
-  float: left;
-}
-.content {
-  width: 460px;
-  float: left;
-}

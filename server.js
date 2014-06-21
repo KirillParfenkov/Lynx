@@ -38,7 +38,6 @@ var checkSession = function( req, res, next ) {
 	}
 
 	if ( !sessionExist && (publicUrls.indexOf(req.url) == -1) ) {
-		console.log('key: ' + req.session.sessionKey);
 		req.session.sessionKey = null;
 		res.redirect( 302, '/login.html');
 	} else {

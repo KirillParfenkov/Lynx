@@ -1,12 +1,11 @@
 {
-  "name": "cross-domain",
-  "subdomain": "cross-domain",
+  "name": "simpleJ",
   "scripts": {
     "start": "server.js"
   },
   "version": "0.0.0-20",
   "dependencies": {
-    "express": "4.x",
+    "express": "4.4.x",
     "connect": "3.x",
     "nconf" : "x",
     "mysql" : "2.x",

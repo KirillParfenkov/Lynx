@@ -1,8 +1,18 @@
 <div class="header">
-	<h1>Simple J</h1>
+	<div class="title">
+		<h1>Manatee</h1>
+	</div>
+	<div class="menu">
+		<ul>
+			<% _.each( tabs, function( tab ) { %>
+				<li><a href="<%= tab.link%>"><%= tab.label%></a></li>
+			<% });%>
+		</ul>
+	</div>
 </div>
 
 <div class="page">
-	Page!
+	<ul>
+
 </div>
 <div class="footer"></div>
