@@ -4,10 +4,11 @@ define([
   'backbone',
   'vm',
 	'events',
+  'libs/queue/queue',
   'models/session',
   'models/user',
   'text!templates/layout.html' 
-], function($, _, Backbone, Vm, Events, Session, User, layoutTemplate){
+], function($, _, Backbone, Vm, Events, Queue, Session, User, layoutTemplate){
   var AppView = Backbone.View.extend({
     el: '.container',
     template: layoutTemplate,
@@ -25,6 +26,15 @@ define([
       });
     },
     render: function () {
+      var queue = new Queue([
+        function(queue) {
+          console.log('f1!');
+          queue.next();
+        },
+        function(queue) {
+          console.log('f2!');
+        }]);
+      queue.start();
 			//var that = this;
       this.trigger('render');
 
