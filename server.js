@@ -73,3 +73,8 @@ app.post('/login', function (req, res) {
 	req.session.sessionKey = sessionKey;
 	res.redirect( 302, '/');
 });
+
+app.get('/view/:name', function(req, res) {
+	
+});
+

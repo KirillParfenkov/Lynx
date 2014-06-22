@@ -14,7 +14,8 @@ require.config({
 
     // Just a short cut so we can put our html outside the js dir
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
-    templates: '../templates'
+    templates: '../templates',
+    custom: '../custom'
   },
 	urlArgs: "bust=" +  (new Date()).getTime()
 
@@ -29,8 +30,16 @@ require([
   'vm',
   'models/user'
 ], function($, AppView, Router, Vm, User){
-  var appView = Vm.create({}, 'AppView', AppView);
-  Router.initialize({appView: appView});
-  appView.render();
+  var tabs = [{ name : 'home', 
+                label : 'Home', 
+                link: '#/link1', 
+                view: 'custom/views/home.js'},
+              { name : 'test1', 
+                label : 'Test 1', 
+                link: '#/link2',
+                view: 'custom/views/view1.js'}];
+  var appView = new AppView(); //Vm.create({}, 'AppView', AppView);
+  Router.initialize({appView: appView, tabs: tabs});
+  appView.render(tabs);
   Backbone.history.start();
 });

@@ -32,6 +32,7 @@ define([
 	
 	
   return {
-  	create: create
+  	create: create,
+  	views: views
   };
 });

@@ -14,40 +14,29 @@ define([
     template: layoutTemplate,
     tabs : [],
     initialize: function () {
-      //var that = this;
-      this.tabs = [{ name : 'home', label : 'Home', link: '#/link1'},
-            { name : 'test1', label : 'Test 1', link: '#/link2' },
-            { name : 'test2', label : 'Test 2', link: '#/link3'}];
-      this.on('loadData', function(){
-        this.renderWithData();
-      });
-      this.on('render', function() {
-        this.loadData();
-      });
+
     },
-    render: function () {
+    render: function ( tabs, callback ) {
+      var view = this;
       var queue = new Queue([
         function(queue) {
-          console.log('f1!');
+          view.loadData();
           queue.next();
         },
         function(queue) {
-          console.log('f2!');
+          view.renderWithData( tabs );
+          if ( callback ) {
+            callback();
+          }
         }]);
       queue.start();
-			//var that = this;
-      this.trigger('render');
-
 		},
 
     loadData : function () {
-      this.trigger('loadData');
     },
 
-    renderWithData : function () {
-
-      $(this.el).html(_.template(layoutTemplate, {tabs : this.tabs}));
-      this.trigger('finishRender');
+    renderWithData : function ( tabs ) {
+      $(this.el).html(_.template(layoutTemplate, {tabs : tabs}));
     }
 	});
   return AppView;
