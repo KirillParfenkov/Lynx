@@ -1,3 +1,19 @@
 <div>
-	User views
+	Users view
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>EMAIL</th>
+			<th>FIRST NAME</th>
+			<th>LAST NAME</th>
+		</tr>
+		<% _.each( users,  function( user ) { %>
+			<tr>
+				<td><%= user.id %></td>
+				<td><%= user.email %></td>
+				<td><%= user.firstName %></td>
+				<td><%= user.lastName %></td>
+			</tr>
+		<% });%>
+	</table>
 </div>

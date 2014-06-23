@@ -53,11 +53,6 @@ app.use(serveStatic('public'));
 app.use(checkSession);
 app.use(serveStatic('webapp'));
 
-
-app.listen(nconf.get('port'), function() {
-	console.log('Server running at ' + nconf.get('port') + ' port');
-});
-
 app.post('/login', function (req, res) {
 	var creds = req.body;
 	var len = 256;
@@ -74,7 +69,55 @@ app.post('/login', function (req, res) {
 	res.redirect( 302, '/');
 });
 
-app.get('/view/:name', function(req, res) {
-	
+var tabales = {};
+tabales['users'] = [{
+		id : 1,
+		firstName : 'Kiryl',
+		lastName : 'Parfiankou',
+		email : 'Kiryl_Parfiankou@gmail.com'
+	},
+	{
+		id : 2,
+		firstName : 'Bob',
+		lastName : 'Bobse',
+		email : 'Bob_Bobse@email.com'
+	},
+	{
+		id : 3,
+		firstName : 'Test',
+		lastName : 'Tests',
+		email : 'Test_test@gmail.com'
+	}
+];
+
+app.get('/api/:table', function(req, res) {
+	res.json( tabales[req.params.table] );
 });
 
+app.post('/api/:table', function(req, res) {
+
+});
+
+app.get('/api/:table/:id', function(req, res) {
+	var table = tabales[req.params.table];
+	var id = req.params.id;
+	for ( var i = 0 ; i < table.length; i++) {
+		if ( table[i].id == id ) {
+			res.json(table[i]);
+			return;
+		}
+	}
+	res.json(400, {error: 'Not Found'});
+});
+
+app.put('/api/:table/:id', function(req, res) {
+
+});
+
+app.delete('/api/:table/:id', function(req, res) {
+
+});
+
+app.listen(nconf.get('port'), function() {
+	console.log('Server running at ' + nconf.get('port') + ' port');
+});

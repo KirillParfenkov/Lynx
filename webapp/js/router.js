@@ -28,6 +28,11 @@ define([
         views.push( tabs[i].view );
       }
 
+      router.sideBar = new SetupSideBar();
+      this.setupViews['usersView'] = new UsersView();
+      this.setupViews['profilesView'] = new ProfilesView();
+      this.setupViews['tabsView'] = new TabsView();
+
       require( views , function() {
         var Views = arguments;
         var view;
@@ -40,11 +45,6 @@ define([
           callback();
         }
       });
-
-      router.sideBar = new SetupSideBar();
-      this.setupViews['usersView'] = new UsersView();
-      this.setupViews['profilesView'] = new ProfilesView();
-      this.setupViews['tabsView'] = new TabsView();
     },
 
     selectTab: function( tabName ) {
