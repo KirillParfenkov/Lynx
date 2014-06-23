@@ -32,11 +32,11 @@ require([
 ], function($, AppView, Router, Vm, User){
   var tabs = [{ name : 'home', 
                 label : 'Home', 
-                link: '#/link1', 
+                link: '#/tab/home', 
                 view: 'custom/views/home.js'},
               { name : 'test1', 
                 label : 'Test 1', 
-                link: '#/link2',
+                link: '#/tab/test1',
                 view: 'custom/views/view1.js'}];
   var appView = new AppView(); //Vm.create({}, 'AppView', AppView);
   Router.initialize({appView: appView, tabs: tabs});

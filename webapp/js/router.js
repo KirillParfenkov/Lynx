@@ -7,9 +7,9 @@ define([
 ], function ($, _, Backbone, Vm) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
+    tabViewMap : {},
     routes: {
-      '/link1' : 'test1',
-      '/link2' : 'this'
+      'tab/:tabName' : 'selectTab'
     },
 
     initialize : function (options) {
@@ -23,18 +23,19 @@ define([
       require( views , function() {
         console.log('views');
         console.log(arguments);
+
         var Views = arguments;
+        var view;
         for ( var i = 0; i < Views.length; i++ ) {
-          router.viewList.push( new (Views[i])());
+          view = new (Views[i])();
+          router.viewList.push( view );
+          router.tabViewMap[tabs[i].name] = view;
         }
       });
     },
 
-    test1: function() {
-      alert('test1');
-    },
-    test2: function() {
-      alert('test2');
+    selectTab: function( tabName ) {
+      this.tabViewMap[tabName].render();
     }
   }); 
 
