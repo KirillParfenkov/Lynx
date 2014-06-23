@@ -49,6 +49,7 @@ app.use(session({
 	keys : ['secret1', 'secret2']
 }));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(serveStatic('public'));
 app.use(checkSession);
 app.use(serveStatic('webapp'));
@@ -111,6 +112,16 @@ app.get('/api/:table/:id', function(req, res) {
 });
 
 app.put('/api/:table/:id', function(req, res) {
+	var table = tabales[req.params.table];
+	var id = req.params.id;
+	for ( var i = 0 ; i < table.length; i++) {
+		if ( table[i].id == id ) {
+			table[i] = req.body;
+			res.json(200, table[i]);
+			return;
+		}
+	}
+	res.json(400, {error: 'Not Found'});
 
 });
 

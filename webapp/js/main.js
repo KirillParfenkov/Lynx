@@ -47,6 +47,7 @@ require([
     },
     function(queue) {
       appView = new AppView();
+      appView.render(tabs);
       queue.next();
     },
     function(queue) {
@@ -56,7 +57,6 @@ require([
         });
     },
     function(queue) {
-      appView.render(tabs);
       Backbone.history.start();
     }]);
   queue.start();

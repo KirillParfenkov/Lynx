@@ -1,0 +1,30 @@
+<div>
+	Edit page
+	<h3><%= user.firstName%> <%= user.lastName%> (<%= user.email%>)</h3>
+	<form>
+		<table>
+			<tr>
+				<td>
+					<label for="userEmail">Email</label>
+					<input name="email" id="userEmail" type="email" value="<%= user.email%>">
+				</td>
+			</td>
+			<tr>
+				<td>
+					<label for="userFirstName">First Name</label>
+					<input name="firstName" id="userFirstName" type="text" value="<%= user.firstName%>">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="userLastName">Last Name</label>
+					<input name="lastName" id="userLastName" type="text" value="<%= user.lastName%>">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input class="saveButton" type="button" value="Save">
+				</td>
+			</tr>
+	</form>
+</div>
