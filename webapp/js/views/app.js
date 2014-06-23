@@ -14,7 +14,6 @@ define([
     template: layoutTemplate,
     tabs : [],
     initialize: function () {
-
     },
     render: function ( tabs, callback ) {
       var view = this;

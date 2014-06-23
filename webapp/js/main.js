@@ -28,9 +28,14 @@ require([
   'views/app',
   'router',
   'vm',
-  'models/user'
-], function($, AppView, Router, Vm, User){
-  var tabs = [{ name : 'home', 
+  'models/user',
+  'libs/queue/queue'
+], function($, AppView, Router, Vm, User, Queue){
+  var appView;
+  var tab;
+  var queue = new Queue([
+    function(queue) {
+       tabs = [{ name : 'home', 
                 label : 'Home', 
                 link: '#/tab/home', 
                 view: 'custom/views/home.js'},
@@ -38,8 +43,21 @@ require([
                 label : 'Test 1', 
                 link: '#/tab/test1',
                 view: 'custom/views/view1.js'}];
-  var appView = new AppView(); //Vm.create({}, 'AppView', AppView);
-  Router.initialize({appView: appView, tabs: tabs});
-  appView.render(tabs);
-  Backbone.history.start();
+      queue.next();
+    },
+    function(queue) {
+      appView = new AppView();
+      queue.next();
+    },
+    function(queue) {
+      Router.initialize({appView: appView, tabs: tabs},
+        function() {
+          queue.next();
+        });
+    },
+    function(queue) {
+      appView.render(tabs);
+      Backbone.history.start();
+    }]);
+  queue.start();
 });

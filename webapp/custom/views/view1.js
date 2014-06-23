@@ -7,11 +7,11 @@ define([
   'text!custom/templates/template1.html' 
 ], function ($, _, Backbone, Events, Queue, contentTemplate) {
 	var ContentView = Backbone.View.extend({
-		el : '.content',
+		elem : '.content',
 		template : contentTemplate,
 		render : function ( src, callback ) {
 			var view = this;
-			$(this.el).html(_.template(contentTemplate));
+			$(this.elem).html(_.template(contentTemplate));
 		}
 	});
 	return ContentView;
