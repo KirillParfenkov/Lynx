@@ -90,6 +90,7 @@ tabales['users'] = [{
 		email : 'Test_test@gmail.com'
 	}
 ];
+
 tabales['tabs'] = [
 	{
 		id : 0,
@@ -104,6 +105,25 @@ tabales['tabs'] = [
         label : 'Test 1', 
         link: '#/tab/test1',
         view: 'custom/views/view1.js'
+    }
+];
+
+tabales['profiles'] = [
+	{
+		id : 0,
+		name : 'System Administrator', 
+    },
+    {	
+    	id : 1,
+    	name : 'User', 
+    },
+        {	
+    	id : 2,
+    	name : 'Profile1', 
+    },
+    {	
+    	id : 3,
+    	name : 'Profile2', 
     }
 ];
 

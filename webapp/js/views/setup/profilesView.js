@@ -5,18 +5,39 @@ define([
   'events',
   'libs/queue/queue',
   'models/session',
-  'models/user',
+  'models/profile',
+  'collections/profiles',
   'text!templates/setup/profilesView.html' 
-], function ($, _, Backbone, Events, Queue, Session, User, profilesViewTemplate) {
-	var UsersView = Backbone.View.extend({
+], function ($, _, Backbone, Events, Queue, Session, Profile, Profiles, profilesViewTemplate) {
+	var ProfilesView = Backbone.View.extend({
 		elem : '.content',
     initialize: function () {
       //this.el = '.sideBar';
     },
 		render : function ( src, callback ) {
-			var view = this;
-      $(view.elem).html(_.template(profilesViewTemplate), {});
+      var view = this;
+      var profiles = null;
+      var queue = new Queue([
+        function(queue) {
+            profiles = new Profiles();
+            profiles.fetch({
+              success : function () {
+                queue.next();
+              },
+              error : function() {
+                console.log('error!');
+                queue.next();
+              }
+            });
+        },
+        function(queue) {
+          $(view.elem).html(_.template(profilesViewTemplate, {profiles: profiles.toJSON()}));
+          if ( callback ) {
+            callback();
+          }
+        }]);
+      queue.start();
 		}
 	});
-	return UsersView;
+	return ProfilesView;
 });
