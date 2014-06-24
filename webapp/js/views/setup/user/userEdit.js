@@ -9,20 +9,17 @@ define([
   'collections/users',
   'text!templates/setup/user/userEdit.html'
 ], function ($, _, Backbone, Events, Queue, Session, User, Usres, userEditTemplate) {
-	var UsersView = Backbone.View.extend({
+	var UserEdit = Backbone.View.extend({
 		el : '.content',
     events: {
-      'click .saveButton' : 'save'
+      'click .userSaveButton' : 'save'
     },
     user : null,
     initialize: function () {
-      this.users = new Usres();
     },
 		render : function ( src, callback ) {
       var view = this;
       var user = new User( {id: src.id} );
-      console.log(this.el);
-      console.log( $('.content'));
       user.fetch( {
         success: function ( user ) {
           view.user = user;
@@ -42,11 +39,10 @@ define([
       }, 
       {
         success: function (user) {
-          console.log(user.toJSON());
           window.location.hash = '/setup/usersView';
         }
       });
     }
 	});
-	return UsersView;
+	return UserEdit;
 });

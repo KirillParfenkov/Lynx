@@ -1,0 +1,36 @@
+<div>
+	Edit tab
+	<h3><%= tab.name%></h3>
+	<form>
+		<table>
+			<tr>
+				<td>
+					<label for="tabName">Name</label>
+					<input name="name" id="tabName" type="text" value="<%= tab.name %>">
+				</td>
+			</td>
+			<tr>
+				<td>
+					<label for="tabLabel">Label</label>
+					<input name="label" id="tabLabel" type="text" value="<%= tab.label %>">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="tabLink">Link</label>
+					<input name="link" id="tabLink" type="text" value="<%= tab.link %>">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="tabView">View</label>
+					<input name="view" id="tabView" type="text" value="<%= tab.view %>">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input class="tabSaveButton" type="button" value="Save">
+				</td>
+			</tr>
+	</form>
+</div>

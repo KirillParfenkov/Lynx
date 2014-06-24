@@ -9,7 +9,7 @@ define([
   'collections/users',
   'text!templates/setup/user/userView.html'
 ], function ($, _, Backbone, Events, Queue, Session, User, Usres, userViewTemplate) {
-	var UsersView = Backbone.View.extend({
+	var UserView = Backbone.View.extend({
 		el : '.content',
     user : null,
     initialize: function () {
@@ -27,5 +27,5 @@ define([
       });
 		}
 	});
-	return UsersView;
+	return UserView;
 });

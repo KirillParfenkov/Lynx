@@ -72,23 +72,39 @@ app.post('/login', function (req, res) {
 
 var tabales = {};
 tabales['users'] = [{
-		id : 1,
+		id : 0,
 		firstName : 'Kiryl',
 		lastName : 'Parfiankou',
 		email : 'Kiryl_Parfiankou@gmail.com'
 	},
 	{
-		id : 2,
+		id : 1,
 		firstName : 'Bob',
 		lastName : 'Bobse',
 		email : 'Bob_Bobse@email.com'
 	},
 	{
-		id : 3,
+		id : 2,
 		firstName : 'Test',
 		lastName : 'Tests',
 		email : 'Test_test@gmail.com'
 	}
+];
+tabales['tabs'] = [
+	{
+		id : 0,
+		name : 'home', 
+    	label : 'Home', 
+        link: '#/tab/home', 
+        view: 'custom/views/home.js'
+    },
+    {	
+    	id : 1,
+    	name : 'test1', 
+        label : 'Test 1', 
+        link: '#/tab/test1',
+        view: 'custom/views/view1.js'
+    }
 ];
 
 app.get('/api/:table', function(req, res) {
@@ -96,7 +112,11 @@ app.get('/api/:table', function(req, res) {
 });
 
 app.post('/api/:table', function(req, res) {
-
+	var table =  tabales[req.params.table];
+	var item = req.body;
+	item.id = table.length;
+	table.push( item );
+	res.json(200, item);
 });
 
 app.get('/api/:table/:id', function(req, res) {
