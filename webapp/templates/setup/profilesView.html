@@ -4,11 +4,13 @@
 		<tr>
 			<th>ID</th>
 			<th>NAME</th>
+			<th>ACTION</th>
 		</tr>
 		<% _.each( profiles,  function( profile ) { %>
 			<tr>
 				<td><%= profile.id %></td>
-				<td><%= profile.name %></td>
+				<td><%= profile.label %></td>
+				<td><a href='#/setup/profileView/<%=profile.id%>'>View</a> <a href='#/setup/profileEdit/<%=profile.id%>'>Edit</a></td>
 			</tr>
 		<% });%>
 	</table>

@@ -75,19 +75,22 @@ tabales['users'] = [{
 		id : 0,
 		firstName : 'Kiryl',
 		lastName : 'Parfiankou',
-		email : 'Kiryl_Parfiankou@gmail.com'
+		email : 'Kiryl_Parfiankou@gmail.com',
+		profile : 0
 	},
 	{
 		id : 1,
 		firstName : 'Bob',
 		lastName : 'Bobse',
-		email : 'Bob_Bobse@email.com'
+		email : 'Bob_Bobse@email.com',
+		profile : 1
 	},
 	{
 		id : 2,
 		firstName : 'Test',
 		lastName : 'Tests',
-		email : 'Test_test@gmail.com'
+		email : 'Test_test@gmail.com',
+		profile : 3
 	}
 ];
 
@@ -111,19 +114,31 @@ tabales['tabs'] = [
 tabales['profiles'] = [
 	{
 		id : 0,
-		name : 'System Administrator', 
+		name : 'SystemAdministrator',
+		label : 'System Administrator',
+		admin : true,
+		tabs : [ 0, 1 ]
     },
     {	
     	id : 1,
-    	name : 'User', 
+    	name : 'User',
+    	label : 'User',
+    	admin : false,
+    	tabs : [ 0 ]
     },
         {	
     	id : 2,
     	name : 'Profile1', 
+    	label : 'Profile 1',
+    	admin : false,
+    	tabs : [ 0 ]
     },
     {	
     	id : 3,
-    	name : 'Profile2', 
+    	name : 'Profile2',
+    	label : 'Profile 2',
+    	admin : true,
+    	tabs : [ 0, 1 ]
     }
 ];
 

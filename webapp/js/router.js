@@ -11,8 +11,10 @@ define([
   'views/setup/user/userEdit',
   'views/setup/user/userView',
   'views/setup/tab/tabEdit',
-  'views/setup/tab/tabView'
-], function ($, _, Backbone, Vm, SetupSideBar, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView) {
+  'views/setup/tab/tabView',
+  'views/setup/profile/profileEdit',
+  'views/setup/profile/profileView'
+], function ($, _, Backbone, Vm, SetupSideBar, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
@@ -41,6 +43,8 @@ define([
       this.setupViews['userView'] = new UserView();
       this.setupViews['tabEdit'] = new TabEdit();
       this.setupViews['tabView'] = new TabView();
+      this.setupViews['profileEdit'] = new ProfileEdit();
+      this.setupViews['profileView'] = new ProfileView();
 
       require( views , function() {
         var Views = arguments;

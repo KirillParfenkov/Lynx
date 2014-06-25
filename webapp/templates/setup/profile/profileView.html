@@ -1,3 +1,19 @@
 <div>
-	Profile View
+	<div>
+		Administrator : <%= profile.admin %>
+	</div>
+	<div>
+		<table>
+			<tr>
+				<th>NAME</th>
+				<th>VISIBLE</th>
+			</tr>
+			<% _.each( tabList, function( tab ) { %>
+				<tr>
+					<td><%= tab.label %></td>
+					<td><%= tab.visible %></td>
+				</tr>
+			<%	}); %>
+		</table>
+	</div>
 </div>
