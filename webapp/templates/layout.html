@@ -1,12 +1,11 @@
 <div class="header">
-	<div class="title">
-		<h1>Manatee</h1>
-		<a href="#/setup" >Setup</a>
+	<div class="page-header">
+  		<h1>lynx <small><a href="#/setup"><span class="glyphicon glyphicon-th-list"></span></a></small></h1>
 	</div>
 	<div class="menu">
-		<ul>
+		<ul id="tabMenu" class="nav nav-pills">
 			<% _.each( tabs, function( tab ) { %>
-				<li><a href="<%= tab.link%>"><%= tab.label%></a></li>
+				<li value="<%= tab.name %>"><a href="<%= tab.link%>"><%= tab.label%></a></li>
 			<% });%>
 		</ul>
 	</div>

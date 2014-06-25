@@ -63,6 +63,8 @@ define([
     selectTab: function( tabName ) {
       this.clearSetupSideBar();
       this.tabViewMap[tabName].render();
+      $( '#tabMenu' ).find('li').removeClass( 'active' );
+      $( '#tabMenu' ).find( 'li[value=' + tabName + ']' ).addClass('active');
     },
 
     selectSetup: function() {

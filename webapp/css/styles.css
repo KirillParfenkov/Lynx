@@ -8,3 +8,7 @@
 @import url("theme.css");
 @import url("menus.css");
 @import url("layout.css");
+
+/* bootstrap*/
+@import url("bootstrap.min.css");
+@import url("bootstrap-theme.css");
