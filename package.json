@@ -11,6 +11,7 @@
     "mysql" : "2.x",
     "cookie-session" : "1.x",
     "body-parser": "1.4.x",
-    "serve-static" : "1.x"
+    "serve-static" : "1.x",
+    "mc" : "1.x"
   }
 }

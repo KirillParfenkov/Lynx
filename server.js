@@ -6,6 +6,7 @@ var session = require('cookie-session')
 var bodyParser = require('body-parser');
 var serveStatic = require('serve-static');
 var crypto = require('crypto');
+var mc = require('mc');
 
 nconf.argv()
 	.env()
@@ -17,6 +18,11 @@ var pool = mysql.createPool({
 	database: nconf.get('database:name'),
 	user: nconf.get('database:user'),
 	password: nconf.get('database:password')
+});
+
+var client = new mc.Client('localhost', mc.Adapter.json);
+client.connect( function( err ) {
+	console.log('memchashed! port 11211');
 });
 
 var tabales = {};
