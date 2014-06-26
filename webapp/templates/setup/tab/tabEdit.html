@@ -1,36 +1,34 @@
 <div>
-	Edit tab
-	<h3><%= tab.name%></h3>
-	<form>
-		<table>
-			<tr>
-				<td>
-					<label for="tabName">Name</label>
-					<input name="name" id="tabName" type="text" value="<%= tab.name %>">
-				</td>
-			</td>
-			<tr>
-				<td>
-					<label for="tabLabel">Label</label>
-					<input name="label" id="tabLabel" type="text" value="<%= tab.label %>">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="tabLink">Link</label>
-					<input name="link" id="tabLink" type="text" value="<%= tab.link %>">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="tabView">View</label>
-					<input name="view" id="tabView" type="text" value="<%= tab.view %>">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<input class="tabSaveButton" type="button" value="Save">
-				</td>
-			</tr>
+	<h3 class="col-sm-offset-1">Tab: <%= tab.name%></h3>
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<label for="tabName" class="col-sm-2 control-label">Name</label>
+			<div class="col-sm-5">
+				<input name="name" class="form-control" id="tabName" type="text" value="<%= tab.name %>">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="tabLabel" class="col-sm-2 control-label">Label</label>
+			<div class="col-sm-5">	
+				<input name="label" class="form-control" id="tabLabel" type="text" value="<%= tab.label %>">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="tabLink" class="col-sm-2 control-label">Link</label>
+			<div class="col-sm-5">
+				<input name="link" class="form-control" id="tabLink" type="text" value="<%= tab.link %>">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="tabView" class="col-sm-2 control-label">View</label>
+			<div class="col-sm-5">
+				<input name="view" class="form-control" id="tabView" type="text" value="<%= tab.view %>">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-5">
+				<input class="tabSaveButton" type="button" value="Save">
+			</div>
+		</div>
 	</form>
 </div>

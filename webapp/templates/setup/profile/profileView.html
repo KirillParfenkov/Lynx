@@ -3,15 +3,15 @@
 		Administrator : <%= profile.admin %>
 	</div>
 	<div>
-		<table>
+		<table class="table table-hover">
 			<tr>
 				<th>NAME</th>
 				<th>VISIBLE</th>
 			</tr>
 			<% _.each( tabList, function( tab ) { %>
-				<tr>
+				<tr class="<% if ( tab.visible ) { %> success  <% } else { %>danger<% } %>" >
 					<td><%= tab.label %></td>
-					<td><%= tab.visible %></td>
+					<td class="col-sm-2"><%= tab.visible %></td>
 				</tr>
 			<%	}); %>
 		</table>

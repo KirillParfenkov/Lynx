@@ -4,15 +4,26 @@ body {
 }
 .container {
   margin: auto;
-  width: 400px; 
+
 }
 .page {
-  display: box;
-  display: -webkit-box;
-  box-orient: horizontal;
-  -webkit-box-orient: horizontal;
+  margin-top: 20px;
+  padding-top: 20px;
+  position: relative;
 }
 
 .sideBar {
-	margin-right: 20px; 
+  position: absolute;
+  width: 150px;
+  left: -200px;
+  top: 32px;
+}
+
+.content {
+  left: 200px;
+  top: 0;
+}
+
+.toolbar {
+  margin-bottom: 10px;
 }

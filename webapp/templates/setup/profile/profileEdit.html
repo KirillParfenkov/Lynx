@@ -1,9 +1,7 @@
 <div>
+	<h3><%= profile.label %></h3>
 	<div>
-		<%= profile.label %>
-	</div>
-	<div>
-		<table>
+		<table class="table table-hover ">
 			<tr>
 				<th>NAME</th>
 				<th>VISIBLE</th>
@@ -11,14 +9,12 @@
 			<% _.each( tabList, function( tab ) { %>
 				<tr>
 					<td><%= tab.label %></td>
-					<td><input name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>></td>
+					<td class="col-sm-2">
+							<input name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>>
+					</td>
 				</tr>
 			<%	}); %>
-			<tr>
-				<td>
-					<input class="profileSaveButton" type="button" value="Save">
-				</td>
-			</tr>
 		</table>
+		<button class="profileSaveButton btn btn-default" type="button">Save</button>
 	</div>
 </div>
