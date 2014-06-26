@@ -164,6 +164,16 @@ app.post('/login', function (req, res) {
 	} 
 });
 
+app.get('/logout', function(req, res) {
+	var sessionKey = req.session.sessionKey;
+	for( var i = 0; i < sessions.length; ++i ) {
+		if ( sessions[i].id == req.session.sessionKey ) {
+			sessions.splice(i, 1);
+			break;
+		}
+	}
+	res.redirect( 302, '/');
+});
 
 app.get('/visibleTabs', function(req, res) {
 
