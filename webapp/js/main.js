@@ -29,21 +29,20 @@ require([
   'router',
   'vm',
   'models/user',
-  'libs/queue/queue'
-], function($, AppView, Router, Vm, User, Queue){
+  'libs/queue/queue',
+  'collections/visibleTabs'
+], function($, AppView, Router, Vm, User, Queue, VisibleTabs){
   var appView;
   var tab;
   var queue = new Queue([
     function(queue) {
-       tabs = [{ name : 'home', 
-                label : 'Home', 
-                link: '#/tab/home', 
-                view: 'custom/views/home.js'},
-              { name : 'test1', 
-                label : 'Test 1', 
-                link: '#/tab/test1',
-                view: 'custom/views/view1.js'}];
-      queue.next();
+      tabs = new VisibleTabs();
+      tabs.fetch({
+        success : function() {
+          tabs = tabs.toJSON();
+          queue.next();
+        }
+      });
     },
     function(queue) {
       appView = new AppView();

@@ -85,7 +85,7 @@ define([
       var profile = this.profile;
       var tabs = [];
       $('input:checkbox[name=tabs]:checked').each(function( ) {
-        tabs.push($(this).val());
+        tabs.push( parseInt($(this).val()) );
       });
       profile.save({
         tabs : tabs
