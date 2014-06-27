@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 var serveStatic = require('serve-static');
 var crypto = require('crypto');
 var mc = require('mc');
+var DataLoader = require('./modules/data-loader');
+
+var dataLoader = new DataLoader('./config.json');
 
 nconf.argv()
 	.env()
