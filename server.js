@@ -15,14 +15,6 @@ nconf.argv()
 	.env()
 	.file({file: './config.json'});
 
-var pool = mysql.createPool({
-	connectionLimit : nconf.get('database:connectionLimit'),
-	host : nconf.get('database:uri'),
-	database: nconf.get('database:name'),
-	user: nconf.get('database:user'),
-	password: nconf.get('database:password')
-});
-
 var client = new mc.Client('localhost', mc.Adapter.json);
 client.connect( function( err ) {
 	console.log('memchashed! port 11211');
@@ -30,38 +22,38 @@ client.connect( function( err ) {
 
 var tabales = {};
 tabales['users'] = [{
-		id : 0,
+		id : 1,
 		firstName : 'Kiryl',
 		lastName : 'Parfiankou',
 		email : 'Kiryl_Parfiankou@gmail.com',
-		profile : 0
-	},
-	{
-		id : 1,
-		firstName : 'Bob',
-		lastName : 'Bobse',
-		email : 'Bob_Bobse@email.com',
 		profile : 1
 	},
 	{
 		id : 2,
+		firstName : 'Bob',
+		lastName : 'Bobse',
+		email : 'Bob_Bobse@email.com',
+		profile : 2
+	},
+	{
+		id : 3,
 		firstName : 'Test',
 		lastName : 'Tests',
 		email : 'Test_test@gmail.com',
-		profile : 3
+		profile : 4
 	}
 ];
 
 tabales['tabs'] = [
 	{
-		id : 0,
+		id : 1,
 		name : 'home', 
     	label : 'Home', 
         link: '#/tab/home', 
         view: 'custom/views/home.js'
     },
     {	
-    	id : 1,
+    	id : 2,
     	name : 'test1', 
         label : 'Test 1', 
         link: '#/tab/test1',
@@ -71,32 +63,32 @@ tabales['tabs'] = [
 
 tabales['profiles'] = [
 	{
-		id : 0,
+		id : 1,
 		name : 'SystemAdministrator',
 		label : 'System Administrator',
 		admin : true,
-		tabs : [ 0, 1 ]
+		tabs : [ 1, 2 ]
     },
     {	
-    	id : 1,
+    	id : 2,
     	name : 'User',
     	label : 'User',
     	admin : false,
-    	tabs : [ 0 ]
+    	tabs : [ 1 ]
     },
         {	
-    	id : 2,
+    	id : 3,
     	name : 'Profile1', 
     	label : 'Profile 1',
     	admin : false,
-    	tabs : [ 0 ]
+    	tabs : [ 1 ]
     },
     {	
-    	id : 3,
+    	id : 4,
     	name : 'Profile2',
     	label : 'Profile 2',
     	admin : true,
-    	tabs : [ 0, 1 ]
+    	tabs : [ 1, 2 ]
     }
 ];
 
@@ -223,41 +215,46 @@ app.get('/visibleTabs', function(req, res) {
 });
 
 app.get('/api/:table', function(req, res) {
-	res.json( tabales[req.params.table] );
+	dataLoader.getObjects( req.params.table, function( err, rows) {
+		if (err) {
+			res.json( 400, { error: 'SQL error' });
+		} else {
+			res.json( 200, rows );
+		}
+	});
 });
 
 app.post('/api/:table', function(req, res) {
-	var table =  tabales[req.params.table];
-	var item = req.body;
-	item.id = table.length;
-	table.push( item );
-	res.json(200, item);
+	var row = req.body;
+	dataLoader.postObject( req.params.table, req.body, function( err, result ) {
+		if (err) {
+			res.json(400, {error: 'SQL error'});
+		} else {
+			//will be changed
+			row.id = result.insertId;
+			res.json( 200, row );
+		}
+	});
 });
 
 app.get('/api/:table/:id', function(req, res) {
-	var table = tabales[req.params.table];
-	var id = req.params.id;
-	for ( var i = 0 ; i < table.length; i++) {
-		if ( table[i].id == id ) {
-			res.json(table[i]);
-			return;
+	dataLoader.getObject( req.params.table, req.params.id, function( err, row, fields) {
+		if (err) {
+			res.json( 400, { error: 'SQL error' });
+		} else {
+			res.json( 200, row);
 		}
-	}
-	res.json(400, {error: 'Not Found'});
+	});
 });
 
 app.put('/api/:table/:id', function(req, res) {
-	var table = tabales[req.params.table];
-	var id = req.params.id;
-	for ( var i = 0 ; i < table.length; i++) {
-		if ( table[i].id == id ) {
-			table[i] = req.body;
-			res.json(200, table[i]);
-			return;
+	dataLoader.putObject( req.params.table, req.body, req.params.id, function( err, row ) {
+		if ( err ) {
+			res.json( 400, {error: 'SQL error'} );
+		} else {
+			res.json( 200, row );
 		}
-	}
-	res.json(400, {error: 'Not Found'});
-
+	});
 });
 
 app.delete('/api/:table/:id', function(req, res) {
