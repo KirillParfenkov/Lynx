@@ -8,6 +8,7 @@ var DataLoader = function( configFile ) {
 	var postRequest = 'INSERT INTO ?? SET ?';
 	var updateRequest = 'UPDATE ?? SET ? WHERE id = ?';
 	var deleteRequest = 'DELETE FROM ?? WHERE id = ?';
+	var userTable = 'users';
 
 	nconf.argv()
 		.env()
@@ -71,6 +72,18 @@ var DataLoader = function( configFile ) {
 			}
 		});
 	}
-} 
+
+	this.getVisibleTabs = function ( profileId, callback ) {
+		this.pool.query( 'SELECT tabs.id, tabs.name, tabs.label, tabs.view ' +
+			              'FROM tabProfileLinks JOIN tabs ' +
+			              'WHERE profileId = ? AND tabId = tabs.id', [profileId], function( err, results, fields) {
+			if (err) {
+				callback( err );
+			} else {
+				callback( err, results );
+			}
+		});
+	}
+}
 
 module.exports = DataLoader;

@@ -74,21 +74,30 @@ tabales['profiles'] = [
     	name : 'User',
     	label : 'User',
     	admin : false,
-    	tabs : [ 1 ]
+    	tabs : {
+    		table: 'tabs',
+    		links: [1]
+    	}
     },
         {	
     	id : 3,
     	name : 'Profile1', 
     	label : 'Profile 1',
     	admin : false,
-    	tabs : [ 1 ]
+    	tabs : {
+    		table: 'tabs',
+    		links: [1]
+    	}
     },
     {	
     	id : 4,
     	name : 'Profile2',
     	label : 'Profile 2',
     	admin : true,
-    	tabs : [ 1, 2 ]
+    	tabs : {
+    		table: 'tabs',
+    		links: [1, 2]
+    	}
     }
 ];
 
@@ -151,7 +160,7 @@ app.post('/login', function (req, res) {
 			isCredNotReady = false;
 		}
 	}
-		sessions.push({id : sessionKey, userId: loginUser.id});
+		sessions.push({id : sessionKey, user: loginUser});
 		req.session.sessionKey = sessionKey;
 		res.redirect( 302, '/');
 	} else {
@@ -172,46 +181,24 @@ app.get('/logout', function(req, res) {
 
 app.get('/visibleTabs', function(req, res) {
 
-	var tabs = tabales['tabs'];
-	var users = tabales['users'];
-	var profiles = tabales['profiles'];
 	var sessionKey = req.session.sessionKey;
-	var userId;
 	var user;
-	var profile;
-
-	for ( var i = 0; i < sessions.length; ++i ) {
-		if ( sessions[i].id == sessionKey ) {
-			userId = sessions[i].userId;
-			break;
-		}
-	}
 
 	//serch user
-
-	for( var i = 0; i < users.length; ++i ) {
-		if ( users[i].id == userId ) {
-			user = users[i];
+	for ( var i = 0; i < sessions.length; ++i ) {
+		if ( sessions[i].id == sessionKey ) {
+			user = sessions[i].user;
 			break;
 		}
 	}
 
-	for( var i = 0; i < profiles.length; ++i) {
-		if ( profiles[i].id == user.profile) {
-			profile = profiles[i];
-			break;
+	dataLoader.getVisibleTabs( user.profile, function( err, tabs ) {
+		if ( err ) {
+			res.json( 400, { error: 'SQL error' } );
+		} else {
+			res.json( 200, tabs );
 		}
-	}
-
-	var tabsForView = [];
-
-	for ( i = 0; i < tabs.length; ++i) {
-		if ( profile.tabs.indexOf(tabs[i].id) != -1) {
-			tabsForView.push( tabs[i] );
-		}
-	}
-
-	res.send( 200, tabsForView );
+	});
 });
 
 app.get('/api/:table', function(req, res) {
