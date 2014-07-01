@@ -31,6 +31,7 @@ define([
             });
         },
         function(queue) {
+          console.log( profiles.toJSON() );
           $(view.elem).html(_.template(profilesViewTemplate, {profiles: profiles.toJSON()}));
           if ( callback ) {
             callback();

@@ -10,6 +10,9 @@ var mc = require('mc');
 var DataLoader = require('./modules/data-loader');
 
 var dataLoader = new DataLoader('./config.json');
+dataLoader.initialize(function( err ) {
+	console.log('dataLoader is ready!');
+});
 
 nconf.argv()
 	.env()
@@ -42,63 +45,6 @@ tabales['users'] = [{
 		email : 'Test_test@gmail.com',
 		profile : 4
 	}
-];
-
-tabales['tabs'] = [
-	{
-		id : 1,
-		name : 'home', 
-    	label : 'Home', 
-        link: '#/tab/home', 
-        view: 'custom/views/home.js'
-    },
-    {	
-    	id : 2,
-    	name : 'test1', 
-        label : 'Test 1', 
-        link: '#/tab/test1',
-        view: 'custom/views/view1.js'
-    }
-];
-
-tabales['profiles'] = [
-	{
-		id : 1,
-		name : 'SystemAdministrator',
-		label : 'System Administrator',
-		admin : true,
-		tabs : [ 1, 2 ]
-    },
-    {	
-    	id : 2,
-    	name : 'User',
-    	label : 'User',
-    	admin : false,
-    	tabs : {
-    		table: 'tabs',
-    		links: [1]
-    	}
-    },
-        {	
-    	id : 3,
-    	name : 'Profile1', 
-    	label : 'Profile 1',
-    	admin : false,
-    	tabs : {
-    		table: 'tabs',
-    		links: [1]
-    	}
-    },
-    {	
-    	id : 4,
-    	name : 'Profile2',
-    	label : 'Profile 2',
-    	admin : true,
-    	tabs : {
-    		table: 'tabs',
-    		links: [1, 2]
-    	}
-    }
 ];
 
 var sessions = [];
@@ -206,6 +152,8 @@ app.get('/api/:table', function(req, res) {
 		if (err) {
 			res.json( 400, { error: 'SQL error' });
 		} else {
+			console.log('rows --> ');
+			console.log(rows);
 			res.json( 200, rows );
 		}
 	});

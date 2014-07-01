@@ -21,6 +21,8 @@ define([
         function ( queue ) {
           profile.fetch( {
             success: function ( profile ) {
+              console.log('2:');
+              console.log( profile.toJSON() );
               queue.next();
             },
             error: function () {

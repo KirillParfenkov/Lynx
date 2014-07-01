@@ -40,6 +40,8 @@ require([
       tabs.fetch({
         success : function() {
           tabs = tabs.toJSON();
+          console.log( 'tabs' );
+          console.log( tabs );
           queue.next();
         }
       });
