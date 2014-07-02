@@ -409,6 +409,14 @@ var DataLoader = function( configFile ) {
 			}
 		});
 	}
+
+	this.loadFile = function ( table, id, data, callback ) {
+		var file = {
+			parentId : id,
+			table : table,
+			file : data
+		}
+	}
 }
 
 module.exports = DataLoader;

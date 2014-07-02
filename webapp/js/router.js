@@ -87,7 +87,11 @@ define([
     },
     selectView: function( name, id ) {
       viewLoader.load( name, function( view ) {
-        view.render();
+        var src;
+        if ( id ) {
+          src = { id: id };
+        }
+        view.render( src );
       });
     }
   }); 

@@ -16,7 +16,7 @@ define([
 
         var name = viewnName;
         while ( name.indexOf('.') != -1 ) {
-          name.replace('.', '/');
+          name = name.replace('.', '/');
         }
 
         var path = this.basePath + name;

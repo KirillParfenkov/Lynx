@@ -8,6 +8,10 @@ var serveStatic = require('serve-static');
 var crypto = require('crypto');
 var mc = require('mc');
 var DataLoader = require('./modules/data-loader');
+var url = require('url');
+var formidable = require('formidable');
+var multiparty = require('connect-multiparty');
+var fs = require('fs');
 
 var dataLoader = new DataLoader('./config.json');
 dataLoader.initialize(function( err ) {
@@ -192,6 +196,24 @@ app.put('/api/:table/:id', function(req, res) {
 
 app.delete('/api/:table/:id', function(req, res) {
 
+});
+
+app.post('/image/:table/:id', multiparty(), function(req, res) {
+	console.log('files:');
+	console.log( req.files );
+	fs.readFile( req.files.image.path, function( err,  loadData) {
+		if (err) throw err;
+		var newPath = __dirname + "/uploads/" + req.files.image.originalFilename;
+		fs.writeFile( newPath, loadData, function( err ){
+			if (err) throw err;
+			console.log( 'table: ' + req.params.table );
+			console.log( 'id: ' + req.params.id );
+			dataLoader.loadFile( req.params.table, req.params.id, loadData, function( err ) {
+				if (err) throw err;
+				res.redirect( 302, req.query.ref);	
+			});
+		});
+	});
 });
 
 app.listen(nconf.get('port'), function() {

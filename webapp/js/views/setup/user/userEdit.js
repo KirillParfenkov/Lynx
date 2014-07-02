@@ -32,7 +32,7 @@ define([
 
     save : function () {
       var user = this.user;
-      user.save({  
+      user.save({
         email : $('#userEmail').val(),
         firstName : $('#userFirstName').val(),
         lastName : $('#userLastName').val()

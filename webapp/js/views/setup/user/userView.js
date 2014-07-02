@@ -23,6 +23,7 @@ define([
           $(view.el).html(_.template(userViewTemplate, {user: user.toJSON()}));
         },
         error: function () {
+          console.log('error!');
         }
       });
 		}
