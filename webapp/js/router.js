@@ -4,6 +4,7 @@ define([
   'underscore',
   'backbone',
 	'vm',
+  'moduls/view-loader',
   'views/setup/setupSideBar',
   'views/setup/usersView',
   'views/setup/profilesView',
@@ -14,7 +15,7 @@ define([
   'views/setup/tab/tabView',
   'views/setup/profile/profileEdit',
   'views/setup/profile/profileView'
-], function ($, _, Backbone, Vm, SetupSideBar, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
+], function ($, _, Backbone, Vm, viewLoader, SetupSideBar, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
@@ -24,7 +25,9 @@ define([
       'tab/:tabName' : 'selectTab',
       'setup' : 'selectSetup',
       'setup/:itemName' : 'selectSetupView',
-      'setup/:itemName/:id' : 'selectSetupViewItem'
+      'setup/:itemName/:id' : 'selectSetupViewItem',
+      'view/:name' : 'selectView',
+      'view/:name/:id' : 'selectView'
     },
 
     initialize : function (options, callback) {
@@ -81,6 +84,11 @@ define([
 
     clearSetupSideBar: function() {
       $('.sideBar').html('');
+    },
+    selectView: function( name, id ) {
+      viewLoader.load( name, function( view ) {
+        view.render();
+      });
     }
   }); 
 
