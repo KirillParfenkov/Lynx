@@ -152,8 +152,6 @@ app.get('/api/:table', function(req, res) {
 		if (err) {
 			res.json( 400, { error: 'SQL error' });
 		} else {
-			console.log('rows --> ');
-			console.log(rows);
 			res.json( 200, rows );
 		}
 	});

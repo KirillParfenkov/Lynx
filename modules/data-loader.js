@@ -174,13 +174,83 @@ var DataLoader = function( configFile ) {
 		}
 	}
 
-	this.postOjbect = function( table, object, callback ) {
-		this.pool.query(postRequest, [table, object], function (err, result) {
-			if (err) {
-				callback( err );
-			} else {
-				callback( err, result );
+	this.postObject = function( table, object, callback ) {
+
+		var loader = this;
+		var listForAdd = {};
+		var relationshipList = relationshipsMap[table];
+
+		async.waterfall([
+			function addRelatedObjects( next ) {
+				if ( !relationshipList ) {
+					next( null );
+					return;
+				}
+				for( var j = 0; j < relationshipList.length; ++j ) {
+					var field = relationshipList[j].field;
+					listForAdd[field] = object[field].slice(0);;
+				}
+
+				callList = [];
+				var fields = [];
+				for( var j = 0; j < relationshipList.length; ++j ) {
+					fields.push( { name : relationshipList[j].field,
+						              r : relationshipList[j] });
+
+					callList.push( function( nextStep ) {
+						var fieldObj = fields.pop();
+						if ( listForAdd[fieldObj.name].length > 0 ) {
+							var relatedObjects = [];
+							for ( var i = 0; i < listForAdd[fieldObj.name].length; ++i ) {
+								var obj = {};
+								obj[fieldObj.r.parentIdField] = id;
+								obj[fieldObj.r.childrenIdField] = listForAdd[fieldObj.name][i];
+								relatedObjects.push( obj );
+							}
+							var relatedObjectsArr = [];
+							for ( var i = 0; i < relatedObjects.length; ++i) {
+								var tmpArray = [];
+								for ( var fieldName in relatedObjects[i] ) {
+									tmpArray.push( relatedObjects[i][fieldName]);
+								}
+								relatedObjectsArr.push( tmpArray );
+							}
+							loader.pool.query('INSERT INTO ?? (??, ??) VALUES ? ', [ fieldObj.r.linkingTable, 
+											                                         fieldObj.r.parentIdField, 
+											                                         fieldObj.r.childrenIdField, 
+											                                         relatedObjectsArr ], 
+								function( err, result ) {
+									if (err) throw err;
+									nextStep( null );
+							});
+						} else {
+							nextStep( null );
+						}
+					});
+				}
+
+				async.waterfall( callList, function ( err ) {
+					if (err) throw err;
+					next( null );
+				});
+			},
+			function addObject ( next ) {
+				var objectForUpdate = {};
+				for ( var fieldName in object ) {
+					if ( !Array.isArray(object[fieldName]) ) {
+						objectForUpdate[fieldName] = object[fieldName];
+					}
+				}
+				loader.pool.query( postRequest, [table, objectForUpdate], function( err, result ) {
+					if (err) throw err;
+					next( null, result );
+				});
+					
 			}
+		], function( err, result ) {
+			if (err) throw err;
+			object.id = result.id;
+			callback( err, object );
 		});
 	}
 
@@ -229,7 +299,7 @@ var DataLoader = function( configFile ) {
 					}
 					next( null, listFroDel, listForAdd );
 				},
-				function addRemove( listFroDel, listForAdd, next ) {
+				function addRemoveRelatedObjects( listFroDel, listForAdd, next ) {
 					var relationshipList = relationshipsMap[table];
 					if ( !relationshipList ) {
 						next( null );
@@ -299,10 +369,10 @@ var DataLoader = function( configFile ) {
 						next( null );
 					});
 				},
-				function( next ) {
+				function addObject ( next ) {
 					var objectForUpdate = {};
 					for ( var fieldName in object ) {
-						if ( !object[fieldName].length ) {
+						if ( !Array.isArray(object[fieldName]) ) {
 							objectForUpdate[fieldName] = object[fieldName];
 						}
 					}
