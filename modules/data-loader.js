@@ -189,7 +189,6 @@ var DataLoader = function( configFile ) {
 		var loader = this;
 		var listForAdd = {};
 		var listFroDel = {};
-		console.log('putObject');
 
 			async.waterfall([
 				function loadRelatedTables ( next ) {
@@ -216,13 +215,10 @@ var DataLoader = function( configFile ) {
 						var field = relationshipList[j].field;
 						listForAdd[field] = object[field].slice(0);;
 						listFroDel[field] = [];
-						console.log('relIds[id]');
-						console.log( relIds );
 						var relIds = relatedIdsMap[field];
 						if ( relIds[ id ] ) {
 							for ( var i = 0; i < relIds[id].length; ++i ) {
 								var index = object[field].indexOf( relIds[id][i] );
-								console.log('index: ' + index);
 								if (  index == -1 ) {
 									listFroDel[field].push( relIds[id][i] );
 								} else {
@@ -230,8 +226,6 @@ var DataLoader = function( configFile ) {
 								}
 							}
 						}
-						console.log( listFroDel[field] );
-						console.log( listForAdd[field] );
 					}
 					next( null, listFroDel, listForAdd );
 				},
@@ -249,13 +243,8 @@ var DataLoader = function( configFile ) {
 
 						callList.push( function( callback ) {
 							var fieldObj = fields.pop();
-							console.log('field: ');
-							console.log( fieldObj );
-							console.log('Fields: ');
-							console.log( fields );
 							async.waterfall([
 								function remove ( nextStep ) {
-									console.log('remove step');
 									if ( listFroDel[fieldObj.name].length > 0 ) {
 										loader.pool.query('DELETE FROM ?? WHERE ?? = ? AND ?? IN (?)', [ fieldObj.r.linkingTable, 
 								                                                           			 fieldObj.r.parentIdField, 
@@ -271,9 +260,6 @@ var DataLoader = function( configFile ) {
 									}
 								},
 								function add( nextStep ) {
-									console.log('add step');
-									console.log('field 2: ');
-									console.log( fieldObj );
 									if ( listForAdd[fieldObj.name].length > 0 ) {
 										var relatedObjects = [];
 										for ( var i = 0; i < listForAdd[fieldObj.name].length; ++i ) {
@@ -282,7 +268,6 @@ var DataLoader = function( configFile ) {
 											obj[fieldObj.r.childrenIdField] = listForAdd[fieldObj.name][i];
 											relatedObjects.push( obj );
 										}
-										console.log('query array:');
 										var relatedObjectsArr = [];
 										for ( var i = 0; i < relatedObjects.length; ++i) {
 											var tmpArray = [];
@@ -291,7 +276,6 @@ var DataLoader = function( configFile ) {
 											}
 											relatedObjectsArr.push( tmpArray );
 										}
-										console.log( relatedObjectsArr );
 										loader.pool.query('INSERT INTO ?? (??, ??) VALUES ? ', [ fieldObj.r.linkingTable, 
 											                                                 fieldObj.r.parentIdField, 
 											                                                 fieldObj.r.childrenIdField, 
@@ -301,7 +285,6 @@ var DataLoader = function( configFile ) {
 											nextStep( null );
 										});
 									} else {
-										console.log('add else');
 										nextStep( null );
 									}
 								}
@@ -312,7 +295,6 @@ var DataLoader = function( configFile ) {
 					}
 
 					async.waterfall( callList, function ( err ) {
-						console.log('final!');
 						if (err) throw err;
 						next( null );
 					});
@@ -320,11 +302,6 @@ var DataLoader = function( configFile ) {
 				function( next ) {
 					var objectForUpdate = {};
 					for ( var fieldName in object ) {
-						console.log('fieldName: ');
-						console.log( fieldName );
-						console.log( object[fieldName] );
-						console.log( object[fieldName].length );
-						console.log( !object[fieldName].length );
 						if ( !object[fieldName].length ) {
 							objectForUpdate[fieldName] = object[fieldName];
 						}
@@ -337,7 +314,6 @@ var DataLoader = function( configFile ) {
 				}
 			], function( err, result ) {
 				if (err) throw err;
-				console.log( object );
 				mainCallback( err, object );
 			});
 	}
@@ -347,8 +323,6 @@ var DataLoader = function( configFile ) {
 			if ( err ) {
 				callback( err );
 			} else {
-				console.log('result');
-				console.log(result);
 				callback( err, result );
 			}
 		});
