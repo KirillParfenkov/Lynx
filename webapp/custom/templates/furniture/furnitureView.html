@@ -19,21 +19,23 @@
 				</form>
 			</div>
 		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">Images</div>
-			<div class="panel-body">
-				<% _.each( pictures,  function( picture ) { %>
-					<div class="media">
-						<a class="pull-left" href="#">
-							<img class="media-object img-thumbnail" src="<%= picture.path %>" alt="<%= picture.name %>" >
-						</a>
-						<div class="media-body">
-							<h4 class="media-heading"><%= picture.name %></h4>
-							<%= picture.name %>
+		<% if ( pictures.length > 0 ) { %>
+			<div class="panel panel-default">
+				<div class="panel-heading">Images</div>
+				<div class="panel-body">
+					<% _.each( pictures, function( picture ) { %>
+						<div class="media">
+							<a class="pull-left" href="#">
+								<img class="media-object img-thumbnail" src="<%= picture.path %>" alt="<%= picture.name %>" >
+							</a>
+							<div class="media-body">
+								<h4 class="media-heading"><%= picture.name %></h4>
+								<%= picture.name %>
+							</div>
 						</div>
-					</div>
-				<% });%>
+					<% });%>
+				</div>
 			</div>
-		</div>
+		<% } %>
 	<% }%>
 </div>

@@ -28,22 +28,24 @@ define([
 						var picturesForLoad = [];
                 		var picturesForView = [];
                 		var callList = [];
-                		for ( var i = 0; i < furnitureVar.pictures.length; ++i ) {
-		                   	var picture = new Picture({id : furnitureVar.pictures[i]});
-		                    picturesForLoad.push( picture );
-		                    callList.push( function( back ) {
-		                    	var picVar = picturesForLoad.pop();
-		                    	picVar.fetch({
-		                        	success : function( result ) {
-		                        		//picturesForView.push( result.toJSON() );
-		                        		back( null, result.toJSON() );
-		                        	},
-		                        	error : function( err ) {
-		                          		back( err );
-		                        	}
-		                    	});
-		                	});
-		                }
+                		if ( furnitureVar.pictures ) {
+	                		for ( var i = 0; i < furnitureVar.pictures.length; ++i ) {
+			                   	var picture = new Picture({id : furnitureVar.pictures[i]});
+			                    picturesForLoad.push( picture );
+			                    callList.push( function( back ) {
+			                    	var picVar = picturesForLoad.pop();
+			                    	picVar.fetch({
+			                        	success : function( result ) {
+			                        		//picturesForView.push( result.toJSON() );
+			                        		back( null, result.toJSON() );
+			                        	},
+			                        	error : function( err ) {
+			                          		back( err );
+			                        	}
+			                    	});
+			                	});
+			                }
+			            }
 		                async.parallel( callList, function( err, results ) {
 		                	if (err) throw err;
 		                	$(view.el).html(_.template(contentTemplate, {furniture: furnitureVar, pictures: results}));
@@ -72,6 +74,10 @@ define([
 				type : 'POST',
 				success : function( file ) {
 					var pictures = view.furniture.get('pictures');
+					if ( !pictures ) {
+						pictures = [];
+					}
+					pictures.push( file.id );
 					view.furniture.save({ pictures : pictures },
 						{
 							success: function( newFurniture ) {
