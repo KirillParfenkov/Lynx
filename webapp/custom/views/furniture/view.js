@@ -13,6 +13,9 @@ define([
 		el : '.content',
 		template : contentTemplate,
 		furniture : null,
+		events : {
+			'click .furnitureAddImage' : 'saveImage'
+		},
 		render : function ( src, callback ) {
 			var view = this;
 
@@ -23,9 +26,9 @@ define([
 						view.furniture = result;
 						var furnitureVar = result.toJSON();
 						var picturesForLoad = [];
-                  		var picturesForView = [];
-                  		var callList = [];
-                  		for ( var i = 0; i < furnitureVar.pictures.length; ++i ) {
+                		var picturesForView = [];
+                		var callList = [];
+                		for ( var i = 0; i < furnitureVar.pictures.length; ++i ) {
 		                   	var picture = new Picture({id : furnitureVar.pictures[i]});
 		                    picturesForLoad.push( picture );
 		                    callList.push( function( back ) {
@@ -44,7 +47,7 @@ define([
 		                async.parallel( callList, function( err, results ) {
 		                	if (err) throw err;
 		                	$(view.el).html(_.template(contentTemplate, {furniture: furnitureVar, pictures: results}));
-		                });	
+		                });
 					},
 					error : function() {
 						console.log('error!');
@@ -52,6 +55,39 @@ define([
 				});
 			}
 		},
+
+		saveImage : function( e ) {
+			var view = this;
+			var formData = new FormData($('#addImageForm')[0]);
+			/*
+				xhr : function() {
+					var myXhr = $.ajaxSettings.xhr();
+					if ( myXhr.upload ) {
+						//myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
+					}
+				}
+			*/
+			$.ajax({
+				url : '/file/furnitures/' + view.furniture.id,
+				type : 'POST',
+				success : function( file ) {
+					var pictures = view.furniture.get('pictures');
+					view.furniture.save({ pictures : pictures },
+						{
+							success: function( newFurniture ) {
+								view.render({ id : newFurniture.id });
+							},
+							error : function() {
+								console.log('error!');
+							}
+						});
+				},
+				data : formData,
+				cache : false,
+				contentType : false,
+				processData : false
+			});
+		}
 	});
 	return ContentView;
 });

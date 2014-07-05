@@ -53,7 +53,6 @@ var DataLoader = function( configFile ) {
 				} else {
 					callback();
 				}
-
 	};
 
 	this.initialize = function( callback ) {
@@ -249,7 +248,7 @@ var DataLoader = function( configFile ) {
 			}
 		], function( err, result ) {
 			if (err) throw err;
-			object.id = result.id;
+			object.id = result.insertId;
 			callback( err, object );
 		});
 	}
@@ -272,7 +271,6 @@ var DataLoader = function( configFile ) {
 								relatedIdsMap[field] = loader.generateIdsMap( relatedTabales[field], relationshipList[j]);
 							}
 						}
-						
 						next( null, relatedIdsMap );
 					});
 				},
@@ -283,7 +281,7 @@ var DataLoader = function( configFile ) {
 						return;}
 					for( var j = 0; j < relationshipList.length; ++j ) {
 						var field = relationshipList[j].field;
-						listForAdd[field] = object[field].slice(0);;
+						listForAdd[field] = object[field].slice(0);
 						listFroDel[field] = [];
 						var relIds = relatedIdsMap[field];
 						if ( relIds[ id ] ) {
@@ -292,7 +290,7 @@ var DataLoader = function( configFile ) {
 								if (  index == -1 ) {
 									listFroDel[field].push( relIds[id][i] );
 								} else {
-									listForAdd[field].splice( index, 1 );
+									listForAdd[field].splice( listForAdd[field].indexOf( relIds[id][i] ), 1 );
 								}
 							}
 						}

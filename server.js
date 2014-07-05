@@ -226,7 +226,7 @@ app.post('/file/:table/:id', multiparty(), function(req, res) {
 					file.path = table + '/' + id + '/' + result.id;
 					async.parallel([
 						function( back ) {
-							dataLoader.putObject( 'files', file, id, function( err, result ) {
+							dataLoader.putObject( 'files', file, result.id, function( err, result ) {
 								if (err) throw err;
 								back();
 							});
