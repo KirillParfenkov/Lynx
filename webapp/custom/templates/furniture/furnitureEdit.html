@@ -1,31 +1,20 @@
 <div>
-	<h3 class="col-sm-offset-1">Furniture: <%= furniture.label%></h3>
-	<form class="form-horizontal" role="form">
-		<div class="form-group">
-			<label for="furnitureLabel" class="col-sm-2 control-label">Label</label>
-			<div class="col-sm-5">
-				<input name="label" class="form-control" id="furnitureLabel" type="text" value="<%= furniture.label %>">
-			</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Furniture: <%= furniture.label %></div>
+		<div class="panel-body">
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<label for="furnitureLabel" class="col-sm-2 control-label">Label</label>
+					<div class="col-sm-5">
+						<input name="label" class="form-control" id="furnitureLabel" type="text" value="<%= furniture.label %>">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-5">
+						<input class="furnitureSaveButton" type="button" value="Save">
+					</div>
+				</div>
+			</form>
 		</div>
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-5">
-				<input class="furnitureSaveButton" type="button" value="Save">
-			</div>
-		</div>
-	</form>
-	<% if (furniture.id) { %> 
-		<h3 class="col-sm-offset-1">Image Loder</h3>
-		<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="/image/furnitures/<%= furniture.id%>?ref=/%23/view/furniture.edit/<%= furniture.id%>">
-			<div class="col-sm-offset-2" >
-  				<div class="form-group">
-    				<label for="imageFile">Image</label>
-    				<input name="image" type="file" id="imageFile">
-    				<p class="help-block">Image for object.</p>
-  				</div>
-  			</div>
-  			<div class="col-sm-offset-2">
-				<button type="submit" class="btn btn-default">Save Image</button>
-			</div>
-		</form>
-	<% }%>
+	</div>
 </div>

@@ -7,6 +7,7 @@ require.config({
     underscore: 'libs/underscore/underscore', // https://github.com/amdjs
     backbone: 'libs/backbone/backbone', // https://github.com/amdjs
     sinon: 'libs/sinon/sinon.js',
+    async: 'libs/async/async',
 
     // Require.js plugins
     text: 'libs/require/text',

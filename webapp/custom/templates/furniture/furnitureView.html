@@ -1,4 +1,40 @@
 <div>
 	<h3><%= furniture.label %></h3>
-	<div>Content place</div>
+	<div>Content place <%= furniture.id %> </div>
+	<% if (furniture.id) { %> 
+		<div class="panel panel-default">
+			<div class="panel-heading">Image Loder</div>
+			<div class="panel-body">
+				<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" 
+				      action="/file/furnitures/<%= furniture.id%>?ref=/%23/view/furniture.view/<%= furniture.id%>">
+					<div class="col-sm-offset-2" >
+							<div class="form-group">
+							<label for="imageFile">Image</label>
+							<input name="image" type="file" id="imageFile">
+							<p class="help-block">Image for object.</p>
+						</div>
+					</div>
+					<div class="col-sm-offset-2">
+						<button type="submit" class="btn btn-default">Add Image</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Images</div>
+			<div class="panel-body">
+				<% _.each( pictures,  function( picture ) { %>
+					<div class="media">
+						<a class="pull-left" href="#">
+							<img class="media-object img-thumbnail" src="<%= picture.path %>" alt="<%= picture.name %>" >
+						</a>
+						<div class="media-body">
+							<h4 class="media-heading"><%= picture.name %></h4>
+							<%= picture.name %>
+						</div>
+					</div>
+				<% });%>
+			</div>
+		</div>
+	<% }%>
 </div>

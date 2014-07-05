@@ -12,6 +12,9 @@ var url = require('url');
 var formidable = require('formidable');
 var multiparty = require('connect-multiparty');
 var fs = require('fs');
+var mkpath = require('mkpath');
+var path = require('path');
+var async = require('async');
 
 var dataLoader = new DataLoader('./config.json');
 dataLoader.initialize(function( err ) {
@@ -85,6 +88,7 @@ app.use(bodyParser.json());
 app.use(serveStatic('public'));
 app.use(checkSession);
 app.use(serveStatic('webapp'));
+app.use(serveStatic('files'));
 
 app.post('/login', function (req, res) {
 
@@ -198,20 +202,54 @@ app.delete('/api/:table/:id', function(req, res) {
 
 });
 
-app.post('/image/:table/:id', multiparty(), function(req, res) {
-	console.log('files:');
-	console.log( req.files );
+app.post('/file/:table/:id', multiparty(), function(req, res) {
+
+	var table = req.params.table;
+	var id = req.params.id;
+	var fileName = req.files.image.originalFilename;
+	var ref = req.query.ref;
+
 	fs.readFile( req.files.image.path, function( err,  loadData) {
+
 		if (err) throw err;
-		var newPath = __dirname + "/uploads/" + req.files.image.originalFilename;
-		fs.writeFile( newPath, loadData, function( err ){
-			if (err) throw err;
-			console.log( 'table: ' + req.params.table );
-			console.log( 'id: ' + req.params.id );
-			dataLoader.loadFile( req.params.table, req.params.id, loadData, function( err ) {
-				if (err) throw err;
-				res.redirect( 302, req.query.ref);	
+		var newPath = __dirname + "/files/" + table + '/' + id;
+		mkpath( newPath, function( err ) {
+			var file = {
+				name : fileName
+			}
+
+			dataLoader.postObject( 'files', file, function( err, result ) {
+				if (err) {
+					res.json( 400, {error: 'SQL error'});
+				} else {
+					file.id = result.id;
+					file.path = table + '/' + id + '/' + result.id;
+					async.parallel([
+						function( back ) {
+							dataLoader.putObject( 'files', file, id, function( err, result ) {
+								if (err) throw err;
+								back();
+							});
+						},
+						function( back ) {
+							fs.writeFile( newPath + '/' + result.id, loadData, function( err ){
+								if (err) throw err;
+								back();
+							});
+						}
+					], function( err, results ) {
+						if (err) throw err;
+						if ( ref ) {
+							res.redirect( 302, ref );
+							return;
+						}
+						res.send( 200, file );
+					});
+				}
 			});
+
+			if (err) throw err;
+
 		});
 	});
 });

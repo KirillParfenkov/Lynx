@@ -15,6 +15,7 @@
     "mc" : "1.x",
     "async" : "x",
     "formidable" : "1.x",
-    "connect-multiparty" : "1.0.5"
+    "connect-multiparty" : "1.0.5",
+    "mkpath" : "x"
   }
 }
