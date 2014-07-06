@@ -12,7 +12,7 @@
 	<div class="menu">
 		<ul id="tabMenu" class="nav nav-pills">
 			<% _.each( tabs, function( tab ) { %>
-				<li value="<%= tab.name %>"><a href="<%= tab.link%>"><%= tab.label%></a></li>
+				<li value="<%= tab.name %>"><a class="tabLink__sys" href="<%= tab.link %>"><%= tab.label %></a></li>
 			<% });%>
 		</ul>
 	</div>

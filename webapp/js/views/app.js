@@ -11,6 +11,9 @@ define([
 ], function($, _, Backbone, Vm, Events, Queue, Session, User, layoutTemplate){
   var AppView = Backbone.View.extend({
     el: '.container',
+    events : {
+      'click .tabLink__sys' : 'selectTab'
+    },
     template: layoutTemplate,
     tabs : [],
     initialize: function () {
@@ -32,6 +35,13 @@ define([
 		},
 
     loadData : function () {
+    },
+
+    selectTab : function ( e ) {
+      $('.sideBar').html('');
+      $( '#tabMenu' ).find('li').removeClass( 'active' );
+      console.log( e.currentTarget.parent );
+      $(e.currentTarget).parent().addClass('active');
     },
 
     renderWithData : function ( tabs ) {

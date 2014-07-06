@@ -49,25 +49,7 @@ define([
       this.setupViews['profileEdit'] = new ProfileEdit();
       this.setupViews['profileView'] = new ProfileView();
 
-      require( views , function() {
-        var Views = arguments;
-        var view;
-        for ( var i = 0; i < Views.length; i++ ) {
-          view = new (Views[i])();
-          router.viewList.push( view );
-          router.tabViewMap[tabs[i].name] = view;
-        }
-        if ( callback ) {
-          callback();
-        }
-      });
-    },
-
-    selectTab: function( tabName ) {
-      this.clearSetupSideBar();
-      this.tabViewMap[tabName].render();
-      $( '#tabMenu' ).find('li').removeClass( 'active' );
-      $( '#tabMenu' ).find( 'li[value=' + tabName + ']' ).addClass('active');
+      callback();
     },
 
     selectSetup: function() {
@@ -85,6 +67,7 @@ define([
     clearSetupSideBar: function() {
       $('.sideBar').html('');
     },
+
     selectView: function( name, id ) {
       viewLoader.load( name, function( view ) {
         var src;
