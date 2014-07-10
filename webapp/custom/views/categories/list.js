@@ -3,139 +3,171 @@ define([
   'underscore',
   'backbone',
   'events',
-  'models/furniture',
-  'collections/furnitures',
+  'async',
+  'models/category',
+  'collections/categories',
   'text!custom/templates/categories/categoriesList.html',
-], function ($, _, Backbone, Events, Furniture, Furnitures, contentTemplate) {
+], function ($, _, Backbone, Events, Async, Category, Categories, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		ui : {},
 		template : contentTemplate,
 		render : function ( src, callback ) {
 
-			var view = this;
-			$(view.el).html(_.template(contentTemplate));
+			var view = this,
+				categoryTree,
+				categories = new Categories();
 
-			view.ui.tree = new webix.ui({
-				container : "categoriesTree",
-				view : "tree",
-				id : "catTree",
-				select : true,
-				data : [
-					{ 
-						id : "root",
-					  	value : "Cars",
-					  	open: true,
-					  	data:[
-					  		{
-					  			id : 1,
-					  			value : "Toyota",
-					  			data : [
-					  				{ id:"1.1", value:"Avalon" },
-									{ id:"1.2", value:"Corolla" },
-									{ id:"1.3", value:"Camry" }
-					  			]
-					  		}
-						]
-					}
-				],
-				onContext : {}
-			});
-
-			view.ui.treeContext = new webix.ui({
-				view : "contextmenu",
-				id : "categoryMenu",
-				data : [
-					{
-						value : "Add"
-					},
-					{
-						value : "Info"
-					},
-					{
-						value : "Edit"
-					},
-					{
-						value : "Delete"
-					}
-				],
-				master : $$('catTree'),
-				on : {
-					"onItemClick" : function(id) {
-
-						var context = this.getContext();
-						var tree = context.obj;
-						var treeId = context.id;
-						var item = this.getItem( id ).value;
-
-						if ( item == 'Add' ) {
-							$$( 'addCategoryWin' ).show();
-						} else if ( item == 'Info' ){
-							$$( 'infoCategoryWin' ).show();
-						} else if ( item == 'Edit' ) {
-							$$('editCategoryWin').show();
+			Async.waterfall([
+				function loadCategories( next ) {
+					categories.fetch( {
+						success : function( result ) {
+							next( null, result.toJSON());
+						},
+						error : function( err ) {
+							next( err );
 						}
+					});
+					
+				},
+				function bieldCategoryTree( categories, next ) {
+					var categoryTree = [],
+					    categoryTreeMap = {};
 
+					for( var i = 0; i < categories.length; i++  ) {
+						categoryTreeMap[ categories[i].id ] = {
+							id: categories[i].id,
+							value : categories[i].name,
+							data : []
+						};
 					}
-				}
-			});
 
-			view.ui.addCategoryWin = new webix.ui({
-				view : "window",
-				position : "center",
-				move : true,
-				id : "addCategoryWin",
-				head : "Add Categoty",
-				body : {
-					view : "form",
-					id : "addCategoryForm",
-					elements : [
-						{ view : "text", label : "Name" },
-						{ margin : 5, cols : [
+					for( var i = 0; i < categories.length; i++  ) {
+						var item;
+						if ( !categories[i].parentId ) {
+							categoryTree.push( categoryTreeMap[categories[i].id] );
+
+						} else {
+							categoryTreeMap[ categories[i].parentId ].data.push( categoryTreeMap[categories[i].id] );
+						}
+					}
+					next( null, categoryTree );
+				},
+				function renderView ( categoryTree, next ) {
+					$(view.el).html(_.template(contentTemplate));
+
+					console.log('categoryTree');
+					console.log(categoryTree);
+
+					view.ui.tree = new webix.ui({
+						container : "categoriesTree",
+						view : "tree",
+						id : "catTree",
+						select : true,
+						data : categoryTree,
+						onContext : {}
+					});
+
+					view.ui.treeContext = new webix.ui({
+						view : "contextmenu",
+						id : "categoryMenu",
+						data : [
 							{
-								view : "button", 
-								value : "Add", 
-								type : 'form',
-								click : function () {
-									webix.message('Added Category!');
-									$$('addCategoryWin').hide();
-								}
+								value : "Add"
 							},
 							{
-								view : "button", 
-								value : "Cancel",
-								click : function () {
-									$$('addCategoryWin').hide();
-								}
+								value : "Info"
+							},
+							{
+								value : "Edit"
+							},
+							{
+								value : "Delete"
 							}
-						]}
-					]
-				},
-				modal : true
-			});
+						],
+						master : $$('catTree'),
+						on : {
+							"onItemClick" : function(id) {
 
-			view.ui.infoCategoryWin = new webix.ui({
-				view : "window",
-				position : "center",
-				move : true,
-				id : "infoCategoryWin",
-				head : "Info Category",
-				body : {
-					template : "Save text"
-				},
-				modal : true
-			});
+								var context = this.getContext();
+								var tree = context.obj;
+								var treeId = context.id;
+								var item = this.getItem( id ).value;
 
-			view.ui.editCategoryWin = new webix.ui({
-				view : "window",
-				position : "center",
-				move : true,
-				id : "editCategoryWin",
-				head : "Edit Category",
-				body : {
-					template : "Save text"
-				},
-				modal : true
+								if ( item == 'Add' ) {
+									$$( 'addCategoryWin' ).show();
+								} else if ( item == 'Info' ){
+									$$( 'infoCategoryWin' ).show();
+								} else if ( item == 'Edit' ) {
+									$$('editCategoryWin').show();
+								}
+
+							}
+						}
+					});
+
+					view.ui.addCategoryWin = new webix.ui({
+						view : "window",
+						position : "center",
+						move : true,
+						id : "addCategoryWin",
+						head : "Add Categoty",
+						body : {
+							view : "form",
+							id : "addCategoryForm",
+							elements : [
+								{ view : "text", label : "Name" },
+								{ margin : 5, cols : [
+									{
+										view : "button", 
+										value : "Add", 
+										type : 'form',
+										click : function () {
+											webix.message('Added Category!');
+											$$('addCategoryWin').hide();
+										}
+									},
+									{
+										view : "button", 
+										value : "Cancel",
+										click : function () {
+											$$('addCategoryWin').hide();
+										}
+									}
+								]}
+							]
+						},
+						modal : true
+					});
+
+					view.ui.infoCategoryWin = new webix.ui({
+						view : "window",
+						position : "center",
+						move : true,
+						id : "infoCategoryWin",
+						head : "Info Category",
+						body : {
+							template : "Save text"
+						},
+						modal : true
+					});
+
+					view.ui.editCategoryWin = new webix.ui({
+						view : "window",
+						position : "center",
+						move : true,
+						id : "editCategoryWin",
+						head : "Edit Category",
+						body : {
+							template : "Save text"
+						},
+						modal : true
+					});
+
+					next( null );
+				}
+			], function( err ) {
+				if ( err ) throw err;
 			});
 		}
 	});
