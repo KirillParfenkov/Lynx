@@ -40,7 +40,6 @@ define([
     selectTab : function ( e ) {
       $('.sideBar').html('');
       $( '#tabMenu' ).find('li').removeClass( 'active' );
-      console.log( e.currentTarget.parent );
       $(e.currentTarget).parent().addClass('active');
     },
 

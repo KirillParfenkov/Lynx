@@ -8,6 +8,7 @@ require.config({
     backbone: 'libs/backbone/backbone', // https://github.com/amdjs
     sinon: 'libs/sinon/sinon.js',
     async: 'libs/async/async',
+    webix: 'libs/webix/webix',
 
     // Require.js plugins
     text: 'libs/require/text',
@@ -31,8 +32,9 @@ require([
   'vm',
   'models/user',
   'libs/queue/queue',
+  'libs/webix/webix',
   'collections/visibleTabs'
-], function($, AppView, Router, Vm, User, Queue, VisibleTabs){
+], function($, AppView, Router, Vm, User, Queue, Webix, VisibleTabs){
   var appView;
   var tab;
   var queue = new Queue([
