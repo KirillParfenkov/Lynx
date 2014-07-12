@@ -56,13 +56,10 @@ define([
 				function renderView ( categoryTree, next ) {
 					$(view.el).html(_.template(contentTemplate));
 
-					console.log('categoryTree');
-					console.log(categoryTree);
-
 					view.ui.tree = new webix.ui({
 						container : "categoriesTree",
 						view : "tree",
-						id : "catTree",
+						id : "categoriesTree",
 						select : true,
 						data : categoryTree,
 						onContext : {}
@@ -85,7 +82,7 @@ define([
 								value : "Delete"
 							}
 						],
-						master : $$('catTree'),
+						master : $$('categoriesTree'),
 						on : {
 							"onItemClick" : function(id) {
 
@@ -95,6 +92,7 @@ define([
 								var item = this.getItem( id ).value;
 
 								if ( item == 'Add' ) {
+									$$( 'addCategoryWin' ).context = context;
 									$$( 'addCategoryWin' ).show();
 								} else if ( item == 'Info' ){
 									$$( 'infoCategoryWin' ).show();
@@ -107,6 +105,7 @@ define([
 					});
 
 					view.ui.addCategoryWin = new webix.ui({
+						context : null,
 						view : "window",
 						position : "center",
 						move : true,
@@ -116,15 +115,33 @@ define([
 							view : "form",
 							id : "addCategoryForm",
 							elements : [
-								{ view : "text", label : "Name" },
+								{ view : "text", label : "Name", name : "name" },
 								{ margin : 5, cols : [
 									{
 										view : "button", 
 										value : "Add", 
 										type : 'form',
 										click : function () {
-											webix.message('Added Category!');
-											$$('addCategoryWin').hide();
+											var parentId = $$('addCategoryWin').context.id;
+											var category = new Category();
+											category.save(	{ 
+																parentId: parentId,
+																name : $$('addCategoryForm').getValues().name
+														  	},
+														  	{
+																success : function ( result ) {
+																	var category = result.toJSON();
+																	webix.message( 'Added category "' + $$('addCategoryForm').getValues().name + '"' );
+																	$$('addCategoryWin').hide();
+																	$$('categoriesTree').add({
+																		id : category.id,
+																		value : category.name
+																	}, 0, parentId);
+																},
+																error : function () {
+																	webix.message( 'Error' );
+																}
+															});
 										}
 									},
 									{

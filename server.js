@@ -171,9 +171,7 @@ app.post('/api/:table', function(req, res) {
 		if (err) {
 			res.json(400, {error: 'SQL error'});
 		} else {
-			//will be changed
-			row.id = result.insertId;
-			res.json( 200, row );
+			res.json( 200, result );
 		}
 	});
 });
