@@ -286,7 +286,7 @@ var DataLoader = function( configFile ) {
 						return;}
 					for( var j = 0; j < relationshipList.length; ++j ) {
 						var field = relationshipList[j].field;
-						listForAdd[field] = object[field].slice(0);
+						listForAdd[field] = object[field] ? object[field].slice(0) : [];
 						listFroDel[field] = [];
 						var relIds = relatedIdsMap[field];
 						if ( relIds[ id ] ) {

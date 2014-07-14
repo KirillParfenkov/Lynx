@@ -16,10 +16,11 @@
 				</div>
 			</form>
 			<div class="categoryList">
-				<h3>Categories: </h3>
+				<h4>Categories: </h4>
 				<% _.each( categories, function( category ) { %>
 					<span class="category"><%= category.name %>;</span>
 				<% }); %>
+				<button id="addCategoryButton">Add</button>
 			</div>
 		</div>
 	</div>

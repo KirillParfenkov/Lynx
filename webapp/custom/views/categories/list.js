@@ -32,7 +32,7 @@ define([
 				},
 				function bieldCategoryTree( categories, next ) {
 					var categoryTree = [],
-					    categoryTreeMap = {};
+						categoryTreeMap = {};
 
 					for( var i = 0; i < categories.length; i++  ) {
 						categoryTreeMap[ categories[i].id ] = {

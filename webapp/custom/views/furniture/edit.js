@@ -8,8 +8,9 @@ define([
   'models/furniture',
   'models/picture',
   'models/category',
+  'collections/categories',
   'text!custom/templates/furniture/furnitureEdit.html' 
-], function ($, _, Backbone, Events, async, Queue, Furniture, Picture, Category, contentTemplate) {
+], function ($, _, Backbone, Events, async, Queue, Furniture, Picture, Category, Categories, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		template : contentTemplate,
@@ -17,47 +18,96 @@ define([
       		'click .furnitureSaveButton' : 'save'
     	},
     furniture : null,
-    ui : null,
+    ui : {},
 		render : function ( src, callback ) {
       		var view = this;
       		var furniture;
           //var picture
       		if ( src.id != -1) {
-        		furniture = new Furniture( {id: src.id} );
-        		furniture.fetch( {
-          			success: function ( result ) {
-            			view.furniture = result;
-                  var categoryIdList = result.toJSON().categories;
-                  var callList = [];
+            async.parallel({
+              staticContent : function( finish ) {
+            		furniture = new Furniture( {id: src.id} );
+            		furniture.fetch( {
+              			success: function ( result ) {
+                			view.furniture = result;
+                      console.log('categoryIdList');
+                      console.log( result.toJSON() );
+                      var categoryIdList = result.toJSON().categories;
+                      if ( categoryIdList ) {
+                        categoryIdList = categoryIdList.slice(0);
+                      } else {
+                        categoryIdList = [];
+                      }
+                      var callList = [];
 
-                  for ( var i = 0; i < categoryIdList.length; i++ ) {
-                    callList.push( function( next ) {
-                      var categoryId = categoryIdList.pop();
-                      var category = new Category( {id : categoryId});
-                      category.fetch({
-                        success : function( result ) {
-                          next( null, result.toJSON() );
-                        },
-                        error : function( err ) {
-                          console.log( err );
-                          next( err );
-                        }
+                      for ( var i = 0; i < categoryIdList.length; i++ ) {
+                        callList.push( function( next ) {
+                          var categoryId = categoryIdList.pop();
+                          var category = new Category( {id : categoryId});
+                          category.fetch({
+                            success : function( result ) {
+                              next( null, result.toJSON() );
+                            },
+                            error : function( err ) {
+                              console.log( err );
+                              next( err );
+                            }
+                          });
+                        });
+                      }
+
+                      async.parallel( callList, function( err, categories ){
+                        if (err) throw err;
+                        finish( null, {furniture : result.toJSON(), categories : categories} );
                       });
-                    });
-                  }
+              			},
+              			error: function () {
+              				console.log('error!');
+              			}
+            		});
+              },
+              scriptContent : function ( finish ) {
 
-                  async.parallel( callList, function( err, categories ){
-                    if (err) throw err;
-                    console.log('categories');
-                    console.log(categories);
-                    $(view.el).html(_.template(contentTemplate, {furniture : result.toJSON(), categories : categories}));
-                    view.initUiComponents( src, callback );
-                  });
-          			},
-          			error: function () {
-          				console.log('error!');
-          			}
-        		});
+                var categoriesVar,
+                    categoryTree = [],
+                    categoryTreeMap = {},
+                    categories = new Categories();
+
+                categories.fetch({
+                  success : function( result ) {
+                    categories = result.toJSON();
+
+                    for( var i = 0; i < categories.length; i++  ) {
+                      categoryTreeMap[ categories[i].id ] = {
+                        id: categories[i].id,
+                        value : categories[i].name,
+                        data : []
+                      };
+                    }
+
+                    for( var i = 0; i < categories.length; i++  ) {
+                      var item;
+                      if ( !categories[i].parentId ) {
+                        categoryTree.push( categoryTreeMap[categories[i].id] );
+
+                      } else {
+                        categoryTreeMap[ categories[i].parentId ].data.push( categoryTreeMap[categories[i].id] );
+                      }
+                    }
+                    finish( null, { categoryTree : categoryTree });
+                  },
+                  error : function( err ) {
+                    console.log( err );
+                    finish( err );
+                  }
+                });
+              }
+            }, function( err, results ) {
+              if (err) throw err;
+              console.log(results.staticContent);
+              $(view.el).html(_.template(contentTemplate, results.staticContent ));
+              view.initUiComponents( results.scriptContent , callback );
+            });
       		} else {
         		view.furniture = new Furniture();
         		$(view.el).html(_.template(contentTemplate, {furniture: view.furniture.toJSON()}));
@@ -66,24 +116,50 @@ define([
 		},
 
     initUiComponents : function ( src,  callback ) {
+
+      $('#addCategoryButton').off('click')
+                             .on( 'click', function() {
+                                $$('addCategoryTreeWen').show();
+                             });
       var view = this;
 
-      view.ui.categoryTree = new webix.ui({
-        view : "datatable",
-      });
 
       view.ui.categoryTreeWen = new webix.ui({
         view : "window",
         position : "center",
         move : true,
+        modal : true,
         id : "addCategoryTreeWen",
         head : "Add Category",
+        height : "400px",
         body : {
-          template : "Same text"
-        },
-        modal : true
+              rows : [
+                { 
+                  id : "categoryTree",
+                  view : "tree",
+                  select : true,
+                  data : src.categoryTree
+                },
+                { margin : 5, cols : [
+                  {
+                    view : "button",
+                    value : "Add",
+                    click : function () {
+                      view.addCategoryToFurniture($$('categoryTree').getSelectedId());
+                      $$('addCategoryTreeWen').hide();
+                    }
+                  },
+                  {
+                    view : "button",
+                    value : "Cancel",
+                    click : function () {
+                      $$('addCategoryTreeWen').hide();
+                    }
+                  }
+                ]}
+              ]
+        }
       });
-
 
       if ( callback ) {
         callback();
@@ -92,15 +168,25 @@ define([
 
 		save : function () {
       		var furniture = this.furniture;
+          console.log('categories');
+          console.log( furniture.get('categories') );
       		furniture.save({  
         		label : $('#furnitureLabel').val(),
+            categories : furniture.get('categories')
       		}, 
       		{
         		success: function ( furniture ) {
           			window.location.hash = '/view/furniture.list';
-        		}
-      		});
-    	}
+        	}
+      	});
+    },
+
+    addCategoryToFurniture : function( id ) {
+      if ( !this.furniture.get('categories') ) {
+        this.furniture.set('categories', []);
+      }
+      this.furniture.get('categories').push( id );
+    }
 	});
 
 	return ContentView;
