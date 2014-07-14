@@ -3,11 +3,13 @@ define([
   'underscore',
   'backbone',
   'events',
+  'async',
   'libs/queue/queue',
   'models/furniture',
   'models/picture',
+  'models/category',
   'text!custom/templates/furniture/furnitureEdit.html' 
-], function ($, _, Backbone, Events, Queue, Furniture, Picture, contentTemplate) {
+], function ($, _, Backbone, Events, async, Queue, Furniture, Picture, Category, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		template : contentTemplate,
@@ -25,8 +27,32 @@ define([
         		furniture.fetch( {
           			success: function ( result ) {
             			view.furniture = result;
-                  $(view.el).html(_.template(contentTemplate, {furniture: result.toJSON()}));
-                  view.initUiComponents( src, callback );
+                  var categoryIdList = result.toJSON().categories;
+                  var callList = [];
+
+                  for ( var i = 0; i < categoryIdList.length; i++ ) {
+                    callList.push( function( next ) {
+                      var categoryId = categoryIdList.pop();
+                      var category = new Category( {id : categoryId});
+                      category.fetch({
+                        success : function( result ) {
+                          next( null, result.toJSON() );
+                        },
+                        error : function( err ) {
+                          console.log( err );
+                          next( err );
+                        }
+                      });
+                    });
+                  }
+
+                  async.parallel( callList, function( err, categories ){
+                    if (err) throw err;
+                    console.log('categories');
+                    console.log(categories);
+                    $(view.el).html(_.template(contentTemplate, {furniture : result.toJSON(), categories : categories}));
+                    view.initUiComponents( src, callback );
+                  });
           			},
           			error: function () {
           				console.log('error!');
@@ -53,11 +79,10 @@ define([
         id : "addCategoryTreeWen",
         head : "Add Category",
         body : {
-          template : "Save text"
+          template : "Same text"
         },
         modal : true
       });
-
 
 
       if ( callback ) {
@@ -77,5 +102,6 @@ define([
       		});
     	}
 	});
+
 	return ContentView;
 });

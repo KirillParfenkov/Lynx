@@ -15,6 +15,12 @@
 					</div>
 				</div>
 			</form>
+			<div class="categoryList">
+				<h3>Categories: </h3>
+				<% _.each( categories, function( category ) { %>
+					<span class="category"><%= category.name %>;</span>
+				<% }); %>
+			</div>
 		</div>
 	</div>
 </div>

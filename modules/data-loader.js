@@ -36,18 +36,23 @@ var DataLoader = function( configFile ) {
 				}
 				if ( relationshipsMap[table] ) {
 					for( var i = 0; i < relationshipsMap[table].length; i++ ) {
-						callList.push( function( callback, relatedTabales ) {
+						callList.push( function( callback ) {
 							var relationship = relationshipList.pop();
-							
-							if ( !relatedTabales ) { relatedTabales = {} }
+							var relateTable = {};
 							pool.query( getRequest, [relationship.linkingTable], function(err, rows, fields) {
 								if ( err ) throw err;
-								relatedTabales[ relationship.field ] = rows;
-								callback( null, relatedTabales );
+								relateTable.field = relationship.field
+								relateTable.rows = rows;
+								callback( null, relateTable );
 							});
 						});
 					}
-					async.waterfall( callList, function( err, relatedTabales) {
+					async.series( callList, function( err, relatedTabaleList ) {
+						if ( err ) throw err;
+						var relatedTabales = {}
+						for ( var i = 0; i < relatedTabaleList.length; i++) {
+							relatedTabales[relatedTabaleList[i].field] = relatedTabaleList[i].rows;
+						}
 						callback( err, relatedTabales );
 					});
 				} else {
@@ -76,7 +81,7 @@ var DataLoader = function( configFile ) {
 		var loader = this;
 		async.waterfall([
 			function loadRelatedTables( next ) {
-				loader.getRelateTables( table, function( err, relatedTabales) {
+				loader.getRelateTables( table, function( err, relatedTabales ) {
 					next( null, relatedTabales );
 				});
 			},
