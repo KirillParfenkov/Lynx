@@ -13,6 +13,7 @@ var DataLoader = function( configFile ) {
 	var userTable = 'users';
 	var relationships;
 	var relationshipsMap = {};
+	var relationshipsToParentMap = {};
 
 	nconf.argv()
 		.env()
@@ -71,6 +72,11 @@ var DataLoader = function( configFile ) {
 						relationshipsMap[relationships[i].parent] = [];
 					}
 					relationshipsMap[relationships[i].parent].push(relationships[i]);
+
+					if ( !(relationshipsToParentMap[relationships[i].children])) {
+						relationshipsToParentMap[relationships[i].children] = [];
+					}
+					relationshipsToParentMap[relationships[i].children].push(relationships[i]);
 				}
 				callback( err );
 			}
@@ -392,12 +398,33 @@ var DataLoader = function( configFile ) {
 	}
 
 	this.deleteObject = function( table, id, callback ) {
-		this.pool.query(deleteRequest, [table, id], function( err, result) {
-			if ( err ) {
-				callback( err );
-			} else {
-				callback( err, result );
+		var dataLoader = this; 
+		var callList = [];
+		if ( relationshipsToParentMap[table] ) {
+			var relationshipList = relationshipsToParentMap[table].slice(0);
+			var deleteQuery = 'DELETE FROM ?? WHERE ?? = ?';
+
+			for( var i = 0; i < relationshipList.length; i++ ) {
+				callList.push( function( finish ) {
+					var relationship = relationshipList.pop();
+					console.log( relationship.childrenIdField );
+					dataLoader.pool.query( deleteQuery, [relationship.linkingTable, 
+						                                 relationship.childrenIdField,
+						                                 id], 
+						function( err, result ) {
+							if (err) throw err;
+							finish( err, result );
+						});
+				});
 			}
+
+		}
+
+		async.parallel( callList, function( err, results ) {
+			if ( err ) throw err;
+			dataLoader.pool.query( deleteRequest, [table, id], function( err, result ) {
+				callback( err, result );
+			});
 		});
 	}
 

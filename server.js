@@ -197,7 +197,13 @@ app.put('/api/:table/:id', function(req, res) {
 });
 
 app.delete('/api/:table/:id', function(req, res) {
-
+	dataLoader.deleteObject( req.params.table, req.params.id, function( err, result ) {
+		if ( err ) {
+			res.json( 400, {error: 'SQL error'} );
+		} else {
+			res.json( 200, result );
+		}
+	});
 });
 
 app.post('/file/:table/:id', multiparty(), function(req, res) {
