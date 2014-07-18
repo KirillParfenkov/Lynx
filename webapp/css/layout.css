@@ -27,3 +27,21 @@ body {
 .toolbar {
   margin-bottom: 10px;
 }
+
+.categoryList .category {
+  display: inline-block;
+  padding: 7px;
+  font-size: 11pt;
+  border: 1px solid #8c8b8b;
+  margin: 1px;
+
+}
+
+.categoryList .category a span {
+  display: inline;
+}
+
+.categoryList .category a {  
+  text-decoration : none;
+  color : #FFF;
+}  

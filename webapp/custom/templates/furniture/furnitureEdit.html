@@ -9,19 +9,23 @@
 						<input name="label" class="form-control" id="furnitureLabel" type="text" value="<%= furniture.label %>">
 					</div>
 				</div>
+				<% if ( furniture.id && (furniture.id != -1) ) { %>
+					<div class="form-group">
+						<label for="categoryListCont" class="col-sm-2 control-label">Categories</label>
+						<div id="categoryListCont" class="categoryList col-sm-5">
+							<% _.each( categories, function( category ) { %>
+								<span class="category label label-info"><%= category.name %> <a class="deleteLink" categoryId="<%= category.id %>" href=""><span class="glyphicon glyphicon-remove"></span></a></span> 
+							<% }); %>
+							<a href="" id="addCategoryButton" style="text-decoration : none; color : #000;"><span class="glyphicon glyphicon-plus"></span></a>
+						</div>
+					</div>
+				<% } %>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-5">
-						<input class="furnitureSaveButton" type="button" value="Save">
+						<input class="furnitureSaveButton btn btn-success" type="button" value="Save">
 					</div>
 				</div>
 			</form>
-			<div class="categoryList">
-				<h4>Categories: </h4>
-				<% _.each( categories, function( category ) { %>
-					<span class="category"><%= category.name %>;</span>
-				<% }); %>
-				<button id="addCategoryButton">Add</button>
-			</div>
 		</div>
 	</div>
 </div>

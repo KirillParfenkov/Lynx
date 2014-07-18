@@ -118,7 +118,8 @@ define([
     initUiComponents : function ( src,  callback ) {
 
       $('#addCategoryButton').off('click')
-                             .on( 'click', function() {
+                             .on( 'click', function( event ) {
+                                event.preventDefault();
                                 $$('addCategoryTreeWen').show();
                              });
       var view = this;
@@ -145,7 +146,7 @@ define([
                     view : "button",
                     value : "Add",
                     click : function () {
-                      view.addCategoryToFurniture($$('categoryTree').getSelectedId());
+                      view.addCategoryToFurniture($$('categoryTree').getSelectedItem());
                       $$('addCategoryTreeWen').hide();
                     }
                   },
@@ -161,6 +162,15 @@ define([
         }
       });
 
+      console.log( view.furniture );
+
+      $('.deleteLink').off().on( 'click', function( event ) {
+        event.preventDefault();
+        var categoryId = $( event.currentTarget ).attr('categoryId');
+
+        view.deleteCategoryFromFurniture( categoryId, $( event.currentTarget ) );
+      });
+
       if ( callback ) {
         callback();
       }
@@ -168,8 +178,6 @@ define([
 
 		save : function () {
       		var furniture = this.furniture;
-          console.log('categories');
-          console.log( furniture.get('categories') );
       		furniture.save({  
         		label : $('#furnitureLabel').val(),
             categories : furniture.get('categories')
@@ -181,11 +189,25 @@ define([
       	});
     },
 
-    addCategoryToFurniture : function( id ) {
+    deleteCategoryFromFurniture : function( id, element ) {
+
+      var categories = this.furniture.attributes.categories;
+      categories.splice( categories.indexOf(parseInt(id)), 1 );
+      element.parent().remove();
+
+    },
+
+    addCategoryToFurniture : function( item ) {
       if ( !this.furniture.get('categories') ) {
         this.furniture.set('categories', []);
       }
-      this.furniture.get('categories').push( id );
+      var categories = this.furniture.get('categories');
+      if ( categories.indexOf(item.id) == -1 ) {
+        categories.push( item.id );
+        $('#addCategoryButton').before('<span class="category label label-info">' + item.value + 
+                                       ' <a class="deleteLink" categoryId=" ' + item.id + '" href="">' +
+                                       '<span class="glyphicon glyphicon-remove"></span></a></span> ');
+      }
     }
 	});
 

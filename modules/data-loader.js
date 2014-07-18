@@ -198,7 +198,7 @@ var DataLoader = function( configFile ) {
 				}
 				for( var j = 0; j < relationshipList.length; ++j ) {
 					var field = relationshipList[j].field;
-					listForAdd[field] = object[field].slice(0);;
+					listForAdd[field] = object[field] ? object[field].slice(0) : [];
 				}
 
 				callList = [];
