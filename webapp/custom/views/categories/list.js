@@ -70,6 +70,25 @@ define([
 				function renderView ( categoryTree, next ) {
 					$(view.el).html(_.template(contentTemplate));
 
+					webix.ui({
+						view:"form",
+						id : "addPrimCategoryForm",
+						container : "addPrimCategoryFormCont",
+						elements:[ {cols : [
+							{
+								view: "label",
+								label : "Categories"
+							},
+							{
+								view:"button", 
+								id:"addPrimCategoryButton", 
+								value:"Add Promary Category", 
+								inputWidth:200 
+							}]}
+						]
+					})
+
+
 					view.ui.leyout = new webix.ui({
 						type:"head",
 						container : 'categoryListLayoutCont',
