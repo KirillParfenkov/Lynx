@@ -77,13 +77,15 @@ define([
 						elements:[ {cols : [
 							{
 								view: "label",
-								label : "Categories"
+								label : "Categories",
+								width : 120
 							},
 							{
 								view:"button", 
 								id:"addPrimCategoryButton", 
 								value:"Add Promary Category", 
-								inputWidth:200 
+								inputWidth:200,
+								type : "form"
 							}]}
 						]
 					})
