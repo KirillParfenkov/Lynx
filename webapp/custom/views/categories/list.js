@@ -71,21 +71,26 @@ define([
 					$(view.el).html(_.template(contentTemplate));
 
 					webix.ui({
-						view:"form",
+						view: "form",
 						id : "addPrimCategoryForm",
 						container : "addPrimCategoryFormCont",
+						borderless : true,
 						elements:[ {cols : [
 							{
 								view: "label",
-								label : "Categories",
+								label : "<b>Categories</b>",
 								width : 120
 							},
 							{
 								view:"button", 
 								id:"addPrimCategoryButton", 
 								value:"Add Promary Category", 
-								inputWidth:200,
-								type : "form"
+								width:200,
+								type : "form",
+								click : function() {
+									//$$( 'addCategoryWin' ).context = {}};
+									$$( 'addCategoryWin' ).show();
+								}
 							}]}
 						]
 					})
@@ -185,7 +190,7 @@ define([
 										value : "Add", 
 										type : 'form',
 										click : function () {
-											var parentId = $$('addCategoryWin').context.id;
+											var parentId = $$('addCategoryWin').context ? $$('addCategoryWin').context.id : null;
 											var category = new Category();
 											category.save(	{ 
 																parentId: parentId,
