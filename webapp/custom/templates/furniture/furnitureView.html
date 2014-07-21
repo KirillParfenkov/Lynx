@@ -28,9 +28,8 @@
 							<a class="pull-left" href="#">
 								<img class="media-object img-thumbnail" src="<%= picture.path %>" alt="<%= picture.name %>" >
 							</a>
-							<div class="media-body">
-								<h4 class="media-heading"><%= picture.name %></h4>
-								<%= picture.name %>
+							<div id="picture-<%= picture.id %>">
+								
 							</div>
 						</div>
 					<% });%>

@@ -6,13 +6,15 @@ define([
   'events',
   'libs/queue/queue',
   'models/furniture',
-  'models/picture',
+  'models/file',
+  'custom/views/file/view',
   'text!custom/templates/furniture/furnitureView.html' 
-], function ($, _, Backbone, async, Events, Queue, Furniture, Picture, contentTemplate) {
+], function ($, _, Backbone, async, Events, Queue, Furniture, Picture, FileView, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		template : contentTemplate,
 		furniture : null,
+		pictureViews : {},
 		events : {
 			'click .furnitureAddImage' : 'saveImage'
 		},
@@ -49,6 +51,10 @@ define([
 		                async.parallel( callList, function( err, results ) {
 		                	if (err) throw err;
 		                	$(view.el).html(_.template(contentTemplate, {furniture: furnitureVar, pictures: results}));
+		                	for( var i = 0; i < results.length; i++ ) {
+		                		view.pictureViews[results[i].id] = new FileView({ el : '#picture-' + results[i].id});
+		                		view.pictureViews[results[i].id].render( { id : results[i].id} );
+		                	}
 		                });
 					},
 					error : function() {
