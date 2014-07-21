@@ -8,13 +8,15 @@ define([
   'models/furniture',
   'models/file',
   'custom/views/file/view',
+  'custom/views/file/edit',
   'text!custom/templates/furniture/furnitureView.html' 
-], function ($, _, Backbone, async, Events, Queue, Furniture, Picture, FileView, contentTemplate) {
+], function ($, _, Backbone, async, Events, Queue, Furniture, Picture, FileView, FileEdit, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		template : contentTemplate,
 		furniture : null,
 		pictureViews : {},
+		pictureEdits : {},
 		events : {
 			'click .furnitureAddImage' : 'saveImage'
 		},
@@ -52,7 +54,10 @@ define([
 		                	if (err) throw err;
 		                	$(view.el).html(_.template(contentTemplate, {furniture: furnitureVar, pictures: results}));
 		                	for( var i = 0; i < results.length; i++ ) {
-		                		view.pictureViews[results[i].id] = new FileView({ el : '#picture-' + results[i].id});
+		                		view.pictureEdits[results[i].id] = new FileEdit({ el : '#picture-' + results[i].id });
+		                		view.pictureViews[results[i].id] = new FileView({ el : '#picture-' + results[i].id,
+		                														  editView : view.pictureEdits[results[i].id] });
+		                		view.pictureEdits[results[i].id].showView = view.pictureViews[results[i].id];
 		                		view.pictureViews[results[i].id].render( { id : results[i].id} );
 		                	}
 		                });
@@ -99,6 +104,15 @@ define([
 				contentType : false,
 				processData : false
 			});
+		},
+
+		editPicture : function( e ) {
+			var view = this;
+
+		},
+
+		deletePicture : function( e ) {
+			var view = this;
 		}
 	});
 	return ContentView;

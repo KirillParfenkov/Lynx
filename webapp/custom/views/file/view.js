@@ -13,15 +13,21 @@ define([
 		ui : {},
 		template : contentTemplate,
 		typeMap : null,
+		editView : null,
+		file : null,
+		events : {
+			'click .editLink' : 'editFile'
+		},
 
 		initialize : function( src ) {
 			this.el = src.el;
+			this.editView = src.editView;
 		},
 
 		render : function ( src, callback ) {
 
 			var view = this;
-			var file = new File({id : src.id});
+			view.file = new File({id : src.id});
 
 			Async.parallel([
 				function loadTypes( finish ) {
@@ -46,7 +52,7 @@ define([
 					}
 				},
 				function loadFile( finish ) {
-					file.fetch({
+					view.file.fetch({
 						success : function( result ) {
 							finish( null );
 							
@@ -58,9 +64,18 @@ define([
 				}
 			], function( err, result ) {
 				if ( err ) throw err;
-				$(view.el).html(_.template(contentTemplate, { file : file.toJSON(), types : view.typeMap }));
+				$(view.el).html(_.template(contentTemplate, { file : view.file.toJSON(), types : view.typeMap }));
 				if ( callback ) callback();
  			});
+		},
+
+		editFile : function( e ) {
+			var view = this;
+			console.log( e );
+			e.preventDefault();
+			alert( 'id: ' + view.file.get('id'));
+			console.log('id: ' + view.file.get('id'));
+			this.editView.render( { id : view.file.get('id')} );
 		}
 	});
 	return FileView;
