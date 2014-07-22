@@ -44,4 +44,8 @@ body {
 .categoryList .category a {  
   text-decoration : none;
   color : #FFF;
-}  
+}
+
+.noBackgroundImage {
+  background-image: none;
+}

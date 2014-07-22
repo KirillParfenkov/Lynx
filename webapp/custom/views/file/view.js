@@ -71,10 +71,7 @@ define([
 
 		editFile : function( e ) {
 			var view = this;
-			console.log( e );
 			e.preventDefault();
-			alert( 'id: ' + view.file.get('id'));
-			console.log('id: ' + view.file.get('id'));
 			this.editView.render( { id : view.file.get('id')} );
 		}
 	});
