@@ -13,7 +13,13 @@ define([
 		ui : {},
 		template : contentTemplate,
 		typeMap : null,
+		types : null,
 		showView : null,
+		file : null,
+		events : {
+			'click .savePictureButton' : 'save',
+			'click .cancelPictureButton' : 'cancel'
+		},
 
 		initialize : function( src ) {
 			this.el = src.el;
@@ -23,15 +29,15 @@ define([
 		render : function ( src, callback ) {
 
 			var view = this;
-			var file = new File({id : src.id});
+			view.file = new File({id : src.id});
 
 			Async.parallel([
 				function loadTypes( finish ) {
 					if ( view.typeMap ) {
 						finish( null );
 					} else {
-						var types = new Types();
-						types.fetch( {
+						view.types = new Types();
+						view.types.fetch( {
 							success : function( result ) {
 								var typesVar = result.toJSON();
 								view.typeMap = {};
@@ -48,7 +54,7 @@ define([
 					}
 				},
 				function loadFile( finish ) {
-					file.fetch({
+					view.file.fetch({
 						success : function( result ) {
 							finish( null );
 							
@@ -60,9 +66,31 @@ define([
 				}
 			], function( err, result ) {
 				if ( err ) throw err;
-				$(view.el).html(_.template(contentTemplate, { file : file.toJSON(), types : view.typeMap }));
+				$(view.el).html(_.template(contentTemplate, { file : view.file.toJSON(), types : view.types.toJSON() }));
 				if ( callback ) callback();
  			});
+		},
+
+		save : function( e ) {
+			var view = this;
+			e.preventDefault();
+			view.file.save({
+				name : $(e.target).parents('form:first').find('[name=name]').val(),
+				type : $(e.target).parents('form:first').find('[name=type]').val()
+			}, {
+				success : function( result ) {
+					view.showView.render( { id : view.file.get('id')} );
+				},
+				error : function( err ) {
+					console.log( err );
+				}
+			});
+			
+		},
+
+		cancel : function( e ) {
+			e.preventDefault();
+			this.showView.render( { id : this.file.get('id')} );
 		}
 	});
 	return FileEdit;
