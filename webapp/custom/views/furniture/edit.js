@@ -6,7 +6,7 @@ define([
   'async',
   'libs/queue/queue',
   'models/furniture',
-  'models/picture',
+  'models/file',
   'models/category',
   'collections/categories',
   'text!custom/templates/furniture/furnitureEdit.html' 
