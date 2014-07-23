@@ -7,7 +7,8 @@ define([
   'models/file',
   'collections/types',
   'text!custom/templates/file/fileView.html',
-], function ($, _, Backbone, Events, Async, File, Types, contentTemplate) {
+  'text!custom/templates/picture/pictureDelete.html'
+], function ($, _, Backbone, Events, Async, File, Types, contentTemplate, deleteTemplate) {
 	var FileView = Backbone.View.extend({
 		el : '.content',
 		ui : {},
@@ -79,8 +80,22 @@ define([
 
 		delete : function( e ) {
 			e.preventDefault();
+			var view = this;
 			var pictures = this.furniture.attributes.pictures;
-			pictures.indexOf();
+			var delIndex = pictures.indexOf( view.file.id );
+			if ( delIndex != -1) {
+				pictures.splice( delIndex, 1 );
+				this.furniture.save( {
+					pictures : pictures
+				}, {
+					success : function( result ) {
+						$(view.el).html(_.template(deleteTemplate, {file : view.file.toJSON()}));
+					},
+					error : function() {
+						console.log('err!');
+					}
+				});
+			}
 		}
 	});
 	return FileView;
