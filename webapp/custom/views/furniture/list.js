@@ -11,9 +11,15 @@ define([
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		template : contentTemplate,
+		furnitures : null,
+		events : {
+			'click .deleteFurnitureLink' : 'deleteFurniture'
+		},
+		
 		render : function ( src, callback ) {
 			var view = this;
-			furnitures = new Furnitures();
+			view.furnitures = new Furnitures();
+			var furnitures = view.furnitures;
 
 			var queue = new Queue([
 				function(queue) {
@@ -31,6 +37,24 @@ define([
 				}
 			]);
 			queue.start();
+		},
+
+		deleteFurniture : function( e ) {
+			var view = this;
+			e.preventDefault();
+			if ( confirm("Are you sure?") ) {
+				var furnitureId = $( e.target ).attr('furnitureId');
+				var furniture = view.furnitures.get( furnitureId );
+				furniture.destroy({
+					success : function( model, response ) {
+						//location.reload();
+						view.render();
+					},
+					error : function( err ) {
+						console.log(err);
+					}
+				});
+			}
 		}
 
 	});

@@ -400,24 +400,39 @@ var DataLoader = function( configFile ) {
 	this.deleteObject = function( table, id, callback ) {
 		var dataLoader = this; 
 		var callList = [];
+		var deleteQuery = 'DELETE FROM ?? WHERE ?? = ?';
 		if ( relationshipsToParentMap[table] ) {
 			var relationshipList = relationshipsToParentMap[table].slice(0);
-			var deleteQuery = 'DELETE FROM ?? WHERE ?? = ?';
-
 			for( var i = 0; i < relationshipList.length; i++ ) {
 				callList.push( function( finish ) {
 					var relationship = relationshipList.pop();
-					console.log( relationship.childrenIdField );
 					dataLoader.pool.query( deleteQuery, [relationship.linkingTable, 
 						                                 relationship.childrenIdField,
 						                                 id], 
 						function( err, result ) {
 							if (err) throw err;
 							finish( err, result );
-						});
+						}
+					);
 				});
 			}
 
+		}
+		if ( relationshipsMap[table] ) {
+			var relationshipChildList = relationshipsMap[table].slice(0);
+			for ( var j = 0; j < relationshipChildList.length; j++ ) {
+				callList.push( function( finish ) {
+					var relationship = relationshipChildList.pop();
+					dataLoader.pool.query( deleteQuery, [relationship.linkingTable, 
+														 relationship.parentIdField,
+														 id],
+						function( err, result ) {
+							if (err) throw err;
+							finish( err, result );
+						}
+					);
+				});
+			}
 		}
 
 		async.parallel( callList, function( err, results ) {
@@ -430,8 +445,8 @@ var DataLoader = function( configFile ) {
 
 	this.getVisibleTabs = function ( profileId, callback ) {
 		this.pool.query( 'SELECT tabs.id, tabs.name, tabs.link, tabs.label, tabs.view ' +
-			              'FROM tabProfileLinks JOIN tabs ' +
-			              'WHERE profileId = ? AND tabId = tabs.id', [profileId], function( err, results, fields) {
+			             'FROM tabProfileLinks JOIN tabs ' +
+			             'WHERE profileId = ? AND tabId = tabs.id', [profileId], function( err, results, fields) {
 			if (err) {
 				callback( err );
 			} else {

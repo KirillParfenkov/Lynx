@@ -15,7 +15,7 @@
 			<tr>
 				<td><%= furniture.id %></td>
 				<td><%= furniture.label %></td>
-				<td><a href='#/view/furniture.view/<%=furniture.id%>'>View</a> <a href='#/view/furniture.edit/<%=furniture.id%>'>Edit</a></td>
+				<td><a href='#/view/furniture.view/<%=furniture.id%>'>View</a> <a href='#/view/furniture.edit/<%=furniture.id%>'>Edit</a > <a class="deleteFurnitureLink" href="#" furnitureId="<%=furniture.id%>">Delete</a></td>
 			</tr>
 		<% });%>
 	</table>
