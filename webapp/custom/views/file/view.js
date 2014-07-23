@@ -16,12 +16,14 @@ define([
 		editView : null,
 		file : null,
 		events : {
-			'click .editLink' : 'editFile'
+			'click .editLink' : 'editFile',
+			'click .deleteLink' : 'delete'
 		},
 
 		initialize : function( src ) {
 			this.el = src.el;
 			this.editView = src.editView;
+			this.furniture = src.furniture;
 		},
 
 		render : function ( src, callback ) {
@@ -73,6 +75,12 @@ define([
 			var view = this;
 			e.preventDefault();
 			this.editView.render( { id : view.file.get('id')} );
+		},
+
+		delete : function( e ) {
+			e.preventDefault();
+			var pictures = this.furniture.attributes.pictures;
+			pictures.indexOf();
 		}
 	});
 	return FileView;

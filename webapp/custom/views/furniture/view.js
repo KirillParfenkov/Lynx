@@ -54,9 +54,11 @@ define([
 		                	if (err) throw err;
 		                	$(view.el).html(_.template(contentTemplate, {furniture: furnitureVar, pictures: results}));
 		                	for( var i = 0; i < results.length; i++ ) {
-		                		view.pictureEdits[results[i].id] = new FileEdit({ el : '#picture-' + results[i].id });
+		                		view.pictureEdits[results[i].id] = new FileEdit({ el : '#picture-' + results[i].id,
+		                														  furniture : view.furniture });
 		                		view.pictureViews[results[i].id] = new FileView({ el : '#picture-' + results[i].id,
-		                														  editView : view.pictureEdits[results[i].id] });
+		                														  editView : view.pictureEdits[results[i].id],
+		                														  furniture : view.furniture });
 		                		view.pictureEdits[results[i].id].showView = view.pictureViews[results[i].id];
 		                		view.pictureViews[results[i].id].render( { id : results[i].id} );
 		                	}

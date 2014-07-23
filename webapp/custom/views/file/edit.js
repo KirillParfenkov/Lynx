@@ -24,6 +24,7 @@ define([
 		initialize : function( src ) {
 			this.el = src.el;
 			this.showView = src.showView;
+			this.furniture = src.furniture;
 		},
 
 		render : function ( src, callback ) {
