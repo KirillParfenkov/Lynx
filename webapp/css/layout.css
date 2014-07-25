@@ -49,3 +49,12 @@ body {
 .noBackgroundImage {
   background-image: none;
 }
+
+.description {
+  margin-bottom: 20px;
+}
+
+.fileLoadBox {
+  width: 300px;
+  margin: 0 auto;
+}

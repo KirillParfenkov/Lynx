@@ -1,27 +1,29 @@
 <div>
 	<h3><%= furniture.label %></h3>
-	<div>Content place <%= furniture.id %> </div>
 	<% if (furniture.id) { %> 
 		<div class="panel panel-default">
-			<div class="panel-heading">Image Loder</div>
+			<div class="panel-heading">Детали</div>
 			<div class="panel-body">
-				<form id="addImageForm" class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
-					<div class="col-sm-offset-2" >
-							<div class="form-group">
-							<label for="imageFile">Image</label>
+				<div class="description">
+					<%= furniture.description %>
+				</div>
+				<div class="fileLoadBox">
+					<form id="addImageForm" role="form" method="POST" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="imageFile">Загрузка Изображеия</label>
 							<input name="image" type="file" id="imageFile">
-							<p class="help-block">Image for object.</p>
+							<p class="help-block">Выберите изображение...</p>
 						</div>
-					</div>
-					<div class="col-sm-offset-2">
-						<button type="button" class="btn btn-default furnitureAddImage">Add Image</button>
-					</div>
-				</form>
+						<div class="form-group">
+							<button type="button" class="btn btn-default furnitureAddImage">Добавить</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 		<% if ( pictures.length > 0 ) { %>
 			<div class="panel panel-default">
-				<div class="panel-heading">Images</div>
+				<div class="panel-heading">Изображения</div>
 				<div class="panel-body">
 					<% _.each( pictures, function( picture ) { %>
 						<div class="media">
