@@ -1,3 +1,24 @@
 <div>
-	Редактирование геообъектов
+	<div class="panel panel-default">
+		<% if ( geoobject ) { %>
+			<div class="panel-heading">Геообъект: <%= geoobject.label %></div>
+		<% } else { %>
+			<div class="panel-heading">Новый геообъект</div>
+		<% } %>
+		<div class="panel-body">
+			<form role="form">
+				<div class="form-group">
+					<label for="geoobjectLabel" class="control-label">Наименование</label>
+					<input name="label" class="form-control" id="geoobjectLabel" type="text" value="<%= geoobject.label %>">
+				</div>
+				<div class="form-group">
+					<label for="geoobjectMark" class="control-label">Метка</label>
+					<input name="label" class="form-control" id="geoobjectMark" type="text" value="<%= geoobject.mark %>">
+				</div>
+				<div class="form-group">
+					<label for="geoobjectAddres" class="control-label">Адрес</label>
+					<textarea name="description" id="furnitureDesc" rows="10" class="form-control"><%= geoobject.address %></textarea>
+			</form>
+		</div>
+	</div>
 </div>
