@@ -177,7 +177,6 @@ define([
     },
 
 		save : function () {
-          console.log( $('#furnitureDesc').val() );
       		var furniture = this.furniture;
       		furniture.save({  
         		label : $('#furnitureLabel').val(),

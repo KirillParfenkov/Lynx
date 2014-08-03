@@ -15,7 +15,7 @@
 			<tr>
 				<td><%= geoobject.id %></td>
 				<td><%= geoobject.label %></td>
-				<td><a href='#/view/geoobject.edit/<%=geoobject.id%>'>Редактировать</a > <a class="deleteGeoobjectLink" href="#" furnitureId="<%=geoobject.id%>">Удалить</a></td>
+				<td><a href='#/view/geoobject.edit/<%=geoobject.id%>'>Редактировать</a > <a class="deleteGeoobjectLink" href="#" id="<%=geoobject.id%>">Удалить</a></td>
 			</tr>
 		<% });%>
 	</table>
