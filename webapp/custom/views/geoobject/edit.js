@@ -12,6 +12,7 @@ define([
 		template : contentTemplate,
 		geoobject : null,
 		map : null,
+		placemark : null,
 		events : {
 			'click .goobjectSaveButton' : 'save'
 		},
@@ -53,6 +54,19 @@ define([
 			view.map = new ymaps.Map("geoobjectMap", {
 				center: [55.76, 37.64], 
 				zoom: 7
+			});
+
+			view.map.events.add('click', function(e) {
+				console.log('coords');
+				console.log(e.get('coords'));
+				var pointGeometry  = new ymaps.geometry.Point(e.get('coords'));
+				if ( !view.placemark ) {
+					view.placemark = new ymaps.Placemark( pointGeometry );
+					view.map.geoObjects.add( view.placemark );
+				} else {
+					view.placemark.geometry.setCoordinates(e.get('coords'));
+				}
+				
 			});
 		}
 	});
