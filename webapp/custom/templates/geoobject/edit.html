@@ -20,8 +20,11 @@
 					<textarea name="description" id="geoobjectAddres" rows="10" class="form-control"><%= geoobject.address %></textarea>
 				</div>
 				<div class="form-group">
-					<label for="geoobjectMap" class="control-label">Расположение</label>
-					<div id="geoobjectMap" style="height: 400px"></div>
+					<label class="control-label">Расположение</label>
+					<button id="placemarkUncheckBtn" type="button" class="btn btn-default <% if ( !placemarkChecked ) { %>hidden<% } %>" >Очистить</button>
+					<button id="placemarkCheckBtn" type="button" class="btn btn-default <% if ( placemarkChecked ) { %>hidden<% } %>">Отметить</button>
+					
+					<div id="geoobjectMap" style="margin-top: 10px; height: 400px"></div>
 				</div>
 				<div class="form-group">
 					<input class="goobjectSaveButton btn btn-success" type="button" value="Сохранить">
