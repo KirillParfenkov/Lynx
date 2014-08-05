@@ -55,18 +55,16 @@ define([
 				center: [55.76, 37.64], 
 				zoom: 7
 			});
-
+			console.log('with preset!');
 			view.map.events.add('click', function(e) {
-				console.log('coords');
-				console.log(e.get('coords'));
-				var pointGeometry  = new ymaps.geometry.Point(e.get('coords'));
+				console.log('with preset');
+				var pointGeometry = new ymaps.geometry.Point(e.get('coords'));
 				if ( !view.placemark ) {
-					view.placemark = new ymaps.Placemark( pointGeometry );
+					view.placemark = new ymaps.Placemark( pointGeometry, {}, {preset : 'islands#darkGreenDotIcon'} );
 					view.map.geoObjects.add( view.placemark );
 				} else {
 					view.placemark.geometry.setCoordinates(e.get('coords'));
 				}
-				
 			});
 		}
 	});
