@@ -20,6 +20,17 @@
 					<textarea name="description" id="geoobjectAddres" rows="10" class="form-control"><%= geoobject.address %></textarea>
 				</div>
 				<div class="form-group">
+					<label for="geoobjectType">Тип</label>
+					<select name="type" id="geoobjectType" class="form-control">
+						<option value="-1">Выберите значение</option>
+						<% _.each( geoobjectTypes, function( type ) { %>
+							<option value="<%= type.id %>" <% if( geoobject.type == type.id ) { %> selected <% } %> >
+								<%= type.label %>
+							</option>
+						<% }); %>
+					</select>
+				</div>
+				<div class="form-group">
 					<label class="control-label">Расположение</label>
 					<button id="placemarkUncheckBtn" type="button" class="btn btn-default <% if ( !placemarkChecked ) { %>hidden<% } %>" >Очистить</button>
 					<button id="placemarkCheckBtn" type="button" class="btn btn-default <% if ( placemarkChecked ) { %>hidden<% } %>">Отметить</button>

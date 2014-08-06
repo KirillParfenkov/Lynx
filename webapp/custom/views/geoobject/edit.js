@@ -78,6 +78,7 @@ define([
 				label : $('#geoobjectLabel').val(),
 				mark : $('#geoobjectMark').val(),
 				address : $('#geoobjectAddres').val(),
+				type : $('#geoobjectType').val(),
 				latitude : view.geoobject.latitude,
 				longitude : view.geoobject.longitude
 			}, {
