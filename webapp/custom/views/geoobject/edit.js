@@ -5,8 +5,9 @@ define([
   'events',
   'async',
   'models/geoobject',
+  'collections/geoobjectTypes',
   'text!custom/templates/geoobject/edit.html'
-], function ($, _, Backbone, Events, Async, Geoobject, contentTemplate) {
+], function ($, _, Backbone, Events, Async, Geoobject, GeoobjectTypes, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		template : contentTemplate,
@@ -21,28 +22,54 @@ define([
 		},
 		render : function ( src, callback ) {
 			var view = this;
-			if ( src.id != -1 ) {
-				view.geoobject = new Geoobject({ id: src.id });
-				view.geoobject.fetch({
-					success : function ( result ) {
-						var geoobjectVar = result.toJSON();
-						console.log('geoobjectVar.latitude ' + geoobjectVar.latitude);
-						console.log('geoobjectVar.longitude ' + geoobjectVar.longitude);
-						if ( geoobjectVar.latitude && geoobjectVar.longitude ) {
-							console.log('cheked!');
-							view.placemarkChecked = true;
-						}
-						$(view.el).html(_.template(contentTemplate, { geoobject : geoobjectVar, placemarkChecked : view.placemarkChecked }));
-						view.renderMap();
-					}, 
-					error : function ( err ) {
-						console.log( err );
+			Async.parallel({
+				geoobject : function ( finish ) {
+					if ( src.id != -1 ) {
+						var geoobject = new Geoobject({ id: src.id });
+						geoobject.fetch({
+							success : function ( result ) {
+								finish( null, result );
+								
+							}, 
+							error : function ( err ) {
+								finish( err );
+							}
+						});
+					} else {
+						finish( null, new Geoobject());
 					}
-				});
-			} else {
-				view.geoobject = new Geoobject();
-				$(view.el).html(_.template(contentTemplate, { geoobject : {}, placemarkChecked : view.placemarkChecked }));
-			}
+				},
+				geoobjectTypes : function ( finish ) {
+					var geoobjectTypes = new GeoobjectTypes();
+					geoobjectTypes.fetch({
+						success : function ( result ) {
+							finish( null, result );
+						},
+						error : function() {
+							finish( err );
+						}
+					});
+				}
+			}, function ( err, results ) {
+
+				if ( err ) throw err;
+
+				view.geoobject = results.geoobject;
+				var geoobjectVar = view.geoobject.toJSON();
+				if ( geoobjectVar.latitude && geoobjectVar.longitude ) {
+					view.placemarkChecked = true;
+				}
+				var geoobjectTypesVar = results.geoobjectTypes.toJSON();
+
+				$(view.el).html(_.template(contentTemplate, 
+					{ 
+						geoobject : geoobjectVar, 
+						placemarkChecked : view.placemarkChecked,
+						geoobjectTypes : geoobjectTypesVar
+					}));
+				view.renderMap();
+
+			});
 		},
 
 		save : function() {
