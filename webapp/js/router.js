@@ -5,7 +5,7 @@ define([
   'backbone',
 	'vm',
   'moduls/view-loader',
-  'views/setup/setupSideBar',
+  'views/setup/setupMenu',
   'views/setup/usersView',
   'views/setup/profilesView',
   'views/setup/tabsView',
@@ -15,11 +15,11 @@ define([
   'views/setup/tab/tabView',
   'views/setup/profile/profileEdit',
   'views/setup/profile/profileView'
-], function ($, _, Backbone, Vm, viewLoader, SetupSideBar, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
+], function ($, _, Backbone, Vm, viewLoader, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
-    sideBar : {},
+    setupMenu : {},
     setupViews : [],
     routes: {
       'tab/:tabName' : 'selectTab',
@@ -38,7 +38,7 @@ define([
         views.push( tabs[i].view );
       }
 
-      router.sideBar = new SetupSideBar();
+      router.setupMenu = new SetupMenu();
       this.setupViews['usersView'] = new UsersView();
       this.setupViews['profilesView'] = new ProfilesView();
       this.setupViews['tabsView'] = new TabsView();
@@ -53,19 +53,20 @@ define([
     },
 
     selectSetup: function() {
-      this.sideBar.render();
+      this.setupMenu.render();
     },
 
     selectSetupView: function( view ) {
       this.setupViews[view].render();
+      this.clearHeaderMenu();
     },
 
     selectSetupViewItem: function( view, id) {
       this.setupViews[view].render( {id: id} );
     },
 
-    clearSetupSideBar: function() {
-      $('.sideBar').html('');
+    clearHeaderMenu: function() {
+      $('.header-menu-container').html('');
     },
 
     selectView: function( name, id ) {

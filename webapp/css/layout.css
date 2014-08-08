@@ -62,3 +62,21 @@ body {
 .hidden {
   display: none;
 }
+
+.page-header .header {
+  font-size: 30px;
+}
+
+.page-header .icon {
+  font-size: 19px;
+}
+
+.page-header .header-menu-container ul{
+  display: inline;
+
+}
+
+.page-header .header-menu-container li{
+  display: inline;
+
+}
