@@ -80,3 +80,8 @@ body {
   display: inline;
 
 }
+
+.header .logout a {
+  font-size: 14px;
+  font-weight: bold;
+}
