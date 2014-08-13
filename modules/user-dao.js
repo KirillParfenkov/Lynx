@@ -27,7 +27,7 @@ var UserDao = function ( configFile ) {
 				var user = rows[0];
 				var userPassword;
 				if ( !user ) {
-					done( null, false );
+					return done( null, false );
 				} else {
 
 					userPassword = user.password;
@@ -36,10 +36,10 @@ var UserDao = function ( configFile ) {
 					console.log( 'userPassword: ' + userPassword);
 
 					if ( passwordHash.verify( password, userPassword ) ) {
-						done( null, user );
+						return done( null, user );
 					}
 
-					done( null, false );
+					return done( null, false );
 				}
 			}
 		});

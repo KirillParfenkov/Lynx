@@ -37,28 +37,6 @@ client.connect( function( err ) {
 });
 
 var tabales = {};
-tabales['users'] = [{
-		id : 1,
-		firstName : 'Kiryl',
-		lastName : 'Parfiankou',
-		email : 'Kiryl_Parfiankou@gmail.com',
-		profile : 1
-	},
-	{
-		id : 2,
-		firstName : 'Bob',
-		lastName : 'Bobse',
-		email : 'Bob_Bobse@email.com',
-		profile : 2
-	},
-	{
-		id : 3,
-		firstName : 'Test',
-		lastName : 'Tests',
-		email : 'Test_test@gmail.com',
-		profile : 4
-	}
-];
 
 var sessions = [];
 var app = express();
@@ -73,12 +51,18 @@ passport.use( new LocalStrategy({
 		passwordField: 'password'
 	},
 	function( email, password, done ) {
+		console.log(' LocalStrategy done!');
 
 		var len = 256;
 		var isCredNotReady = true;
 		var sessionKey;
 
+		console.log( 'email: ' + email );
+		console.log( 'password: ' + password );
+
 		userDao.authorize( email, password, function( err, loginUser ) {
+			console.log('usr dao done!');
+
 
 			if ( err ) {
 				return done( err );
