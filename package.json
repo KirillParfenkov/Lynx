@@ -18,6 +18,7 @@
     "connect-multiparty" : "1.0.5",
     "mkpath" : "x",
     "passport" : "0.2.x",
-    "passport-local" : "1.x"
+    "passport-local" : "1.x",
+    "password-hash" : "1.2.x"
   }
 }

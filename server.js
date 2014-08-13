@@ -7,6 +7,7 @@ var express = require('express'),
 	serveStatic = require('serve-static'),
 	crypto = require('crypto'),
 	mc = require('mc'),
+	UserDao = require('./modules/user-dao'),
 	DataLoader = require('./modules/data-loader'),
 	url = require('url'),
 	formidable = require('formidable'),
@@ -18,10 +19,13 @@ var express = require('express'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy;
 
+
 var dataLoader = new DataLoader('./config.json');
 dataLoader.initialize(function( err ) {
 	console.log('dataLoader is ready!');
 });
+
+var userDao = new UserDao('./config.json');
 
 nconf.argv()
 	.env()
@@ -57,46 +61,79 @@ tabales['users'] = [{
 ];
 
 var sessions = [];
-
 var app = express();
-var publicUrls = [
-	'/login'
-];
 
-var checkSession = function( req, res, next ) {
+function ensureAuthenticated( req, res, next ) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect( 302, '/login.html');
+}
+
+passport.use( new LocalStrategy({
+		usernameField: 'email',
+		passwordField: 'password'
+	},
+	function( email, password, done ) {
+
+		var len = 256;
+		var isCredNotReady = true;
+		var sessionKey;
+
+		userDao.authorize( email, password, function( err, loginUser ) {
+
+			if ( err ) {
+				return done( err );
+			}
+
+			console.log( loginUser );
+			console.log( 'after loginUser' );
+
+			if ( !loginUser ) {
+				return done( null, false, { message: 'Incorrect credationls!' } );
+			}
+
+			return done( null, loginUser );
+		});
+	}
+));
+
+passport.serializeUser( function( user, done ) {
+
+	var len = 256;
+	var isCredNotReady = true;
+	var sessionKey;
+
+	while ( isCredNotReady ) {
+		sessionKey = crypto.randomBytes(len).toString('hex');
+		if ( sessions.indexOf(sessionKey) == -1 ) {
+			isCredNotReady = false;
+		}
+	}
+
+	sessions.push({id : sessionKey, user: user});
+
+	done( null, sessionKey );
+});
+
+passport.deserializeUser( function( sessionKey, done ) {
+
 	var sessionExist = false;
-	if (req.session.sessionKey) {
+	var user;
+	if ( sessionKey ) {
 		for (var i = 0; i < sessions.length; i++) {
-			if ( sessions[i].id == req.session.sessionKey ) {
+			if ( sessions[i].id == sessionKey ) {
 				sessionExist = true;
+				user = sessions[i].user;
 				break;
 			}
 		}
 	}
 
-	if ( !sessionExist && (publicUrls.indexOf(req.url) == -1) ) {
-		req.session.sessionKey = null;
-		res.redirect( 302, '/login.html');
+	if ( !sessionExist ) {
+		done( null, false, { message: 'Incorrect credationls!' } );
 	} else {
-		next();
+		done( null, user );
 	}
-}
-
-passport.use( new LocalStrategy(
-	function( username, password, done ) {
-
-		console.log( 'username: ' + username );
-		console.log( 'password: ' + password );
-
-		if ( !(username == 'admin') ) {
-			return done( null, false, { message: 'Incorrect username!' } );
-		} else if ( !(password == 'admin') ) {
-			return done( null, false, { message: 'Incorrect password!' } );
-		}
-
-		return done( null, { id : 1 } );
-	}
-));
+});
 
 app.use(session({
 	keys : ['secret1', 'secret2']
@@ -104,46 +141,20 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(serveStatic('public'));
-app.use(checkSession);
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.post('/login', passport.authenticate( 'local', { successRedirect: '/', failureRedirect: '/login' }));
+
+app.use(ensureAuthenticated);
 app.use(serveStatic('webapp'));
 app.use(serveStatic('files'));
 
-app.post('/login', function (req, res) {
-
-	var creds = req.body;
-	var loginEmail = req.body.email;
-	var len = 256;
-	var isCredNotReady = true;
-	var sessionKey;
-	var users = tabales['users'];
-	var loginUser;
-
-	for ( var i = 0; i < users.length; ++i ) {
-		if ( users[i].email == loginEmail ) {
-			loginUser = users[i];
-			break;
-		}
-	}
-
-	if ( loginUser ) {
-		while ( isCredNotReady ) {
-		sessionKey = crypto.randomBytes(len).toString('hex');
-		if ( sessions.indexOf(sessionKey) == -1 ) {
-			isCredNotReady = false;
-		}
-	}
-		sessions.push({id : sessionKey, user: loginUser});
-		req.session.sessionKey = sessionKey;
-		res.redirect( 302, '/');
-	} else {
-		res.redirect( 302, '/login.html');
-	} 
-});
-
 app.get('/logout', function(req, res) {
-	var sessionKey = req.session.sessionKey;
+
+	var user = req.user;
 	for( var i = 0; i < sessions.length; ++i ) {
-		if ( sessions[i].id == req.session.sessionKey ) {
+		if ( sessions[i].user.id == user.id ) {
 			sessions.splice(i, 1);
 			break;
 		}
@@ -153,16 +164,7 @@ app.get('/logout', function(req, res) {
 
 app.get('/visibleTabs', function(req, res) {
 
-	var sessionKey = req.session.sessionKey;
-	var user;
-
-	//serch user
-	for ( var i = 0; i < sessions.length; ++i ) {
-		if ( sessions[i].id == sessionKey ) {
-			user = sessions[i].user;
-			break;
-		}
-	}
+	var user = req.user;
 
 	dataLoader.getVisibleTabs( user.profile, function( err, tabs ) {
 		if ( err ) {
