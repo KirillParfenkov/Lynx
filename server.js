@@ -1,20 +1,22 @@
-var express = require('express');
-var connect = require('connect');
-var nconf = require('nconf');
-var mysql = require('mysql');
-var session = require('cookie-session')
-var bodyParser = require('body-parser');
-var serveStatic = require('serve-static');
-var crypto = require('crypto');
-var mc = require('mc');
-var DataLoader = require('./modules/data-loader');
-var url = require('url');
-var formidable = require('formidable');
-var multiparty = require('connect-multiparty');
-var fs = require('fs');
-var mkpath = require('mkpath');
-var path = require('path');
-var async = require('async');
+var express = require('express'),
+	connect = require('connect'),
+	nconf = require('nconf'),
+	mysql = require('mysql'),
+	session = require('cookie-session'),
+	bodyParser = require('body-parser'),
+	serveStatic = require('serve-static'),
+	crypto = require('crypto'),
+	mc = require('mc'),
+	DataLoader = require('./modules/data-loader'),
+	url = require('url'),
+	formidable = require('formidable'),
+	multiparty = require('connect-multiparty'),
+	fs = require('fs'),
+	mkpath = require('mkpath'),
+	path = require('path'),
+	async = require('async'),
+	passport = require('passport'),
+	LocalStrategy = require('passport-local').Strategy;
 
 var dataLoader = new DataLoader('./config.json');
 dataLoader.initialize(function( err ) {
@@ -79,6 +81,22 @@ var checkSession = function( req, res, next ) {
 		next();
 	}
 }
+
+passport.use( new LocalStrategy(
+	function( username, password, done ) {
+
+		console.log( 'username: ' + username );
+		console.log( 'password: ' + password );
+
+		if ( !(username == 'admin') ) {
+			return done( null, false, { message: 'Incorrect username!' } );
+		} else if ( !(password == 'admin') ) {
+			return done( null, false, { message: 'Incorrect password!' } );
+		}
+
+		return done( null, { id : 1 } );
+	}
+));
 
 app.use(session({
 	keys : ['secret1', 'secret2']

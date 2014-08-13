@@ -88,30 +88,34 @@ define([
 			});
 		},
 
-		renderMap : function() {
+		renderMap : function( callback ) {
 			var view = this;
+			ymaps.ready( function() {
 
-			view.map = new ymaps.Map("geoobjectMap", {
-				center: [55.76, 37.64], 
-				zoom: 14
-			});
+				view.map = new ymaps.Map("geoobjectMap", {
+					center: [55.76, 37.64], 
+					zoom: 14
+				});
 
-			var geoobjectVar = view.geoobject.toJSON();
-			if ( geoobjectVar.latitude && geoobjectVar.longitude ) {
-				view.placemark = new ymaps.Placemark( [geoobjectVar.latitude, geoobjectVar.longitude], {}, {preset : 'islands#darkGreenDotIcon'} );
-				view.map.geoObjects.add( view.placemark );
-				view.map.setCenter( [geoobjectVar.latitude, geoobjectVar.longitude] );
-			}
-
-			view.map.events.add('click', function(e) {
-				var coords = e.get('coords');
-				var pointGeometry = new ymaps.geometry.Point(coords);
-				if ( !view.placemark && view.placemarkChecked ) {
-					view.placemark = new ymaps.Placemark( pointGeometry, {}, {preset : 'islands#darkGreenDotIcon'} );
+				var geoobjectVar = view.geoobject.toJSON();
+				if ( geoobjectVar.latitude && geoobjectVar.longitude ) {
+					view.placemark = new ymaps.Placemark( [geoobjectVar.latitude, geoobjectVar.longitude], {}, {preset : 'islands#darkGreenDotIcon'} );
 					view.map.geoObjects.add( view.placemark );
-					view.geoobject.latitude = coords[0];
-					view.geoobject.longitude = coords[1];
+					view.map.setCenter( [geoobjectVar.latitude, geoobjectVar.longitude] );
 				}
+
+				view.map.events.add('click', function(e) {
+					var coords = e.get('coords');
+					var pointGeometry = new ymaps.geometry.Point(coords);
+					if ( !view.placemark && view.placemarkChecked ) {
+						view.placemark = new ymaps.Placemark( pointGeometry, {}, {preset : 'islands#darkGreenDotIcon'} );
+						view.map.geoObjects.add( view.placemark );
+						view.geoobject.latitude = coords[0];
+						view.geoobject.longitude = coords[1];
+					}
+				});
+
+				if ( callback ) callback();
 			});
 		},
 
