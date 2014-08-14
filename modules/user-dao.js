@@ -41,7 +41,6 @@ var UserDao = function ( configFile ) {
 				}
 			}
 		});
-
 	}
 
 }

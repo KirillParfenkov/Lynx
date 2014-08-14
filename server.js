@@ -9,6 +9,7 @@ var express = require('express'),
 	mc = require('mc'),
 	UserDao = require('./modules/user-dao'),
 	DataLoader = require('./modules/data-loader'),
+	ProfileDao = require('./modules/profile-dao'),
 	url = require('url'),
 	formidable = require('formidable'),
 	multiparty = require('connect-multiparty'),
@@ -26,6 +27,14 @@ dataLoader.initialize(function( err ) {
 });
 
 var userDao = new UserDao('./config.json');
+var profileDao = new ProfileDao( './config.json', 'content/permissionSets', false );
+profileDao.getProfileById( 3, function( err, profile ) {
+	console.log( 'err: ' );
+	console.log( err );
+	console.log( 'profile: ' );
+	console.log( profile );
+
+});
 
 nconf.argv()
 	.env()
@@ -124,6 +133,21 @@ app.post('/login', passport.authenticate( 'local', { successRedirect: '/', failu
 app.use(ensureAuthenticated);
 app.use(serveStatic('webapp'));
 app.use(serveStatic('content/files'));
+
+
+app.get( '/system/currentUser', function(req, res) {
+	res.json( 200, req.user );
+});
+
+app.get( '/system/currentProfile', function(req, res) {
+	profileDao.getProfileById( req.user.profile, function( err, profile ) {
+		if ( err ) {
+			res.json( 400, { error: err } );
+		}
+		res.json( 200, profile );
+	});
+	
+});
 
 app.get('/logout', function(req, res) {
 
