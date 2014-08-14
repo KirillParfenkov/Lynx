@@ -123,7 +123,7 @@ app.post('/login', passport.authenticate( 'local', { successRedirect: '/', failu
 
 app.use(ensureAuthenticated);
 app.use(serveStatic('webapp'));
-app.use(serveStatic('files'));
+app.use(serveStatic('content/files'));
 
 app.get('/logout', function(req, res) {
 
@@ -211,7 +211,7 @@ app.post('/file/:table/:id', multiparty(), function(req, res) {
 	fs.readFile( req.files.image.path, function( err,  loadData) {
 
 		if (err) throw err;
-		var newPath = __dirname + "/files/" + table + '/' + id;
+		var newPath = __dirname + "content/files/" + table + '/' + id;
 		mkpath( newPath, function( err ) {
 			var file = {
 				name : fileName
