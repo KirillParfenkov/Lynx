@@ -32,8 +32,6 @@ var UserDao = function ( configFile ) {
 
 					userPassword = user.password;
 					delete user.password;
-					console.log( 'password: ' + password );
-					console.log( 'userPassword: ' + userPassword);
 
 					if ( passwordHash.verify( password, userPassword ) ) {
 						return done( null, user );

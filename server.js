@@ -51,25 +51,16 @@ passport.use( new LocalStrategy({
 		passwordField: 'password'
 	},
 	function( email, password, done ) {
-		console.log(' LocalStrategy done!');
 
 		var len = 256;
 		var isCredNotReady = true;
 		var sessionKey;
 
-		console.log( 'email: ' + email );
-		console.log( 'password: ' + password );
-
 		userDao.authorize( email, password, function( err, loginUser ) {
-			console.log('usr dao done!');
-
 
 			if ( err ) {
 				return done( err );
 			}
-
-			console.log( loginUser );
-			console.log( 'after loginUser' );
 
 			if ( !loginUser ) {
 				return done( null, false, { message: 'Incorrect credationls!' } );
@@ -128,7 +119,7 @@ app.use(serveStatic('public'));
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.post('/login', passport.authenticate( 'local', { successRedirect: '/', failureRedirect: '/login' }));
+app.post('/login', passport.authenticate( 'local', { successRedirect: '/', failureRedirect: '/login.html' }));
 
 app.use(ensureAuthenticated);
 app.use(serveStatic('webapp'));
