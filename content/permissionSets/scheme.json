@@ -1,0 +1,15 @@
+{
+	"system" : {
+		"allowEditTabs" : ["read", "edit"],
+		"allowEditUsers" : ["read", "edit"],
+		"allowEditProfile" : ["read", "edit"],
+		"allowEditСonfiguration" : ["read", "edit"]
+	},
+
+	"tables" : {
+		"allowEditCategoriesTable" : ["read", "edit"],
+		"allowEditFurnitures" : ["read", "edit"],
+		"allowEditAttachments" : ["read", "edit"],
+		"allowEditGeoObjects" : ["read", "edit"]
+	}
+}

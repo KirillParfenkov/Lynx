@@ -1,0 +1,17 @@
+{
+	"allowEditTabs" : {
+		"read" : true
+	},
+	"allowEditUsers" : {
+		"read" : true
+	},
+	"allowEditProfile" : {
+		"read" : true
+	},
+	"allowEditСonfiguration" : {
+		"read" : true
+	},
+	"allowEditGeoObjects" : {
+		"read" : true
+	}
+}
