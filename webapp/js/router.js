@@ -3,8 +3,9 @@ define([
   'jquery',
   'underscore',
   'backbone',
-	'vm',
+	'async',
   'moduls/view-loader',
+  'moduls/context',
   'views/setup/setupMenu',
   'views/setup/usersView',
   'views/setup/profilesView',
@@ -15,12 +16,13 @@ define([
   'views/setup/tab/tabView',
   'views/setup/profile/profileEdit',
   'views/setup/profile/profileView'
-], function ($, _, Backbone, Vm, viewLoader, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
+], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
     setupMenu : {},
     setupViews : [],
+    context : {},
     routes: {
       'tab/:tabName' : 'selectTab',
       'setup' : 'selectSetup',
@@ -30,7 +32,7 @@ define([
       'view/:name/:id' : 'selectView'
     },
 
-    initialize : function (options, callback) {
+    initialize : function (options, doneInit) {
       var router = this;
       var tabs = options.tabs;
       var views =[];
@@ -38,18 +40,59 @@ define([
         views.push( tabs[i].view );
       }
 
-      router.setupMenu = new SetupMenu();
-      this.setupViews['usersView'] = new UsersView();
-      this.setupViews['profilesView'] = new ProfilesView();
-      this.setupViews['tabsView'] = new TabsView();
-      this.setupViews['userEdit'] = new UserEdit();
-      this.setupViews['userView'] = new UserView();
-      this.setupViews['tabEdit'] = new TabEdit();
-      this.setupViews['tabView'] = new TabView();
-      this.setupViews['profileEdit'] = new ProfileEdit();
-      this.setupViews['profileView'] = new ProfileView();
+      Async.parallel({
 
-      callback();
+        setupViews : function( doneSetuoViews ) {
+
+          router.setupMenu = new SetupMenu();
+          router.setupViews['usersView'] = new UsersView();
+          router.setupViews['profilesView'] = new ProfilesView();
+          router.setupViews['tabsView'] = new TabsView();
+          router.setupViews['userEdit'] = new UserEdit();
+          router.setupViews['userView'] = new UserView();
+          router.setupViews['tabEdit'] = new TabEdit();
+          router.setupViews['tabView'] = new TabView();
+          router.setupViews['profileEdit'] = new ProfileEdit();
+          router.setupViews['profileView'] = new ProfileView();
+
+          doneSetuoViews( null, router.setupViews );
+        },
+
+        context : function( doneLoadContext ) {
+
+          Async.parallel( {
+
+            currentUser : function( done ) {
+              context.getCurrentUser( function( err, user ) {
+                if ( err ) done( err );
+                done( null, user );
+              });
+            },
+
+            currentProfile : function( done ) {
+              context.getCurrentProfile( function( err, profile ) {
+                if ( err ) done( err );
+                done( null, profile );
+              });
+            }
+
+          }, function( err, results ) {
+
+            if ( err ) done( err );
+
+            doneLoadContext( null, {
+              currentUser    : results.currentUser,
+              currentProfile : results.currentProfile,
+            });
+
+          });
+        }
+
+      }, function( err, results ) {
+        console.log( err );
+        router.context = results.context;
+        doneInit( err );
+      });
     },
 
     selectSetup: function() {
@@ -62,7 +105,7 @@ define([
     },
 
     selectSetupViewItem: function( view, id) {
-      this.setupViews[view].render( {id: id} );
+      this.setupViews[view].render( {id: id, context: this.context} );
     },
 
     clearHeaderMenu: function() {
@@ -70,10 +113,11 @@ define([
     },
 
     selectView: function( name, id ) {
+      var router = this;
       viewLoader.load( name, function( view ) {
-        var src;
+        var src = { context: router.context };
         if ( id ) {
-          src = { id: id };
+          src.id = id;
         }
         view.render( src );
       });
