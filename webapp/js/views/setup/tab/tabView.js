@@ -4,10 +4,9 @@ define([
   'backbone',
   'events',
   'libs/queue/queue',
-  'models/session',
   'models/tab',
   'text!templates/setup/tab/tabView.html'
-], function ($, _, Backbone, Events, Queue, Session, Tab, tabViewTemplate) {
+], function ($, _, Backbone, Events, Queue, Tab, tabViewTemplate) {
   var TabView = Backbone.View.extend({
     el : '.content',
     tab : null,

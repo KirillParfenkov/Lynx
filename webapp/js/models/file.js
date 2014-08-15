@@ -1,11 +1,9 @@
-define(['jquery',
-		'underscore',
+define([
 		'backbone'
-], function($, _, Backbone) {
+], function( Backbone ) {
+
 	var Picture = Backbone.Model.extend({
-		urlRoot : 'http://localhost:8080/api/files',
-		initialize: function(){
-    	}
+		urlRoot : '/api/files',
 	});
 
 	return Picture;

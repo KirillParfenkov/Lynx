@@ -1,11 +1,10 @@
-define(['jquery',
-		'underscore',
+define([
 		'backbone'
-], function($, _, Backbone) {
+], function( Backbone ) {
+
 	var Category = Backbone.Model.extend({
-		urlRoot : 'http://localhost:8080/api/categories',
-		initialize: function(){
-    	}
+		urlRoot : '/api/categories',
+
 	});
 
 	return Category;

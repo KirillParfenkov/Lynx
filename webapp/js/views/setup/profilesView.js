@@ -4,11 +4,10 @@ define([
   'backbone',
   'events',
   'libs/queue/queue',
-  'models/session',
   'models/profile',
   'collections/profiles',
   'text!templates/setup/profilesView.html' 
-], function ($, _, Backbone, Events, Queue, Session, Profile, Profiles, profilesViewTemplate) {
+], function ($, _, Backbone, Events, Queue, Profile, Profiles, profilesViewTemplate) {
 	var ProfilesView = Backbone.View.extend({
 		elem : '.content',
     initialize: function () {

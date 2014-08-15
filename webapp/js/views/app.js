@@ -5,10 +5,9 @@ define([
   'vm',
 	'events',
   'libs/queue/queue',
-  'models/session',
   'models/user',
   'text!templates/layout.html' 
-], function($, _, Backbone, Vm, Events, Queue, Session, User, layoutTemplate){
+], function($, _, Backbone, Vm, Events, Queue, User, layoutTemplate){
   var AppView = Backbone.View.extend({
     el: '.container',
     events : {

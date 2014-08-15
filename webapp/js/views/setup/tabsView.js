@@ -4,11 +4,10 @@ define([
   'backbone',
   'events',
   'libs/queue/queue',
-  'models/session',
   'models/tab',
   'collections/tabs',
   'text!templates/setup/tabsView.html' 
-], function ($, _, Backbone, Events, Queue, Session, Tab, Tabs, tabsViewTemplate) {
+], function ($, _, Backbone, Events, Queue, Tab, Tabs, tabsViewTemplate) {
 	var TabsView = Backbone.View.extend({
 		elem : '.content',
     initialize: function () {

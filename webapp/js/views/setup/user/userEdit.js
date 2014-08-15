@@ -4,11 +4,10 @@ define([
   'backbone',
   'events',
   'libs/queue/queue',
-  'models/session',
   'models/user',
   'collections/users',
   'text!templates/setup/user/userEdit.html'
-], function ($, _, Backbone, Events, Queue, Session, User, Usres, userEditTemplate) {
+], function ($, _, Backbone, Events, Queue, User, Usres, userEditTemplate) {
 	var UserEdit = Backbone.View.extend({
 		el : '.content',
     events: {

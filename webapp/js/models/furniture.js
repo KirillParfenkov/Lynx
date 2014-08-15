@@ -1,11 +1,9 @@
-define(['jquery',
-		'underscore',
+define([
 		'backbone'
-], function($, _, Backbone) {
+], function( Backbone ) {
+
 	var User = Backbone.Model.extend({
-		urlRoot : 'http://localhost:8080/api/furnitures',
-		initialize: function(){
-    	}
+		urlRoot : '/api/furnitures'
 	});
 
 	return User;

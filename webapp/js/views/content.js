@@ -4,10 +4,9 @@ define([
   'backbone',
   'events',
   'libs/queue/queue',
-  'models/session',
   'models/user',
   'text!templates/layout.html' 
-], function ($, _, Backbone, Events, Queue, Session, User, contentTemplate) {
+], function ($, _, Backbone, Events, Queue, User, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
 		render : function ( src, template, callback ) {

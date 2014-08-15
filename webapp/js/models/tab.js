@@ -3,7 +3,7 @@ define(['jquery',
 		'backbone'
 ], function($, _, Backbone) {
 	var Tab = Backbone.Model.extend({
-		urlRoot : 'http://localhost:8080/api/tabs'
+		urlRoot : '/api/tabs'
 	});
 	return Tab;
 });

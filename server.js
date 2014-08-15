@@ -149,6 +149,15 @@ app.get( '/system/currentProfile', function(req, res) {
 	
 });
 
+app.get( '/system/permissionSets/:id', function( req, res) {
+	profileDao.getProfileById( req.params.id, function( err, permissionSet ) {
+		if ( err ) {
+			res.json( 400, { error: err } );
+		}
+		res.json( 200, permissionSet );
+	});
+});
+
 app.get('/logout', function(req, res) {
 
 	var user = req.user;

@@ -3,7 +3,7 @@ define(['jquery',
 		'backbone'
 ], function($, _, Backbone) {
 	var geoobjectType = Backbone.Model.extend({
-		urlRoot : 'http://localhost:8080/api/geoObjectTypes'
+		urlRoot : '/api/geoObjectTypes'
 	});
 	return geoobjectType;
 });

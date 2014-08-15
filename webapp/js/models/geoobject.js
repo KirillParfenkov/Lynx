@@ -3,7 +3,7 @@ define(['jquery',
 		'backbone'
 ], function($, _, Backbone) {
 	var Geoobject = Backbone.Model.extend({
-		urlRoot : 'http://localhost:8080/api/geoObjects'
+		urlRoot : '/api/geoObjects'
 	});
 	return Geoobject;
 });
