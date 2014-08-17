@@ -149,12 +149,21 @@ app.get( '/system/currentProfile', function(req, res) {
 	
 });
 
-app.get( '/system/permissionSets/:id', function( req, res) {
-	profileDao.getProfileById( req.params.id, function( err, permissionSet ) {
+app.get( '/system/permissionScheme', function( req, res ) {
+	profileDao.getProfileScheme( function( err, scheme ) {
 		if ( err ) {
 			res.json( 400, { error: err } );
 		}
-		res.json( 200, permissionSet );
+		res.json( 200, scheme );
+	});
+});
+
+app.get( '/system/profiles/:id', function( req, res) {
+	profileDao.getProfileById( req.params.id, function( err, profile ) {
+		if ( err ) {
+			res.json( 400, { error: err } );
+		}
+		res.json( 200, profile );
 	});
 });
 

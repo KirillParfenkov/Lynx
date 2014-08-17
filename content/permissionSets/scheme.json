@@ -1,15 +1,55 @@
 {
-	"system" : {
-		"allowEditTabs" : ["read", "edit"],
-		"allowEditUsers" : ["read", "edit"],
-		"allowEditProfile" : ["read", "edit"],
-		"allowEditСonfiguration" : ["read", "edit"]
-	},
+	"system" : [
+		{ 
+			"name" : "allowEditTabs",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "allowEditUsers",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"] 
+		},
+		{ 
+			"name" : "allowEditProfile",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"] 
+		},
+		{ 
+			"name" : "allowEditСonfiguration",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"] 
+		}
+	],
 
-	"tables" : {
-		"allowEditCategoriesTable" : ["read", "edit"],
-		"allowEditFurnitures" : ["read", "edit"],
-		"allowEditAttachments" : ["read", "edit"],
-		"allowEditGeoObjects" : ["read", "edit"]
-	}
+	"tables" : [
+		{ 
+			"name" : "allowEditCategoriesTable",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "allowEditFurnitures",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "allowEditAttachments",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "allowEditGeoObjects",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		}
+	]
 }

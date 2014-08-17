@@ -3,14 +3,14 @@ define([
   'underscore',
   'backbone',
   'events',
-  'libs/queue/queue',
+  'system',
   'async',
   'moduls/context',
   'models/profile',
   'models/permissionSet',
   'collections/tabs',
   'text!templates/setup/profile/profileView.html'
-], function ($, _, Backbone, Events, Queue, Async, Context, Profile, PermissionSet, Tabs, profileViewTemplate) {
+], function ($, _, Backbone, Events, System, Async, Context, Profile, PermissionSet, Tabs, profileViewTemplate) {
   var ProfileView = Backbone.View.extend({
 
     el : '.content',
@@ -65,10 +65,20 @@ define([
               var permissionSet = new PermissionSet({ id : profile.id });
               permissionSet.fetch({
                 success : function ( permissionSet ) {
-                  done( null, permissionSet.toJSON() );
+                  done( null, permissionSet.toJSON().permissionSet );
                 },
                 error : function ( err ) {
                   done( err );
+                }
+              });
+            },
+
+            permissionScheme : function ( done ) {
+              System.getPermissionScheme( function( err, scheme ) {
+                if ( err ) {
+                  done( err );
+                } else {
+                  done( null, scheme );
                 }
               });
             }
@@ -79,20 +89,39 @@ define([
 
             doneLoadData( null, { 
               tabList : results.tabList,
-              permissionSet : results.permissionSet
+              permissionSet : results.permissionSet,
+              permissionScheme : results.permissionScheme
             });
 
           });
         }
       ], function( err, result ) {
         if ( err ) throw err;
+        console.log( 'res: ');
+        console.log( result.permissionSet  );
         $(view.el).html(_.template( profileViewTemplate, {
           profile : profile.toJSON(), 
           tabList : result.tabList, 
-          permissionSet : result.permissionSet
+          permissionSet : result.permissionSet,
+          scheme : result.permissionScheme,
+          viewHalper : view.viewHalper
         }));
       });
+    },
+
+    viewHalper : {
+      getPermissionValue : function( permission, permissionSet, namespace ) {
+        var value;
+        if ( namespace == "system" ) {
+          console.log( 'permission.type: ' + permission.type );
+          if ( (permission.type = "String") && permission.multi ) {
+            value = permissionSet[namespace][permission.name];
+            return value.join();
+          }
+        }
+      }
     }
+
   });
   return ProfileView;
 });

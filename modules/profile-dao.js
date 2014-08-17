@@ -42,6 +42,18 @@ var ProfileDao = function ( configFile, permissionSetsDir, casher ) {
 			}
 		});
 	};
+
+	this.getProfileScheme = function( done ) {
+
+		var permissionSetsPath = this.permissionSetsPath;
+		fs.readFile( permissionSetsPath + '/scheme.json', 'utf-8', function( err, data ) {
+			if (err) {
+				return done( err );
+			} else {
+				return done( null, JSON.parse( data ) );
+			}
+		});
+	}
 }
 
 module.exports = ProfileDao;

@@ -15,5 +15,22 @@
 				</tr>
 			<%	}); %>
 		</table>
+		<div class="panel panel-default">
+			<div class="panel-heading">Системные</div>
+			<div class="panel-body">
+				<table class="table">
+					<tr>
+						<th>Право</th>
+						<th>Значение</th>
+					</tr>
+					<% _.each( scheme.system, function( permisstion ) { %>
+						<tr>
+							<td><%= permisstion.name %></td>
+							<td><%= viewHalper.getPermissionValue( permisstion, permissionSet, 'system' ) %></td>
+						</tr>
+					<% }); %>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>

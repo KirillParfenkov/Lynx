@@ -1,22 +1,9 @@
 {
-	"allowEditTabs" : {
-		"read" : true,
-		"edit" : true
-	},
-	"allowEditUsers" : {
-		"read" : true,
-		"edit" : true
-	},
-	"allowEditProfile" : {
-		"read" : true,
-		"edit" : true
-	},
-	"allowEditСonfiguration" : {
-		"read" : true,
-		"edit" : true
-	},
-	"allowEditGeoObjects" : {
-		"read" : true,
-		"edit" : true
+	"system" : {
+		"allowEditTabs" : ["read", "edit"],
+		"allowEditUsers" : ["read", "edit"],
+		"allowEditProfile" : ["read", "edit"],
+		"allowEditСonfiguration" : ["read", "edit"],
+		"allowEditGeoObjects" : ["read", "edit"]
 	}
 }
