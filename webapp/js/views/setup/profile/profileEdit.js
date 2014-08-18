@@ -3,18 +3,25 @@ define([
   'underscore',
   'backbone',
   'events',
-  'libs/queue/queue',
+  'system',
+  'async',
+  'moduls/context',
   'models/profile',
+  'models/permissionSet',
   'collections/tabs',
   'text!templates/setup/profile/profileEdit.html'
-], function ($, _, Backbone, Events, Queue, Profile, Tabs, profileEditTemplate) {
+], function ($, _, Backbone, Events, System, Async, Context, Profile, PermissionSet, Tabs, profileViewTemplate) {
 	var ProfileView = Backbone.View.extend({
-		el : '.content',
+
+    el : '.content',
+    profile : null,
+
     events: {
       'click .profileSaveButton' : 'save'
     },
-    profile : null,
-		render : function ( src, callback ) {
+
+    render : function ( src, callback ) {
+
       var view = this;
       var profile;
       if ( src.id != -1) {
@@ -23,62 +30,112 @@ define([
         view.profile = new Profile();
         $(view.el).html(_.template(profileEditTemplate, {profile: view.profile.toJSON()}));
       }
-		},
+    },
 
-    save : function () {
-      var profile = this.profile;
-      profile.save({  
-      }, 
-      {
-        success: function (tab) {
-          window.location.hash = '/setup/profilesView';
+    renderEditProfile : function ( src, callback ) {
+
+      var view = this;
+      var profile = new Profile( {id: src.id} );
+
+      Async.waterfall([
+        function loadProfile ( doneLoadProfile ) {
+          profile.fetch( {
+            success: function ( profile ) {
+              view.profile = profile;
+              doneLoadProfile( null, profile.toJSON() );
+            },
+            error: function ( err ) {
+              doneLoadProfile( err );
+            }
+          });
+        },
+        function loadPermissionData ( profile, doneLoadData ) {
+
+          Async.parallel({
+
+            tabList : function ( done ) {
+
+              var tabs = new Tabs();
+              var tabList = [];
+
+              tabs.fetch({
+                success: function ( tabs ) {
+                  _.each(tabs.toJSON(), function(tab) {
+                    if ( typeof (_.find( profile.tabs, function( profTab ) {
+                      return (profTab == tab.id);
+                    })) != 'undefined') {
+                      tabList.push({ id : tab.id, label: tab.label, visible: true});
+                    } else {
+                      tabList.push({ id : tab.id, label: tab.label, visible: false});
+                    }
+                  }); 
+                  done( null, tabList );
+                },
+                error: function ( err ) {
+                  done( err );
+                }
+              });
+            },
+
+            permissionSet : function ( done ) {
+
+              var permissionSet = new PermissionSet({ id : profile.name });
+              permissionSet.fetch({
+                success : function ( permissionSet ) {
+                  done( null, permissionSet.toJSON() );
+                },
+                error : function ( err ) {
+                  done( err );
+                }
+              });
+            },
+
+            permissionScheme : function ( done ) {
+              System.getPermissionScheme( function( err, scheme ) {
+                if ( err ) {
+                  done( err );
+                } else {
+                  done( null, scheme );
+                }
+              });
+            }
+
+          }, function( err, results ) {
+
+            if ( err ) doneLoadData( err );
+
+            doneLoadData( null, { 
+              tabList : results.tabList,
+              permissionSet : results.permissionSet,
+              permissionScheme : results.permissionScheme
+            });
+
+          });
         }
+      ], function( err, result ) {
+        if ( err ) throw err;
+        $(view.el).html(_.template( profileViewTemplate, {
+          profile : profile.toJSON(), 
+          tabList : result.tabList, 
+          permissionSet : result.permissionSet,
+          scheme : result.permissionScheme,
+          viewHalper : view.viewHalper
+        }));
       });
     },
 
-    renderEditProfile : function( src, callback ) {
-      var view = this;
-      var profile = new Profile( {id: src.id} );
-      var tabs = new Tabs();
-      var tabList = [];
-      var queue = new Queue ([
-        function ( queue ) {
-          profile.fetch( {
-            success: function ( tab ) {
-              view.profile = profile;
-              queue.next();
-            },
-            error: function () {
-              queue.next();
-            }
-          });
-        },
-        function ( queue ) {
-          tabs.fetch({
-            success: function ( tabs ) {
-              var prof = profile.toJSON();
-              _.each(tabs.toJSON(), function(tab) {
-                if ( typeof (_.find( prof.tabs, function( profTab ) {
-                  return (profTab == tab.id);
-                })) != 'undefined') {
-                  tabList.push({ id : tab.id, name: tab.name, label: tab.label, visible: true});
-                } else {
-                  tabList.push({ id : tab.id, name: tab.name, label: tab.label, visible: false});
-                }
-              }); 
-              queue.next();
-            },
-            error: function () {
-              queue.next();
-            }
-          });
-        },
-        function ( queue ) {
-          $(view.el).html(_.template(profileEditTemplate, {profile: profile.toJSON(),  tabList: tabList} ));
-        }
-      ]);
+    viewHalper : {
 
-      queue.start();
+      getPermissionValue : function( permission, permissionSet, namespace ) {
+        var value;
+        if ( namespace == "system" || namespace == "tables" ) {
+          if ( (permission.type = "String") && permission.multi && permissionSet[namespace]) {
+            value = permissionSet[namespace][permission.name];
+            return value ? value.join(', ') : "";
+          }
+        }
+        return "";
+      }
     },
 
     save : function () {
@@ -91,7 +148,7 @@ define([
         tabs : tabs
       }, 
       {
-        success: function (tab) {
+        success: function ( tab ) {
           window.location.hash = '/setup/profilesView';
         }
       });

@@ -1,20 +1,41 @@
 <div>
 	<h3><%= profile.label %></h3>
 	<div>
-		<table class="table table-hover ">
-			<tr>
-				<th>NAME</th>
-				<th>VISIBLE</th>
-			</tr>
-			<% _.each( tabList, function( tab ) { %>
-				<tr>
-					<td><%= tab.label %></td>
-					<td class="col-sm-2">
-							<input name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>>
-					</td>
-				</tr>
-			<%	}); %>
-		</table>
+		<div class="panel panel-default">
+			<div class="panel-heading">Системные</div>
+			<div class="panel-body">
+				
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Табы</div>
+			<div class="panel-body">
+				<table class="table table-hover ">
+					<thead>
+						<tr>
+							<th>NAME</th>
+							<th>VISIBLE</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% _.each( tabList, function( tab ) { %>
+							<tr>
+								<td><%= tab.label %></td>
+								<td class="col-sm-2">
+										<input name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>>
+								</td>
+							</tr>
+						<%	}); %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Таблицы</div>
+			<div class="panel-body">
+					
+			</div>
+		</div>
 		<button class="profileSaveButton btn btn-default" type="button">Save</button>
 	</div>
 </div>
