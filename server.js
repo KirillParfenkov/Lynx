@@ -158,12 +158,12 @@ app.get( '/system/permissionScheme', function( req, res ) {
 	});
 });
 
-app.get( '/system/profiles/:id', function( req, res) {
-	profileDao.getProfileById( req.params.id, function( err, profile ) {
+app.get( '/system/getPermissionSets/:id', function( req, res) {
+	profileDao.getPermissionSet( req.params.id, function( err, permissionSet ) {
 		if ( err ) {
 			res.json( 400, { error: err } );
 		}
-		res.json( 200, profile );
+		res.json( 200, permissionSet );
 	});
 });
 

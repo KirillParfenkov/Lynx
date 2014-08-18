@@ -62,10 +62,10 @@ define([
 
             permissionSet : function ( done ) {
 
-              var permissionSet = new PermissionSet({ id : profile.id });
+              var permissionSet = new PermissionSet({ id : profile.name });
               permissionSet.fetch({
                 success : function ( permissionSet ) {
-                  done( null, permissionSet.toJSON().permissionSet );
+                  done( null, permissionSet.toJSON() );
                 },
                 error : function ( err ) {
                   done( err );
@@ -97,8 +97,6 @@ define([
         }
       ], function( err, result ) {
         if ( err ) throw err;
-        console.log( 'res: ');
-        console.log( result.permissionSet  );
         $(view.el).html(_.template( profileViewTemplate, {
           profile : profile.toJSON(), 
           tabList : result.tabList, 
@@ -114,11 +112,12 @@ define([
         var value;
         if ( namespace == "system" ) {
           console.log( 'permission.type: ' + permission.type );
-          if ( (permission.type = "String") && permission.multi ) {
+          if ( (permission.type = "String") && permission.multi && permissionSet[namespace]) {
             value = permissionSet[namespace][permission.name];
             return value.join();
           }
         }
+        return "";
       }
     }
 

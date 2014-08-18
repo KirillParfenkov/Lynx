@@ -3,7 +3,7 @@ define([
 ], function( Backbone ) {
 
 	var PermissionSet = Backbone.Model.extend({
-		urlRoot : '/system/profiles'
+		urlRoot : '/system/getPermissionSets'
 	});
 
 	return PermissionSet;

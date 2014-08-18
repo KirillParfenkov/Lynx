@@ -1,1 +1,9 @@
-{}
+{
+	"system" : {
+		"allowEditTabs" : ["read", "edit"],
+		"allowEditUsers" : ["read", "edit"],
+		"allowEditProfile" : ["read", "edit"],
+		"allowEditСonfiguration" : ["read", "edit"],
+		"allowEditGeoObjects" : ["read", "edit"]
+	}
+}
