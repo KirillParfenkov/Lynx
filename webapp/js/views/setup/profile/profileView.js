@@ -108,12 +108,31 @@ define([
     },
 
     viewHalper : {
+
       getPermissionValue : function( permission, permissionSet, namespace ) {
         var value;
         if ( namespace == "system" || namespace == "tables" ) {
           if ( (permission.type = "String") && permission.multi && permissionSet[namespace]) {
             value = permissionSet[namespace][permission.name];
-            return value.join(', ');
+            return value ? value.join(', ') : "";
+          }
+        }
+        return "";
+      },
+
+      getStyle : function( permission, permissionSet, namespace ) {
+        var value;
+        if ( namespace == "system" || namespace == "tables" ) {
+          if ( (permission.type = "String") && permission.multi && permissionSet[namespace]) {
+            var value = permissionSet[namespace][permission.name];
+            value = value ? value : [];
+            if ( value.length == 0 ) {
+              return "danger";  
+            } else if ( value.length == permission.values.length ) {
+              return "success";
+            } else {
+              return "warning";
+            }
           }
         }
         return "";
