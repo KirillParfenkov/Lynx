@@ -20,13 +20,30 @@
 			<div class="panel-body">
 				<table class="table">
 					<tr>
-						<th>Право</th>
-						<th>Значение</th>
+						<th>Возможность</th>
+						<th>Доступ</th>
 					</tr>
 					<% _.each( scheme.system, function( permisstion ) { %>
 						<tr>
 							<td><%= permisstion.name %></td>
 							<td><%= viewHalper.getPermissionValue( permisstion, permissionSet, 'system' ) %></td>
+						</tr>
+					<% }); %>
+				</table>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Таблицы</div>
+			<div class="panel-body">
+				<table class="table">
+					<tr>
+						<th>Имя таблицы</th>
+						<th>Доступ</th>
+					</tr>
+					<% _.each( scheme.tables, function( permisstion ) { %>
+						<tr>
+							<td><%= permisstion.name %></td>
+							<td><%= viewHalper.getPermissionValue( permisstion, permissionSet, "tables" ) %></td>
 						</tr>
 					<% }); %>
 				</table>

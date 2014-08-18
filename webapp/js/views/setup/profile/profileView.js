@@ -110,11 +110,10 @@ define([
     viewHalper : {
       getPermissionValue : function( permission, permissionSet, namespace ) {
         var value;
-        if ( namespace == "system" ) {
-          console.log( 'permission.type: ' + permission.type );
+        if ( namespace == "system" || namespace == "tables" ) {
           if ( (permission.type = "String") && permission.multi && permissionSet[namespace]) {
             value = permissionSet[namespace][permission.name];
-            return value.join();
+            return value.join(', ');
           }
         }
         return "";

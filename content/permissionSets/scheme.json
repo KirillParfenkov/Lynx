@@ -28,28 +28,53 @@
 
 	"tables" : [
 		{ 
-			"name" : "allowEditCategoriesTable",
+			"name" : "attachments",
 			"type" : "String",
 			"multi" : true,
 			"values" : ["read", "edit"]
 		},
 		{ 
-			"name" : "allowEditFurnitures",
+			"name" : "categories",
 			"type" : "String",
 			"multi" : true,
 			"values" : ["read", "edit"]
 		},
 		{ 
-			"name" : "allowEditAttachments",
+			"name" : "files",
 			"type" : "String",
 			"multi" : true,
 			"values" : ["read", "edit"]
 		},
 		{ 
-			"name" : "allowEditGeoObjects",
+			"name" : "furnitures",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "geoObjects",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "geoObjectTypes",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "profiles",
+			"type" : "String",
+			"multi" : true,
+			"values" : ["read", "edit"]
+		},
+		{ 
+			"name" : "tabs",
 			"type" : "String",
 			"multi" : true,
 			"values" : ["read", "edit"]
 		}
+
 	]
 }

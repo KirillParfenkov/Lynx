@@ -5,5 +5,15 @@
 		"allowEditProfile" : ["read"],
 		"allowEditСonfiguration" : ["read"],
 		"allowEditGeoObjects" : ["read"]
+	},
+	"tables" : {
+		"attachments" : ["read"],
+		"categories" : ["read"],
+		"files" : ["read"],
+		"furnitures" : ["read"],
+		"geoObjects" : ["read"],
+		"geoObjectTypes" : ["read"],
+		"profiles" : ["read"],
+		"tabs" : ["read"]
 	}
 }
