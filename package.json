@@ -1,5 +1,6 @@
 {
   "name": "simpleJ",
+  "author" : "Kiryl Parfiankou"
   "scripts": {
     "start": "server.js"
   },
