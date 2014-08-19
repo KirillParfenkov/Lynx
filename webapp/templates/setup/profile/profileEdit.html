@@ -4,13 +4,35 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Системные</div>
 			<div class="panel-body">
-				
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Возможность</th>
+							<th>Доступ</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% _.each( scheme.system, function( permisstion ) { %>
+							<tr>
+								<td><%= permisstion.name %></td>
+								<td class="col-sm-2">
+									<div class="checkbox">
+										<label><input name="systemRead" type="checkbox" value="">Read</label>
+									</div>
+									<div class="checkbox">
+										<label><input name="systemEdit" type="checkbox" value="">Edit</label>
+									</div>
+								</td>
+							</tr>
+						<% }); %>
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Табы</div>
 			<div class="panel-body">
-				<table class="table table-hover ">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>NAME</th>
@@ -22,7 +44,7 @@
 							<tr>
 								<td><%= tab.label %></td>
 								<td class="col-sm-2">
-										<input name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>>
+									<input name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>>
 								</td>
 							</tr>
 						<%	}); %>
