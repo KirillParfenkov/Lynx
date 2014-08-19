@@ -16,12 +16,12 @@
 							<tr>
 								<td><%= permisstion.name %></td>
 								<td class="col-sm-2">
-									<div class="checkbox">
-										<label><input name="systemRead" type="checkbox" value="">Read</label>
-									</div>
-									<div class="checkbox">
-										<label><input name="systemEdit" type="checkbox" value="">Edit</label>
-									</div>
+									<% _.each( permisstion.values, function( value ) { %>
+										<div class="checkbox">
+											<label><input name="<%= permisstion.name %>" type="checkbox" value="<%= value %>" 
+											              <% if ( viewHalper.getPermissionValue( permisstion, permissionSet, 'system', value ) ) { %> checked <% } %>> <%= value %> </label>
+										</div>
+									<% }); %>
 								</td>
 							</tr>
 						<% }); %>
@@ -55,7 +55,29 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Таблицы</div>
 			<div class="panel-body">
-					
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Возможность</th>
+							<th>Доступ</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% _.each( scheme.tables, function( permisstion ) { %>
+							<tr>
+								<td><%= permisstion.name %></td>
+								<td class="col-sm-2">
+									<% _.each( permisstion.values, function( value ) { %>
+										<div class="checkbox">
+											<label><input name="<%= permisstion.name %>" type="checkbox" value="<%= value %>" 
+											              <% if ( viewHalper.getPermissionValue( permisstion, permissionSet, 'tables', value ) ) { %> checked <% } %>> <%= value %> </label>
+										</div>
+									<% }); %>
+								</td>
+							</tr>
+						<% }); %>
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<button class="profileSaveButton btn btn-default" type="button">Save</button>

@@ -126,12 +126,16 @@ define([
 
     viewHalper : {
 
-      getPermissionValue : function( permission, permissionSet, namespace ) {
-        var value;
+      getPermissionValue : function( permission, permissionSet, namespace, value ) {
+        var userPermissions;
         if ( namespace == "system" || namespace == "tables" ) {
           if ( (permission.type = "String") && permission.multi && permissionSet[namespace]) {
-            value = permissionSet[namespace][permission.name];
-            return value ? value.join(', ') : "";
+            userPermissions = permissionSet[namespace][permission.name];
+            console.log( 'userPermissions: ' );
+            console.log( userPermissions );
+            console.log( 'value: ' + value);
+            console.log('value: ' + _.contains( userPermissions, value ));
+            return _.contains( userPermissions, value );
           }
         }
         return "";
