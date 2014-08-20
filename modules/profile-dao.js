@@ -1,32 +1,31 @@
 var nconf = require('nconf'),
 	mysql = require('mysql'),
 	async = require('async'),
+	DataLoader = require('./data-loader'),
 	passwordHash = require('password-hash'),
 	fs = require('fs');
 
 var ProfileDao = function ( configFile, permissionSetsDir, casher ) {
-	nconf.argv()
-		.env()
-		.file({file: configFile});
 
-	this.pool = mysql.createPool({
-		connectionLimit : nconf.get('database:connectionLimit'),
-		host : nconf.get('database:uri'),
-		port : nconf.get('database:port'),
-		database: nconf.get('database:name'),
-		user: nconf.get('database:user'),
-		password: nconf.get('database:password')
-	});
+	this.dataLoader = new DataLoader(configFile);
 
 	this.permissionSetsPath = __dirname + '/../' + permissionSetsDir;
 
+
+
+	this.initialize = function ( done ) {
+		this.dataLoader.initialize(function( err ) {
+			done( err );
+		});
+	};
+
 	this.getProfileById = function( id, done ) {
 		var permissionSetsPath = this.permissionSetsPath;
-		this.pool.query('SELECT id, name, admin FROM profiles WHERE id = ?', [id], function(err, rows, fields) {
+		this.dataLoader.getObject( 'profiles', id, function( err, row, fields) {
 			if ( err ) {
 				done( err );
 			} else {
-				var profile = rows[0];
+				var profile = row;
 				if ( !profile ) {
 					return done( null, false );
 				} else {
@@ -42,6 +41,50 @@ var ProfileDao = function ( configFile, permissionSetsDir, casher ) {
 			}
 		});
 	};
+
+	this.saveProfile = function( profile, doneSave ) {
+
+		var dao = this;
+
+		var permissionSetsPath = this.permissionSetsPath;
+		var insertRequest = "INSERT INTO profiles SET ?",
+			updateReqyest = "UPDATE profiles SET ? WHERE id = ?";
+
+		var permissionSet = profile.permissionSet;
+		delete profile.permissionSet;
+
+		async.waterfall([
+			function saveProfile( done ) {
+				console.log('saveProfile!');
+
+				if ( profile.id ) {
+					dao.dataLoader.putObject( 'profiles', profile, profile.id, function( err, result ) {
+						console.log( 'err:' );
+						console.log( err );
+						done( err, result );
+					});
+				} else {
+					dao.dataLoader.postObject( 'profiles', profile, function( err, result ) {
+						done( err, result );
+					});
+				}
+			},
+			function savePermissionSet( profile, done ) {
+				console.log('savePermissionSet!');
+				profile.permissionSet = permissionSet;
+				if ( permissionSet ) {
+					fs.writeFile( permissionSetsPath + '/' + profile.name + '.json', JSON.stringify(permissionSet), function( err ){
+						done( err, profile );
+					});
+				} else {
+					done( null, profile );
+				}
+			}
+		], function ( err, profile ) {
+			console.log('result!');
+			doneSave( err, profile );
+		});
+	}
 
 	this.getProfileScheme = function( done ) {
 

@@ -3,7 +3,7 @@ define(['jquery',
 		'backbone'
 ], function($, _, Backbone) {
 	var Profile = Backbone.Model.extend({
-		urlRoot : '/api/profiles'
+		urlRoot : '/system/profiles'
 	});
 	return Profile;
 });

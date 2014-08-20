@@ -28,6 +28,13 @@ dataLoader.initialize(function( err ) {
 
 var userDao = new UserDao('./config.json');
 var profileDao = new ProfileDao( './config.json', 'content/permissionSets', false );
+profileDao.initialize(function( err ) {
+	if ( !err ) {
+		console.log( 'profile-dao is ready!');
+	} else {
+		console.err( err );
+	}
+});
 
 nconf.argv()
 	.env()
@@ -159,6 +166,36 @@ app.get( '/system/getPermissionSets/:id', function( req, res) {
 		res.json( 200, permissionSet );
 	});
 });
+
+app.get( '/system/profiles/:id', function( req, res ) {
+	profileDao.getProfileById( req.params.id, function( err, profile ) {
+		if ( err ) {
+			res.json( 400, { error: err } );
+		}
+		res.json( 200, profile );
+	});
+});
+
+app.post('/system/profiles', function( req, res ) {
+	profileDao.saveProfile( req.body, function( err, profile ) {
+		if (err) {
+			res.json(400, {error: 'error'});
+		} else {
+			res.json( 200, profile );
+		}
+	});
+});
+
+app.put('/system/profiles/:id', function( req, res ) {
+	profileDao.saveProfile( req.body, function( err, profile ) {
+		if ( err ) {
+			res.json( 400, {error: 'error'} );
+		} else {
+			res.json( 200, profile );
+		}
+	});
+});
+
 
 app.get('/logout', function(req, res) {
 
