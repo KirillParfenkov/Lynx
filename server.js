@@ -28,13 +28,6 @@ dataLoader.initialize(function( err ) {
 
 var userDao = new UserDao('./config.json');
 var profileDao = new ProfileDao( './config.json', 'content/permissionSets', false );
-profileDao.getProfileById( 3, function( err, profile ) {
-	console.log( 'err: ' );
-	console.log( err );
-	console.log( 'profile: ' );
-	console.log( profile );
-
-});
 
 nconf.argv()
 	.env()
