@@ -1,5 +1,13 @@
 <div>
-	<h3><%= profile.label %></h3>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<a class="navbar-brand"><%= profile.label %></a>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#/setup/profilesView"><b>К Списку</b></a></li>
+				<li><a style="cursor:pointer" class="profileSaveButton navbar-link" type="button"><b>Save<b></a></li>
+			</ul>
+		</div>
+	</nav>
 	<div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Системные</div>
@@ -18,7 +26,7 @@
 								<td class="col-sm-2">
 									<% _.each( permisstion.values, function( value ) { %>
 										<div class="checkbox">
-											<label><input name="<%= permisstion.name %>" type="checkbox" value="<%= value %>" 
+											<label><input ns="system" name="<%= permisstion.name %>" type="checkbox" value="<%= value %>" 
 											              <% if ( viewHalper.getPermissionValue( permisstion, permissionSet, 'system', value ) ) { %> checked <% } %>> <%= value %> </label>
 										</div>
 									<% }); %>
@@ -44,7 +52,7 @@
 							<tr>
 								<td><%= tab.label %></td>
 								<td class="col-sm-2">
-									<input name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>>
+									<input ns="tabs" name="tabs" type="checkbox" value="<%= tab.id %>" <% if (tab.visible) { %> checked <% } %>>
 								</td>
 							</tr>
 						<%	}); %>
@@ -69,7 +77,7 @@
 								<td class="col-sm-2">
 									<% _.each( permisstion.values, function( value ) { %>
 										<div class="checkbox">
-											<label><input name="<%= permisstion.name %>" type="checkbox" value="<%= value %>" 
+											<label><input ns="tables" name="<%= permisstion.name %>" type="checkbox" value="<%= value %>" 
 											              <% if ( viewHalper.getPermissionValue( permisstion, permissionSet, 'tables', value ) ) { %> checked <% } %>> <%= value %> </label>
 										</div>
 									<% }); %>
@@ -80,6 +88,5 @@
 				</table>
 			</div>
 		</div>
-		<button class="profileSaveButton btn btn-default" type="button">Save</button>
 	</div>
 </div>

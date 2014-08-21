@@ -15,6 +15,7 @@ define([
 
     el : '.content',
     profile : null,
+    scheme : null,
 
     events: {
       'click .profileSaveButton' : 'save'
@@ -42,6 +43,8 @@ define([
           profile.fetch( {
             success: function ( profile ) {
               view.profile = profile;
+              console.log('profile');
+              console.log(  view.profile );
               doneLoadProfile( null, profile.toJSON() );
             },
             error: function ( err ) {
@@ -114,6 +117,7 @@ define([
         }
       ], function( err, result ) {
         if ( err ) throw err;
+        view.scheme = result.permissionScheme;
         $(view.el).html(_.template( profileViewTemplate, {
           profile : profile.toJSON(), 
           tabList : result.tabList, 
@@ -141,15 +145,35 @@ define([
     save : function () {
       var profile = this.profile;
       var tabs = [];
-      $('input:checkbox[name=tabs]:checked').each(function( ) {
+      var permissionSet = profile.get('permissionSet');
+
+      _.each( this.scheme.system, function( permission ){
+        permissionSet.system[permission.name] = [];
+        $('input:checkbox[name=' +  permission.name + '][ns=system]:checked').each( function( ) {
+          permissionSet.system[permission.name].push( $(this).val() );
+        });
+        
+      });
+
+      _.each( this.scheme.tables, function( permission ){
+        permissionSet.tables[permission.name] = [];
+        $('input:checkbox[name=' +  permission.name + '][ns=tables]:checked').each( function( ) {
+          permissionSet.tables[permission.name].push( $(this).val() );
+        });
+        
+      });
+
+      $('input:checkbox[name=tabs][ns=tabs]:checked').each(function( ) {
         tabs.push( parseInt($(this).val()) );
       });
+
       profile.save({
-        tabs : tabs
+        tabs : tabs,
+        permissionSet : permissionSet
       }, 
       {
-        success: function ( tab ) {
-          window.location.hash = '/setup/profilesView';
+        success: function ( profile ) {
+          window.location.hash = '/setup/profileView/' + profile.id;
         }
       });
     }
