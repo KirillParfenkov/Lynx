@@ -10,6 +10,7 @@ var express = require('express'),
 	UserDao = require('./modules/user-dao'),
 	DataLoader = require('./modules/data-loader'),
 	ProfileDao = require('./modules/profile-dao'),
+	EmailService = require('./services/email-service');
 	url = require('url'),
 	formidable = require('formidable'),
 	multiparty = require('connect-multiparty'),
@@ -20,6 +21,22 @@ var express = require('express'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy;
 
+
+var emailService = new EmailService('./config.json');
+
+emailService.sendMail({
+	to : 'Kirill.Parfenkov@gmail.com',
+	subject : "Server started",
+	text : "server started",
+	html : "<h1>Server started!</h1>"
+}, function( err, info ) {
+	if ( err ){
+		console.log( err );	
+	} else {
+		console.log( 'Email service work!' );
+		console.log( info );
+	}
+});
 
 var dataLoader = new DataLoader('./config.json');
 dataLoader.initialize(function( err ) {

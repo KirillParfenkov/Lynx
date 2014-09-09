@@ -1,6 +1,6 @@
 {
   "name": "simpleJ",
-  "author" : "Kiryl Parfiankou"
+  "author" : "Kiryl Parfiankou",
   "scripts": {
     "start": "server.js"
   },
@@ -20,6 +20,7 @@
     "mkpath" : "x",
     "passport" : "0.2.x",
     "passport-local" : "1.x",
-    "password-hash" : "1.2.x"
+    "password-hash" : "1.2.x",
+    "nodemailer" : "1.2.2"
   }
 }

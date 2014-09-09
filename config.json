@@ -7,5 +7,10 @@
 		"password" : "erbnruqp",
 		"connectionLimit" : 10,
 		"port" : "3306"
+	},
+	"email" : {
+		"sender" : "Kiryl.Parfiankou.Dev@gmail.com",
+		"password" : "azk@ovn@gdj",
+		"service" : "Gmail"
 	}
 }
