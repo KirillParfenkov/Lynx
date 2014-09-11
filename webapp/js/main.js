@@ -11,6 +11,7 @@ require.config({
 
     // Require.js plugins
     text: 'libs/require/text',
+    css: 'libs/require/css',
     order: 'libs/require/order',
 
     // Just a short cut so we can put our html outside the js dir
@@ -18,6 +19,11 @@ require.config({
     templates: '../templates',
     custom: '../custom',
     system: './moduls/system'
+  },
+  map : {
+    '*': {
+      'less': 'libs/require/require-less/less' // path to less
+    }
   },
 	urlArgs: "bust=" +  (new Date()).getTime()
 

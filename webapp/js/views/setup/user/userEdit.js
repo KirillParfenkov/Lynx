@@ -6,8 +6,9 @@ define([
   'libs/queue/queue',
   'models/user',
   'collections/users',
-  'text!templates/setup/user/userEdit.html'
-], function ($, _, Backbone, Events, Queue, User, Usres, userEditTemplate) {
+  'text!templates/setup/user/userEdit.html',
+  'less!templates/setup/user/userEdit.less'
+], function ($, _, Backbone, Events, Queue, User, Usres, userEditTemplate, userEditCss) {
 	var UserEdit = Backbone.View.extend({
 		el : '.content',
     events: {
@@ -17,6 +18,8 @@ define([
     initialize: function () {
     },
 		render : function ( src, callback ) {
+      console.log( 'css:' );
+      console.log( userEditCss );
       var view = this;
       var user = new User( {id: src.id} );
       user.fetch( {
