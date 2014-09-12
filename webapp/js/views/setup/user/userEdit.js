@@ -18,8 +18,6 @@ define([
     initialize: function () {
     },
 		render : function ( src, callback ) {
-      console.log( 'css:' );
-      console.log( userEditCss );
       var view = this;
       var user = new User( {id: src.id} );
       user.fetch( {

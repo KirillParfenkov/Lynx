@@ -12,11 +12,12 @@ define([
   'views/setup/tabsView',
   'views/setup/user/userEdit',
   'views/setup/user/userView',
+  'views/setup/user/userAdd',
   'views/setup/tab/tabEdit',
   'views/setup/tab/tabView',
   'views/setup/profile/profileEdit',
   'views/setup/profile/profileView'
-], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, TabEdit, TabView, ProfileEdit, ProfileView) {
+], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, ProfileEdit, ProfileView) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
@@ -26,8 +27,8 @@ define([
     routes: {
       'tab/:tabName' : 'selectTab',
       'setup' : 'selectSetup',
-      'setup/:itemName' : 'selectSetupView',
-      'setup/:itemName/:id' : 'selectSetupViewItem',
+      'setup/:itemName' : 'selectSetupItem',
+      'setup/:itemName/:id' : 'selectSetupItemWithId',
       'view/:name' : 'selectView',
       'view/:name/:id' : 'selectView'
     },
@@ -50,6 +51,7 @@ define([
           router.setupViews['tabsView'] = new TabsView();
           router.setupViews['userEdit'] = new UserEdit();
           router.setupViews['userView'] = new UserView();
+          router.setupViews['userAdd'] = new UserAdd();
           router.setupViews['tabEdit'] = new TabEdit();
           router.setupViews['tabView'] = new TabView();
           router.setupViews['profileEdit'] = new ProfileEdit();
@@ -99,12 +101,12 @@ define([
       this.setupMenu.render();
     },
 
-    selectSetupView: function( view ) {
-      this.setupViews[view].render();
+    selectSetupItem: function( view ) {
+      this.setupViews[view].render( { context: this.context } );
       this.clearHeaderMenu();
     },
 
-    selectSetupViewItem: function( view, id) {
+    selectSetupItemWithId: function( view, id) {
       this.setupViews[view].render( {id: id, context: this.context} );
     },
 
