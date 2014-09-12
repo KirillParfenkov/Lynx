@@ -213,6 +213,22 @@ app.put('/system/profiles/:id', function( req, res ) {
 	});
 });
 
+app.post('/system/users', function( req, res ) {
+	userDao.createUser({
+		email : req.body.email,
+		firstName : req.body.firstName,
+		lastName : req.body.lastName,
+		passport : req.body.passport,
+		repPassword : req.body.repPassword,
+		profile : req.body.profile
+	}, function(err. user) {
+		if (err) {
+			res.json( 400, err );
+		} else {
+			res.json( 200, user );
+		}
+	});
+});
 
 app.get('/logout', function(req, res) {
 
@@ -341,6 +357,7 @@ app.post('/file/:table/:id', multiparty(), function(req, res) {
 		});
 	});
 });
+
 
 app.listen(nconf.get('port'), function() {
 	console.log('Server running at ' + nconf.get('port') + ' port');

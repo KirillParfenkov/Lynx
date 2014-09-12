@@ -5,6 +5,10 @@ var passwordHash = require('password-hash')
 
 var UserDao = function ( configFile ) {
 
+	var SELECT_USER_BY_EMAIL = 'ELECT id, firstName, lastName, email, password, profile FROM users WHERE email = ?';
+	var CHECK_USER_EMAIL = 'SELECT email FROM users WHERE email = ?';
+	var INSERT_USER = 'INSERT INTO users SET ?';
+
 	nconf.argv()
 		.env()
 		.file({file: configFile});
@@ -18,9 +22,32 @@ var UserDao = function ( configFile ) {
 		password: nconf.get('database:password')
 	});
 
+	var validate = function( userParams ) {
+
+		if ( !userParams.email ) {
+			return { err: 'emptyField', message: 'field is empty', field: 'email'};
+		} else if ( !userParams.password ) {
+			return { err: 'emptyField', message: 'field is empty', field: 'password'};
+		} else if ( !userParams.repPassword ) {
+			return { err: 'emptyField', message: 'field is empty', field: 'repPassword'};
+		} else if ( !userParams.profile ) {
+			return { err: 'emptyField', message: 'field is empty', field: 'profile'};
+		}
+
+		if ( userParams.password != userParams.repPassword ) {
+			return { err: 'passNotEqual', message: 'Passwords are not equal', field: ['profile', 'repPassword']};
+		}
+
+		return { success: true }
+
+	};
+
+	var createPassword = function( password ) {
+		passwordHash.generate(password);
+	};
+
 	this.authorize = function( email, password, done ) {
-		// passwordHash
-		this.pool.query('SELECT id, firstName, lastName, email, password, profile FROM users WHERE email = ?', [email], function(err, rows, fields) {
+		this.pool.query( SELECT_USER_BY_EMAIL, [email], function(err, rows, fields) {
 			if ( err ) {
 				done( err );
 			} else {
@@ -43,6 +70,57 @@ var UserDao = function ( configFile ) {
 		});
 	}
 
+	this.createUser = function( userParams, done ) {
+
+		var validation = validate( userParams );
+		var dao = this;
+
+		if ( validation.success ) {
+			async.waterfall([
+
+				function uniquenessCheck( next ) {
+					dao.pool.query( CHECK_USER_EMAIL, [userParams.email], function( err, rows ) {
+						if (err) {
+							next( err );
+							return;
+						}
+						if (rows[0]) {
+							next( { err: 'emailExist', message: 'This address is already registered', field: 'email'} );
+						} else {
+							next( null );
+						}
+					});
+				},
+
+				function createUser( next ) {
+					var user = {
+						firstName : userParams.firstName,
+						lastName : userParams.lastName,
+						email : userParams.email,
+						profile : userParams.profile,
+						password : createPassword( userParams.password )
+					};
+					dao.pool.query( INSERT_USER, [user], function( err, result ) {
+						if (err) {
+							next( err );
+							return;
+						}
+						next( user );
+
+					});
+				}
+
+			], function( err, user ) {
+				if ( err ) {
+					done( err );
+					return;
+				}
+				done( null, user);
+			});
+		} else {
+			done( validation );
+		}
+	}
 }
 
 module.exports = UserDao;
