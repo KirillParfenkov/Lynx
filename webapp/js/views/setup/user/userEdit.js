@@ -8,7 +8,7 @@ define([
   'collections/users',
   'text!templates/setup/user/userEdit.html',
   'less!templates/setup/user/userEdit.less'
-], function ($, _, Backbone, Events, Queue, User, Usres, userEditTemplate, userEditCss) {
+], function ($, _, Backbone, Events, Queue, User, Usres, userEditTemplate) {
 	var UserEdit = Backbone.View.extend({
 		el : '.content',
     events: {
