@@ -176,6 +176,17 @@ define([
           window.location.hash = '/setup/profileView/' + profile.id;
         }
       });
+    },
+
+    hasPermission : function( systemPermissionSet ) {
+      if ( systemPermissionSet && systemPermissionSet.allowEditProfile ) {
+        if ( systemPermissionSet.allowEditProfile.indexOf('edit') == -1 ) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+      return true;
     }
 	});
 	return ProfileView;

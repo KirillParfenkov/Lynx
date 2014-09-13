@@ -37,7 +37,18 @@ define([
           }
         }]);
       queue.start();
-		}
+		},
+
+    hasPermission : function( systemPermissionSet ) {
+      if ( systemPermissionSet && systemPermissionSet.allowEditProfile ) {
+        if ( systemPermissionSet.allowEditProfile.indexOf('read') == -1 ) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+      return true;
+    }
 	});
 	return ProfilesView;
 });

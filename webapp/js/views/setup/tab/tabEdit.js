@@ -45,6 +45,17 @@ define([
           window.location.hash = '/setup/tabsView';
         }
       });
+    },
+
+    hasPermission : function( systemPermissionSet ) {
+      if ( systemPermissionSet && systemPermissionSet.allowEditTabs ) {
+        if ( systemPermissionSet.allowEditTabs.indexOf('edit') == -1 ) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+      return true;
     }
 	});
 	return TabView;

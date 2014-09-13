@@ -25,7 +25,17 @@ define([
           console.log('error!');
         }
       });
-		}
+		},
+    hasPermission : function( systemPermissionSet ) {
+      if ( systemPermissionSet && systemPermissionSet.allowEditUsers ) {
+        if ( systemPermissionSet.allowEditUsers.indexOf('read') == -1 ) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+      return true;
+    }
 	});
 	return UserView;
 });

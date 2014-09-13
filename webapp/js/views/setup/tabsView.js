@@ -9,10 +9,7 @@ define([
   'text!templates/setup/tabsView.html' 
 ], function ($, _, Backbone, Events, Queue, Tab, Tabs, tabsViewTemplate) {
 	var TabsView = Backbone.View.extend({
-		elem : '.content',
-    initialize: function () {
-      //this.el = '.sideBar';
-    },
+		el : '.content',    
 		render : function ( src, callback ) {
       var view = this;
       var tabs = null;
@@ -30,13 +27,24 @@ define([
             });
         },
         function(queue) {
-          $(view.elem).html(_.template(tabsViewTemplate, {tabs: tabs.toJSON()}));
+          $(view.el).html(_.template(tabsViewTemplate, {tabs: tabs.toJSON()}));
           if ( callback ) {
             callback();
           }
         }]);
       queue.start();
-		}
+		},
+
+    hasPermission : function( systemPermissionSet ) {
+      if ( systemPermissionSet && systemPermissionSet.allowEditTabs ) {
+        if ( systemPermissionSet.allowEditTabs.indexOf('read') == -1 ) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+      return true;
+    }
 	});
 	return TabsView;
 });

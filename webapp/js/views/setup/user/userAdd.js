@@ -8,8 +8,9 @@ define([
   'collections/users',
   'collections/profiles',
   'text!templates/setup/user/userAdd.html',
+  'text!templates/error.html',
   'less!templates/setup/user/userAdd.less'
-], function ($, _, Backbone, async, Messager, User, Usres, Profiles, template) {
+], function ($, _, Backbone, async, Messager, User, Usres, Profiles, template, errorTemplate ) {
 	var UserAdd = Backbone.View.extend({
 		el : '.content',
     events: {
@@ -20,6 +21,7 @@ define([
 		render : function ( src, callback ) {
 
       var view = this;
+      
       var profiles = new Profiles();
 
       async.waterfall([
@@ -40,7 +42,7 @@ define([
           $(view.el).html(_.template(template, { profiles : profiles }));
           view.messager = new Messager($('.user-add .mesage-box'));
         }
-      });      
+      });
 		},
 
     save : function() {
@@ -68,6 +70,17 @@ define([
           }
         }
       });
+    },
+
+    hasPermission : function( systemPermissionSet ) {
+      if ( systemPermissionSet && systemPermissionSet.allowEditUsers ) {
+        if ( systemPermissionSet.allowEditUsers.indexOf('edit') == -1 ) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+      return true;
     }
 	});
 	return UserAdd;

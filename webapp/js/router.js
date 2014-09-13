@@ -16,8 +16,9 @@ define([
   'views/setup/tab/tabEdit',
   'views/setup/tab/tabView',
   'views/setup/profile/profileEdit',
-  'views/setup/profile/profileView'
-], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, ProfileEdit, ProfileView) {
+  'views/setup/profile/profileView',
+  'text!templates/error.html',
+], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, ProfileEdit, ProfileView, errorTemplate) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
@@ -98,16 +99,37 @@ define([
     },
 
     selectSetup: function() {
-      this.setupMenu.render();
+      this.setupMenu.render( { context: this.context } );
     },
 
     selectSetupItem: function( view ) {
-      this.setupViews[view].render( { context: this.context } );
+      console.log( 'selectSetupItem!' );
+      console.log( this.setupViews[view].hasPermission );
+      if ( this.setupViews[view].hasPermission ) {
+        var systemPermissionSet = this.context.currentProfile.permissionSet.system;
+        console.log( systemPermissionSet );
+        if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
+          this.setupViews[view].render( { context: this.context } );
+        } else {
+          $(this.setupViews[view].el).html(_.template( errorTemplate ));
+        }
+      } else {
+        this.setupViews[view].render( { context: this.context } );
+      }
       this.clearHeaderMenu();
     },
 
     selectSetupItemWithId: function( view, id) {
-      this.setupViews[view].render( {id: id, context: this.context} );
+      if ( this.setupViews[view].hasPermission ) {
+        var systemPermissionSet = this.context.currentProfile.permissionSet.system;
+        if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
+          this.setupViews[view].render( {id: id, context: this.context} );
+        } else {
+          $(this.setupViews[view].el).html(_.template( errorTemplate ));
+        }
+      } else {
+        this.setupViews[view].render( {id: id, context: this.context} );
+      }
     },
 
     clearHeaderMenu: function() {
@@ -117,11 +139,19 @@ define([
     selectView: function( name, id ) {
       var router = this;
       viewLoader.load( name, function( view ) {
-        var src = { context: router.context };
-        if ( id ) {
-          src.id = id;
+
+        var src = { context: router.context, id: id };
+
+        if ( view.hasPermission ) {
+          var systemPermissionSet = this.context.currentProfile.permissionSet.system;
+          if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
+            view.render( {id: id, context: this.context} );
+          } else {
+            $(view.el).html(_.template( errorTemplate ));
+          }
+        } else {
+          view.render( {id: id, context: this.context} );
         }
-        view.render( src );
       });
     }
   }); 

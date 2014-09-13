@@ -106,7 +106,6 @@ var UserDao = function ( configFile ) {
 							return;
 						}
 						next( null, user );
-
 					});
 				}
 
