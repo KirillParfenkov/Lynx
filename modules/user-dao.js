@@ -43,7 +43,7 @@ var UserDao = function ( configFile ) {
 	};
 
 	var createPassword = function( password ) {
-		passwordHash.generate(password);
+		return passwordHash.generate(password);
 	};
 
 	this.authorize = function( email, password, done ) {

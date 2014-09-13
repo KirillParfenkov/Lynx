@@ -232,10 +232,6 @@ app.post('/system/users', function( req, res ) {
 		repPassword : req.body.repPassword,
 		profile : req.body.profile
 	}, function(err, user) {
-		console.log('err');
-		console.log( err );
-		console.log( 'user' );
-		console.log( user );
 		if (err) {
 			res.json( 400, err );
 		} else {
