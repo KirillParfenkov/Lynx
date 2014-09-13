@@ -195,10 +195,20 @@ app.get( '/system/profiles/:id', function( req, res ) {
 
 app.post('/system/profiles', function( req, res ) {
 	profileDao.saveProfile( req.body, function( err, profile ) {
-		if (err) {
-			res.json(400, {error: 'error'});
+		if ( err ) {
+			res.json( 400, {error: 'error'});
 		} else {
 			res.json( 200, profile );
+		}
+	});
+});
+
+app.get('/system/profiles', function( req, res ) {
+	profileDao.getProfileList( function( err, profiles ) {
+		if ( err ) {
+			res.json( 400, {error: 'error'});
+		} else {
+			res.json( 200, profiles );
 		}
 	});
 });
@@ -218,10 +228,14 @@ app.post('/system/users', function( req, res ) {
 		email : req.body.email,
 		firstName : req.body.firstName,
 		lastName : req.body.lastName,
-		passport : req.body.passport,
+		password : req.body.password,
 		repPassword : req.body.repPassword,
 		profile : req.body.profile
-	}, function(err. user) {
+	}, function(err, user) {
+		console.log('err');
+		console.log( err );
+		console.log( 'user' );
+		console.log( user );
 		if (err) {
 			res.json( 400, err );
 		} else {

@@ -21,7 +21,8 @@ require.config({
     // When you have HTML/CSS designers this aids in keeping them out of the js directory
     templates: '../templates',
     custom: '../custom',
-    system: './moduls/system'
+    system: './moduls/system',
+    messager: './moduls/messager/messager'
   },
   map : {
     '*': {

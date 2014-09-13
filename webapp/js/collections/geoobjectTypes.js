@@ -6,7 +6,7 @@ define([
 ], function( $, _, Backbone, GeoobjectType ) {
 	 var GeoobjectTypes = Backbone.Collection.extend({
 	 	models: GeoobjectType,
-	 	url : 'http://localhost:8080/api/geoObjectTypes'
+	 	url : '/api/geoObjectTypes'
 	 });
 	 return GeoobjectTypes;
 });

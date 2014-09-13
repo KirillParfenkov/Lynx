@@ -5,7 +5,7 @@ var passwordHash = require('password-hash')
 
 var UserDao = function ( configFile ) {
 
-	var SELECT_USER_BY_EMAIL = 'ELECT id, firstName, lastName, email, password, profile FROM users WHERE email = ?';
+	var SELECT_USER_BY_EMAIL = 'SELECT id, firstName, lastName, email, password, profile FROM users WHERE email = ?';
 	var CHECK_USER_EMAIL = 'SELECT email FROM users WHERE email = ?';
 	var INSERT_USER = 'INSERT INTO users SET ?';
 
@@ -105,7 +105,7 @@ var UserDao = function ( configFile ) {
 							next( err );
 							return;
 						}
-						next( user );
+						next( null, user );
 
 					});
 				}

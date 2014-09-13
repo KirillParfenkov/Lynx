@@ -6,7 +6,7 @@ define([
 ], function( $, _, Backbone, Tab ) {
 	 var Tabs = Backbone.Collection.extend({
 	 	models: Tab,
-	 	url : 'http://localhost:8080/api/tabs'
+	 	url : '/api/tabs'
 	 });
 	 return Tabs;
 });

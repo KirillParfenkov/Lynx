@@ -6,7 +6,7 @@ define([
 ], function( $, _, Backbone, User ) {
 	 var Users = Backbone.Collection.extend({
 	 	models: User,
-	 	url : 'http://localhost:8080/api/users'
+	 	url : '/api/users'
 	 });
 	 return Users;
 });

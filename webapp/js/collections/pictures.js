@@ -6,7 +6,7 @@ define([
 ], function( $, _, Backbone, Picture ) {
 	 var Pictures = Backbone.Collection.extend({
 	 	models: Picture,
-	 	url : 'http://localhost:8080/api/files'
+	 	url : '/api/files'
 	 });
 	 return Pictures;
 });

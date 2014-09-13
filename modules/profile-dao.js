@@ -11,7 +11,14 @@ var ProfileDao = function ( configFile, permissionSetsDir, casher ) {
 
 	this.permissionSetsPath = __dirname + '/../' + permissionSetsDir;
 
+	var PROFILE_TABLE = 'profiles';
 
+
+	this.getProfileList = function( done ) {
+		this.dataLoader.getObjects( PROFILE_TABLE, function( err, profiles ) {
+			done( err, profiles );
+		});
+	};
 
 	this.initialize = function ( done ) {
 		this.dataLoader.initialize(function( err ) {
@@ -58,13 +65,13 @@ var ProfileDao = function ( configFile, permissionSetsDir, casher ) {
 				console.log('saveProfile!');
 
 				if ( profile.id ) {
-					dao.dataLoader.putObject( 'profiles', profile, profile.id, function( err, result ) {
+					dao.dataLoader.putObject( PROFILE_TABLE, profile, profile.id, function( err, result ) {
 						console.log( 'err:' );
 						console.log( err );
 						done( err, result );
 					});
 				} else {
-					dao.dataLoader.postObject( 'profiles', profile, function( err, result ) {
+					dao.dataLoader.postObject( PROFILE_TABLE, profile, function( err, result ) {
 						done( err, result );
 					});
 				}

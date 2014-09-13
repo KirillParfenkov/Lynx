@@ -12,7 +12,7 @@ define([
 	var UserEdit = Backbone.View.extend({
 		el : '.content',
     events: {
-      'click .userSaveButton' : 'save'
+      'click .user-edit .userSaveButton' : 'save'
     },
     user : null,
     initialize: function () {
