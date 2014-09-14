@@ -8,6 +8,7 @@ var express = require('express'),
 	crypto = require('crypto'),
 	mc = require('mc'),
 	UserDao = require('./modules/user-dao'),
+	GlobalVariablesDao = require('./modules/globalVariables-dao'),
 	DataLoader = require('./modules/data-loader'),
 	ProfileDao = require('./modules/profile-dao'),
 	EmailService = require('./services/email-service');
@@ -44,6 +45,7 @@ dataLoader.initialize(function( err ) {
 });
 
 var userDao = new UserDao('./config.json');
+var globalVariablesDao = new GlobalVariablesDao('./config.json');
 var profileDao = new ProfileDao( './config.json', 'content/permissionSets', false );
 profileDao.initialize(function( err ) {
 	if ( !err ) {
@@ -236,6 +238,56 @@ app.post('/system/users', function( req, res ) {
 			res.json( 400, err );
 		} else {
 			res.json( 200, user );
+		}
+	});
+});
+
+app.get( '/system/globalVariables', function( req, res ) {
+	globalVariablesDao.getList( function( err, variables ) {
+		if ( err ) {
+			res.json( 400, err );
+		} else {
+			res.json( 200, variables );
+		}
+	});
+});
+
+app.get( '/system/globalVariable/:id', function( req, res) {
+	globalVariablesDao.get( req.params.id, function( err, variable ) {
+		if ( err || !variable ) {
+			res.json( 400, err ? err : { error : 'VariableNotExist' } );
+		} else {
+			res.json( 200, variable );
+		}
+	});
+});
+
+app.post( '/system/globalVariable', function( req, res ) {
+	globalVariablesDao.create( req.body, function( err, variable ) {
+		if ( err ) {
+			res.json( 400, err ? err : { error : 'VariableNotExist' } );
+		} else {
+			res.json( 200, variable );
+		}
+	});
+});
+
+app.put( '/system/globalVariable/:id', function( req, res) {
+	globalVariablesDao.update( req.body, function( err, variable ) {
+		if ( err ) {
+			res.json( 400, err );
+		} else {
+			res.json( 200, variable );
+		}
+	});
+});
+
+app.delete( '/system/globalVariable/:id', function( req, res ) {
+	globalVariablesDao.delete( req.params.id, function( err ) {
+		if ( err ) {
+			res.json( 400, err );
+		} else {
+			res.json( 200, {});
 		}
 	});
 });

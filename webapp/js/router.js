@@ -15,10 +15,12 @@ define([
   'views/setup/user/userAdd',
   'views/setup/tab/tabEdit',
   'views/setup/tab/tabView',
+  'views/setup/globalVariables/globalVariablesView',
+  'views/setup/globalVariables/globalVariablesEdit',
   'views/setup/profile/profileEdit',
   'views/setup/profile/profileView',
   'text!templates/error.html',
-], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, ProfileEdit, ProfileView, errorTemplate) {
+], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, GlobalVariablesView, GlobalVariablesEdit, ProfileEdit, ProfileView, errorTemplate) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
@@ -57,6 +59,8 @@ define([
           router.setupViews['tabView'] = new TabView();
           router.setupViews['profileEdit'] = new ProfileEdit();
           router.setupViews['profileView'] = new ProfileView();
+          router.setupViews['globalVariablesEdit'] = new GlobalVariablesEdit();
+          router.setupViews['globalVariablesView'] = new GlobalVariablesView();
 
           doneSetuoViews( null, router.setupViews );
         },

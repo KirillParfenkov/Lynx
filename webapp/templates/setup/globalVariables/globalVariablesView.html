@@ -1,0 +1,21 @@
+<div>
+	<nav class="navbar navbar-default"  role="navigation">
+		<div class="container-fluid">
+			<a class="navbar-brand">Глобальные переменные</a>
+		</div>
+	</nav>
+	<table class="table table-hover">
+		<tr>
+			<th>ID</th>
+			<th>NAME</th>
+			<th>VALUE</th>
+		</tr>
+		<% _.each( variables,  function( variable ) { %>
+			<tr>
+				<td><%= variable.id %></td>
+				<td><%= variable.name %></td>
+				<td><%= variable.value %></td>
+			</tr>
+		<% });%>
+	</table>
+</div>
