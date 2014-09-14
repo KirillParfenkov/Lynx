@@ -6,12 +6,12 @@ define([
   'libs/queue/queue',
   'models/user',
   'text!templates/setup/setupMenu.html' 
-], function ($, _, Backbone, Events, Queue, User, sideBarTemplate) {
+], function ($, _, Backbone, Events, Queue, User, template) {
 	var SetupSideBarView = Backbone.View.extend({
 		el : '.header-menu-container',
 		render : function ( src, callback ) {
 			var view = this;
-      $(view.el).html(_.template(sideBarTemplate), {});
+      $(view.el).html(_.template(template), {});
 		}
 	});
 	return SetupSideBarView;

@@ -27,10 +27,6 @@ define([
           view.messager.danger('Резурс не доступен =(');
         }
       });
-
-      
-
-      $(view.el).html(_.template(template));
     },
 
     hasPermission : function( systemPermissionSet ) {

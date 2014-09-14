@@ -107,11 +107,8 @@ define([
     },
 
     selectSetupItem: function( view ) {
-      console.log( 'selectSetupItem!' );
-      console.log( this.setupViews[view].hasPermission );
       if ( this.setupViews[view].hasPermission ) {
         var systemPermissionSet = this.context.currentProfile.permissionSet.system;
-        console.log( systemPermissionSet );
         if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
           this.setupViews[view].render( { context: this.context } );
         } else {
