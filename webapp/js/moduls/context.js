@@ -20,6 +20,14 @@ define([
         }).fail( function() {
           done( { error: "error"} );
         });
+      },
+
+      getGlobalVeriables : function( done ) {
+        $.get('/system/globalVariables', function( globalVeriables ) {
+          done( null, globalVeriables );
+        }).fail( function(){
+          done( { error: "error"} );
+        });
       }
   }
   return Context;

@@ -71,25 +71,45 @@ define([
 
             currentUser : function( done ) {
               context.getCurrentUser( function( err, user ) {
-                if ( err ) done( err );
-                done( null, user );
+                if ( err ) {
+                  done( err );
+                } else {
+                  done( null, user );
+                }
               });
             },
 
             currentProfile : function( done ) {
               context.getCurrentProfile( function( err, profile ) {
-                if ( err ) done( err );
-                done( null, profile );
+                if ( err ) {
+                  done( err );
+                } else {
+                  done( null, profile );
+                }
+              });
+            },
+
+            globalVariables : function( done ) {
+              context.getGlobalVeriables( function( err, globalVariables) {
+                if ( err ) {
+                  done( err );
+                } else {
+                  done( null, globalVariables );
+                }
               });
             }
 
           }, function( err, results ) {
 
-            if ( err ) done( err );
+            if ( err ) {
+              console.log( err ); 
+              return;
+            }
 
             doneLoadContext( null, {
               currentUser    : results.currentUser,
               currentProfile : results.currentProfile,
+              globalVariables : results.globalVariables
             });
 
           });
