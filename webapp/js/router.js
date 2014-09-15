@@ -91,6 +91,8 @@ define([
 
             globalVariables : function( done ) {
               context.getGlobalVeriables( function( err, globalVariables) {
+                console.log('inside: ');
+                console.log( globalVariables );
                 if ( err ) {
                   done( err );
                 } else {
@@ -105,6 +107,9 @@ define([
               console.log( err ); 
               return;
             }
+
+            console.log('insied 2:');
+            console.log( results.globalVariables );
 
             doneLoadContext( null, {
               currentUser    : results.currentUser,
@@ -123,7 +128,12 @@ define([
     },
 
     selectSetup: function() {
-      this.setupMenu.render( { context: this.context } );
+      var view = this;
+      var context = this.context;
+      var i18nVar = $.grep(context.globalVariables, function( e ) { return e.name == 'i18n'; })[0];
+      view.setupMenu.loadI18n( i18nVar.value, function( err ) {
+        view.setupMenu.render( { context: context } );
+      });
     },
 
     selectSetupItem: function( view ) {

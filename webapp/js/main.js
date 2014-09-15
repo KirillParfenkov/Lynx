@@ -8,10 +8,12 @@ require.config({
     backbone: 'libs/backbone/backbone', // https://github.com/amdjs
     async: 'libs/async/async',
     webix: 'libs/webix/webix',
+    underi18n : 'libs/underi18n/underi18n',
 
     // Require.js plugins
     text: 'libs/require/text',
     css: 'libs/require/css',
+    json : 'libs/require/json',
     less: 'libs/require/require-less/less',
     lessc: 'libs/require/require-less/lessc',
     normalize : 'libs/require/require-less/normalize',
