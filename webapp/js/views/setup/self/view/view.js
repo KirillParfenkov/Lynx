@@ -21,9 +21,11 @@ define([
       $(view.el).html(_.template( underi18n.template(template, view.i18n), { user : src.context.currentUser, profile : src.context.currentProfile } ));
 		},
     loadI18n : function ( i18n, done ) {
-      var path = '/templates/setup/self/';
+      var path = '/templates/setup/self/view/';
       var view = this;
       $.get( path + i18n + '.json', function( data ) {
+        console.log('--->');
+        console.log( view.i18n );
         view.i18n = underi18n.MessageFactory( data );
         done( null, view.i18n );
       }).fail( function( err ) {

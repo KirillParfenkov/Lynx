@@ -139,11 +139,16 @@ define([
     selectSetupItem: function( view ) {
       
       var router = this;
+      var context = this.context;
 
       var handler = function() {
         var i18nVar = $.grep(context.globalVariables, function( e ) { return e.name == 'i18n'; })[0];
-        router.setupViews[view].loadI18n( i18nVar.value, function( err ) {
-          router.setupViews[view].render( { context: this.context } );
+        if ( router.setupViews[view].loadI18n ) {
+          router.setupViews[view].loadI18n( i18nVar.value, function( err ) {
+            router.setupViews[view].render( { context: context } );
+          });
+        } else {
+          router.setupViews[view].render( { context: context } );
         }
       };
 
