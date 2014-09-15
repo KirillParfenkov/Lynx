@@ -10,9 +10,9 @@ define([
 ], function ($, _, Backbone, Events, Queue, User, Usres, userViewTemplate) {
 	var UserView = Backbone.View.extend({
 		el : '.content',
-    user : null,
     initialize: function () {
       this.users = new Usres();
+      this.el = '.content';
     },
 		render : function ( src, callback ) {
       var view = this;

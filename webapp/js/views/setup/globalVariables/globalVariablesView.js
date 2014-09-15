@@ -12,6 +12,9 @@ define([
   var GlobalVariablesView = Backbone.View.extend({
 
     el : '.content',
+    initialize: function () {
+      this.el = '.content';
+    },
     user : null,
     messager : new Messager( $('.page .main-message-box') ),
 

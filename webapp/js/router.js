@@ -19,8 +19,11 @@ define([
   'views/setup/globalVariables/globalVariablesEdit',
   'views/setup/profile/profileEdit',
   'views/setup/profile/profileView',
+  'views/setup/self/view/view',
   'text!templates/error.html',
-], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, GlobalVariablesView, GlobalVariablesEdit, ProfileEdit, ProfileView, errorTemplate) {
+], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, 
+             TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, GlobalVariablesView, 
+             GlobalVariablesEdit, ProfileEdit, ProfileView, SelfView, errorTemplate) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
     tabViewMap : {},
@@ -61,6 +64,7 @@ define([
           router.setupViews['profileView'] = new ProfileView();
           router.setupViews['globalVariablesEdit'] = new GlobalVariablesEdit();
           router.setupViews['globalVariablesView'] = new GlobalVariablesView();
+          router.setupViews['selfView'] = new SelfView();
 
           doneSetuoViews( null, router.setupViews );
         },
@@ -108,15 +112,11 @@ define([
               return;
             }
 
-            console.log('insied 2:');
-            console.log( results.globalVariables );
-
             doneLoadContext( null, {
               currentUser    : results.currentUser,
               currentProfile : results.currentProfile,
               globalVariables : results.globalVariables
             });
-
           });
         }
 
@@ -137,20 +137,31 @@ define([
     },
 
     selectSetupItem: function( view ) {
+      
+      var router = this;
+
+      var handler = function() {
+        var i18nVar = $.grep(context.globalVariables, function( e ) { return e.name == 'i18n'; })[0];
+        router.setupViews[view].loadI18n( i18nVar.value, function( err ) {
+          router.setupViews[view].render( { context: this.context } );
+        }
+      };
+
+
       if ( this.setupViews[view].hasPermission ) {
         var systemPermissionSet = this.context.currentProfile.permissionSet.system;
         if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
-          this.setupViews[view].render( { context: this.context } );
+          handler();
         } else {
           $(this.setupViews[view].el).html(_.template( errorTemplate ));
         }
       } else {
-        this.setupViews[view].render( { context: this.context } );
+        handler();
       }
       this.clearHeaderMenu();
     },
 
-    selectSetupItemWithId: function( view, id) {
+    selectSetupItemWithId: function( view, id ) {
       if ( this.setupViews[view].hasPermission ) {
         var systemPermissionSet = this.context.currentProfile.permissionSet.system;
         if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {

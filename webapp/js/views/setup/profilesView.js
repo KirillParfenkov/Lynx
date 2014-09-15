@@ -11,7 +11,7 @@ define([
 	var ProfilesView = Backbone.View.extend({
 		elem : '.content',
     initialize: function () {
-      //this.el = '.sideBar';
+      this.el = '.content';
     },
 		render : function ( src, callback ) {
       var view = this;

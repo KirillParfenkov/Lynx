@@ -7,8 +7,11 @@ define([
   'models/user',
   'text!templates/setup/setupMenu/setupMenu.html' 
 ], function ($, _, Backbone, underi18n, Queue, User, template) {
-	var SetupSideBarView = Backbone.View.extend({
+	var SetupMenu = Backbone.View.extend({
 		el : '.header-menu-container',
+    initialize: function () {
+      this.el = '.header-menu-container';
+    },
 
 		render : function ( src, callback ) {
 			var view = this;
@@ -19,7 +22,6 @@ define([
       var path = '/templates/setup/setupMenu/';
       var view = this;
       $.get( path + i18n + '.json', function( data ) {
-        console.log(data);
         view.i18n = underi18n.MessageFactory( data );
         done( null, view.i18n );
       }).fail( function( err ) {
@@ -27,5 +29,5 @@ define([
       });
     }
 	});
-	return SetupSideBarView;
+	return SetupMenu;
 });

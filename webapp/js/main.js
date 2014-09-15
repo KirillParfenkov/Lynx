@@ -45,23 +45,64 @@ require([
   'models/user',
   'libs/queue/queue',
   'libs/webix/webix',
-  'collections/visibleTabs'
-], function($, AppView, Router, Vm, User, Queue, Webix, VisibleTabs){
+  'collections/visibleTabs',
+  'moduls/context',
+  'async',
+], function($, AppView, Router, Vm, User, Queue, Webix, VisibleTabs, context, async){
   var appView;
-  var tab;
+  var tabs;
+  var currentUser;
+  var globalVariables;
   var queue = new Queue([
     function(queue) {
-      tabs = new VisibleTabs();
-      tabs.fetch({
-        success : function() {
-          tabs = tabs.toJSON();
-          queue.next();
+      async.parallel({
+        tabs : function ( done ) {
+          var tabs = new VisibleTabs();
+          tabs.fetch({
+              success : function() {
+                tabs = tabs.toJSON();
+                done( null, tabs );
+              },
+              error : function( err ) {
+                console.log( err );
+                done( err );
+              }
+          });
+        },
+        currentUser : function ( done ) {
+          context.getCurrentUser( function( err, currentUser ) {
+            if ( err ) {
+              done( err );
+            } else {
+              done( null, currentUser );
+            }
+          });
+        },
+        globalVariables : function( done ) {
+          context.getGlobalVeriables( function( err, globalVariables) {
+            if ( err ) {
+              done( err );
+            } else {
+              done( null, globalVariables );
+            }
+          });
         }
+      }, function(err, results) {
+        if ( err ) {
+          console.log( err );  
+        } else {
+          tabs = results['tabs'];
+          currentUser = results['currentUser'];
+          globalVariables = results['globalVariables'];
+        }
+        queue.next();
       });
+      
+
     },
     function(queue) {
       appView = new AppView();
-      appView.render(tabs);
+      appView.render( tabs, currentUser, globalVariables );
       queue.next();
     },
     function(queue) {

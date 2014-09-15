@@ -13,6 +13,9 @@ define([
 ], function ($, _, Backbone, async, Messager, User, Usres, Profiles, template, errorTemplate ) {
 	var UserAdd = Backbone.View.extend({
 		el : '.content',
+    initialize: function () {
+      this.el = '.content';
+    },
     events: {
       'click .user-add .userSaveButton' : 'save'
     },

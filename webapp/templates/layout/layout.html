@@ -1,8 +1,9 @@
 <div class="header">
-	<nav class="navbar navbar-default" role="navigation">
+	<nav class="top-nav navbar navbar-default" role="navigation">
 		<div class="container-fluid">
+			<p class="navbar-text"><a href="#/setup/selfView"><%= currentUser.firstName %> <%= currentUser.lastName %></a></p>
 			<ul class="nav navbar-nav navbar-right">
-				<li class="logout"><a href="/logout"><span>ВЫХОД </span> <span class="glyphicon glyphicon-log-out"></a></li>
+				<li class="logout"><a href="/logout"><span><%_ exit_link %></span> <span class="glyphicon glyphicon-log-out"></a></li>
 			</ul>
 		</div>
 	</nav>
