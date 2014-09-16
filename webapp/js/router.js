@@ -42,6 +42,7 @@ define([
     initialize : function (options, doneInit) {
       var router = this;
       var tabs = options.tabs;
+      this.appView = options.appView;
       var views =[];
       for ( var i = 0; i < tabs.length; i++) {
         views.push( tabs[i].view );
@@ -146,9 +147,11 @@ define([
         if ( router.setupViews[view].loadI18n ) {
           router.setupViews[view].loadI18n( i18nVar.value, function( err ) {
             router.setupViews[view].render( { context: context } );
+            router.appView.cleanSelectTab();
           });
         } else {
           router.setupViews[view].render( { context: context } );
+          router.appView.cleanSelectTab();
         }
       };
 

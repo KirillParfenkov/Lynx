@@ -50,8 +50,12 @@ define([
       });
     },
 
-    selectTab : function ( e ) {
+    cleanSelectTab : function() {
       $( '#tabMenu' ).find('li').removeClass( 'active' );
+    },
+
+    selectTab : function ( e ) {
+      this.cleanSelectTab();
       $(e.currentTarget).parent().addClass( 'active' );
     },
 
