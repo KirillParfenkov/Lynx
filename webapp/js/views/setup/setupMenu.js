@@ -5,7 +5,8 @@ define([
   'underi18n',
   'libs/queue/queue',
   'models/user',
-  'text!templates/setup/setupMenu/setupMenu.html' 
+  'text!templates/setup/setupMenu/setupMenu.html',
+  'less!templates/setup/setupMenu/setupMenu.less'
 ], function ($, _, Backbone, underi18n, Queue, User, template) {
 	var SetupMenu = Backbone.View.extend({
 		el : '.header-menu-container',
