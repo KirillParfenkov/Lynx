@@ -12,10 +12,6 @@ define([
   'text!templates/setup/profile/profileView.html'
 ], function ($, _, Backbone, Events, System, Async, Context, Profile, PermissionSet, Tabs, profileViewTemplate) {
   var ProfileView = Backbone.View.extend({
-
-    className : 'profile-view',
-    container : '.content',
-
     profile : null,
 
     render : function ( src, callback ) {
@@ -99,10 +95,10 @@ define([
         }
       ], function( err, result ) {
         if ( err ) {
+            console.log(err);
             return false;
-            throw err;
         }
-        $(view.container).html(_.template( profileViewTemplate, {
+        $(view.el).html(_.template( profileViewTemplate, {
           profile : profile.toJSON(),
           tabList : result.tabList,
           permissionSet : result.permissionSet,

@@ -113,6 +113,12 @@ define([
               return;
             }
 
+            console.log('Setup Views:');
+            for( var index in router.setupViews ) {
+                router.setupViews[index].setElement('.content');
+            }
+            router.setupMenu.setElement('.header-menu-container');
+
             doneLoadContext( null, {
               currentUser    : results.currentUser,
               currentProfile : results.currentProfile,

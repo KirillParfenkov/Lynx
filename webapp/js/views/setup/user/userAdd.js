@@ -12,79 +12,75 @@ define([
   'less!templates/setup/user/userAdd.less'
 ], function ($, _, Backbone, async, Messager, User, Usres, Profiles, template, errorTemplate ) {
 	var UserAdd = Backbone.View.extend({
-		el : '.content',
-    initialize: function () {
-      this.el = '.content';
-    },
-    events: {
-      'click .user-add .userSaveButton' : 'save'
-    },
-    user : null,
-    messager : new Messager(),
-		render : function ( src, callback ) {
+        events: {
+          'click .user-add .userSaveButton' : 'save'
+        },
+        user : null,
+        messager : new Messager(),
+            render : function ( src, callback ) {
 
-      var view = this;
-      
-      var profiles = new Profiles();
+          var view = this;
 
-      async.waterfall([
-        function loadProfiles( next ) {
-          profiles.fetch( {
-            success : function( profiles ) {
-              next( null, profiles.toJSON() );  
-            },
-            error : function() {
-              next( err );
+          var profiles = new Profiles();
+
+          async.waterfall([
+            function loadProfiles( next ) {
+              profiles.fetch( {
+                success : function( profiles ) {
+                  next( null, profiles.toJSON() );
+                },
+                error : function() {
+                  next( err );
+                }
+              });
+            }
+          ], function( err, profiles ) {
+            if ( err ) {
+              console.log( err );
+            } else {
+              $(view.el).html(_.template(template, { profiles : profiles }));
+              view.messager = new Messager($('.user-add .mesage-box'));
             }
           });
-        }
-      ], function( err, profiles ) {
-        if ( err ) {
-          console.log( err );
-        } else {
-          $(view.el).html(_.template(template, { profiles : profiles }));
-          view.messager = new Messager($('.user-add .mesage-box'));
-        }
-      });
-		},
+            },
 
-    save : function() {
-      var view = this;
-      $.post( '/system/users', {
-          email : $('#userEmail').val(),
-          firstName : $('#userFirstName').val(),
-          lastName : $('#userLastName').val(),
-          password : $('#userPassword').val(),
-          repPassword : $('#userRepPassword').val(),
-          profile : $('#userProfile').val()
-      }).done( function( user ) {
-        window.location.hash = '#/setup/usersView';
-      }).fail( function( result ) {
-        var result = result.responseJSON;
-        if ( result ) {
-          if ( result.err == 'emptyField' ) {
-            view.messager.danger( 'Поле <b>' + result.field + '</b> Не Заполнено.' );
-          } else if ( result.err == 'passNotEqual' ){
-            view.messager.danger( 'Пароли не совподают.' );
-          } else if ( result.err == 'emailExist' ) {
-            view.messager.danger( 'Такой почтовый адресс уже зарегестрирован.' );
+        save : function() {
+          var view = this;
+          $.post( '/system/users', {
+              email : $('#userEmail').val(),
+              firstName : $('#userFirstName').val(),
+              lastName : $('#userLastName').val(),
+              password : $('#userPassword').val(),
+              repPassword : $('#userRepPassword').val(),
+              profile : $('#userProfile').val()
+          }).done( function( user ) {
+            window.location.hash = '#/setup/usersView';
+          }).fail( function( result ) {
+            var result = result.responseJSON;
+            if ( result ) {
+              if ( result.err == 'emptyField' ) {
+                view.messager.danger( 'Поле <b>' + result.field + '</b> Не Заполнено.' );
+              } else if ( result.err == 'passNotEqual' ){
+                view.messager.danger( 'Пароли не совподают.' );
+              } else if ( result.err == 'emailExist' ) {
+                view.messager.danger( 'Такой почтовый адресс уже зарегестрирован.' );
+              } else {
+                view.messager.danger( 'Неизвестная ошибка.' );
+              }
+            }
+          });
+        },
+
+        hasPermission : function( systemPermissionSet ) {
+          if ( systemPermissionSet && systemPermissionSet.allowEditUsers ) {
+            if ( systemPermissionSet.allowEditUsers.indexOf('edit') == -1 ) {
+              return false;
+            }
           } else {
-            view.messager.danger( 'Неизвестная ошибка.' );
+            return false;
           }
+          return true;
         }
-      });
-    },
-
-    hasPermission : function( systemPermissionSet ) {
-      if ( systemPermissionSet && systemPermissionSet.allowEditUsers ) {
-        if ( systemPermissionSet.allowEditUsers.indexOf('edit') == -1 ) {
-          return false;
-        }
-      } else {
-        return false;
-      }
-      return true;
-    }
 	});
 	return UserAdd;
 });

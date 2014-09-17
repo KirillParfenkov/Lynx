@@ -9,33 +9,29 @@ define([
   'text!templates/setup/user/userView.html'
 ], function ($, _, Backbone, Events, Queue, User, Usres, userViewTemplate) {
 	var UserView = Backbone.View.extend({
-		el : '.content',
-    initialize: function () {
-      this.users = new Usres();
-      this.el = '.content';
-    },
-		render : function ( src, callback ) {
-      var view = this;
-      var user = new User( {id: src.id} );
-      user.fetch( {
-        success: function ( user ) {
-          $(view.el).html(_.template(userViewTemplate, {user: user.toJSON()}));
-        },
-        error: function () {
-          console.log('error!');
+
+	    render : function ( src, callback ) {
+            var view = this;
+              var user = new User( {id: src.id} );
+              user.fetch( {
+                success: function ( user ) {
+                  $(view.el).html(_.template(userViewTemplate, {user: user.toJSON()}));
+                },
+                error: function () {
+                  console.log('error!');
+                }
+              });
+            },
+        hasPermission : function( systemPermissionSet ) {
+            if ( systemPermissionSet && systemPermissionSet.allowEditUsers ) {
+                if ( systemPermissionSet.allowEditUsers.indexOf('read') == -1 ) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+            return true;
         }
-      });
-		},
-    hasPermission : function( systemPermissionSet ) {
-      if ( systemPermissionSet && systemPermissionSet.allowEditUsers ) {
-        if ( systemPermissionSet.allowEditUsers.indexOf('read') == -1 ) {
-          return false;
-        }
-      } else {
-        return false;
-      }
-      return true;
-    }
-	});
+    });
 	return UserView;
 });
