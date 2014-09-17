@@ -24,8 +24,7 @@ define([
           queue.next();
         },
         function(queue) {
-          var i18nVar = $.grep( globalVariables, function( e ) { return e.name == 'i18n'; })[0];
-          view.loadI18n( i18nVar.value, function( err ) {
+          view.loadI18n( globalVariables['system']['i18n'], function( err ) {
             queue.next();
           });
         },

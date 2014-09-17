@@ -9,10 +9,6 @@ define([
   'text!templates/setup/tabsView.html' 
 ], function ($, _, Backbone, Events, Queue, Tab, Tabs, tabsViewTemplate) {
 	var TabsView = Backbone.View.extend({
-		el : '.content',
-    initialize: function () {
-      this.el = '.content';
-    },
 		render : function ( src, callback ) {
       var view = this;
       var tabs = null;

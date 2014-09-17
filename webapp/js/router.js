@@ -3,7 +3,7 @@ define([
   'jquery',
   'underscore',
   'backbone',
-	'async',
+  'async',
   'moduls/view-loader',
   'moduls/context',
   'views/setup/setupMenu',
@@ -20,8 +20,8 @@ define([
   'views/setup/profile/profileEdit',
   'views/setup/profile/profileView',
   'views/setup/self/view/view',
-  'text!templates/error.html',
-], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView, 
+  'text!templates/error.html'
+], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView,
              TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, GlobalVariablesView, 
              GlobalVariablesEdit, ProfileEdit, ProfileView, SelfView, errorTemplate) {
   var AppRouter = Backbone.Router.extend({
@@ -96,11 +96,10 @@ define([
 
             globalVariables : function( done ) {
               context.getGlobalVeriables( function( err, globalVariables) {
-                console.log('inside: ');
-                console.log( globalVariables );
                 if ( err ) {
                   done( err );
                 } else {
+
                   done( null, globalVariables );
                 }
               });
@@ -113,7 +112,6 @@ define([
               return;
             }
 
-            console.log('Setup Views:');
             for( var index in router.setupViews ) {
                 router.setupViews[index].setElement('.content');
             }
@@ -137,8 +135,8 @@ define([
     selectSetup: function() {
       var view = this;
       var context = this.context;
-      var i18nVar = $.grep(context.globalVariables, function( e ) { return e.name == 'i18n'; })[0];
-      view.setupMenu.loadI18n( i18nVar.value, function( err ) {
+      var i18nVar = context.globalVariables['system']['i18n'];
+      view.setupMenu.loadI18n( i18nVar, function( err ) {
         view.setupMenu.render( { context: context } );
       });
     },
@@ -149,9 +147,9 @@ define([
       var context = this.context;
 
       var handler = function() {
-        var i18nVar = $.grep(context.globalVariables, function( e ) { return e.name == 'i18n'; })[0];
+        var i18nVar = context.globalVariables['system']['i18n'];
         if ( router.setupViews[view].loadI18n ) {
-          router.setupViews[view].loadI18n( i18nVar.value, function( err ) {
+          router.setupViews[view].loadI18n( i18nVar, function( err ) {
             router.setupViews[view].render( { context: context } );
             router.appView.cleanSelectTab();
           });
