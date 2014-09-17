@@ -180,10 +180,10 @@ define([
           var i18nVar = context.globalVariables['system']['i18n'];
           if ( router.setupViews[view].loadI18n ) {
               router.setupViews[view].loadI18n( i18nVar, function( err ) {
-                  router.setupViews[view].render({id: id, context: this.context} );
+                  router.setupViews[view].render({id: id, context: context} );
               });
           } else {
-              router.setupViews[view].render( {id: id, context: this.context} );
+              router.setupViews[view].render( {id: id, context: context} );
           }
       };
 
