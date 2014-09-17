@@ -13,7 +13,9 @@ define([
 ], function ($, _, Backbone, Events, System, Async, Context, Profile, PermissionSet, Tabs, profileViewTemplate) {
   var ProfileView = Backbone.View.extend({
 
-    el : '.content',
+    className : 'profile-view',
+    container : '.content',
+
     profile : null,
 
     render : function ( src, callback ) {
@@ -96,14 +98,18 @@ define([
           });
         }
       ], function( err, result ) {
-        if ( err ) throw err;
-        $(view.el).html(_.template( profileViewTemplate, {
-          profile : profile.toJSON(), 
-          tabList : result.tabList, 
+        if ( err ) {
+            return false;
+            throw err;
+        }
+        $(view.container).html(_.template( profileViewTemplate, {
+          profile : profile.toJSON(),
+          tabList : result.tabList,
           permissionSet : result.permissionSet,
           scheme : result.permissionScheme,
           viewHalper : view.viewHalper
         }));
+        return true;
       });
     },
 
