@@ -174,15 +174,28 @@ define([
     },
 
     selectSetupItemWithId: function( view, id ) {
+      var router = this;
+      var context = this.context;
+      var handler = function() {
+          var i18nVar = context.globalVariables['system']['i18n'];
+          if ( router.setupViews[view].loadI18n ) {
+              router.setupViews[view].loadI18n( i18nVar, function( err ) {
+                  router.setupViews[view].render({id: id, context: this.context} );
+              });
+          } else {
+              router.setupViews[view].render( {id: id, context: this.context} );
+          }
+      };
+
       if ( this.setupViews[view].hasPermission ) {
         var systemPermissionSet = this.context.currentProfile.permissionSet.system;
         if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
-          this.setupViews[view].render( {id: id, context: this.context} );
+          handler();
         } else {
           $(this.setupViews[view].el).html(_.template( errorTemplate ));
         }
       } else {
-        this.setupViews[view].render( {id: id, context: this.context} );
+        handler();
       }
     },
 
