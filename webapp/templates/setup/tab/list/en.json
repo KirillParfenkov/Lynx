@@ -1,0 +1,10 @@
+{
+    "tabListHeader" : "Tab List",
+    "headerID" : "ID",
+    "headerName" : "Name",
+    "headerLabel" : "Label",
+    "headerLink" : "Link",
+    "headerAction" : "Action",
+    "addItemLink" : "New",
+    "editItemLink" : "Edit"
+}

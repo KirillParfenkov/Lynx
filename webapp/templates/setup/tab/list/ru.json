@@ -1,0 +1,10 @@
+{
+    "tabListHeader" : "Список Табов",
+    "headerID" : "ID",
+    "headerName" : "Имя",
+    "headerLabel" : "Метка",
+    "headerLink" : "Ссылка",
+    "headerAction" : "Действие",
+    "addItemLink" : "Добавить",
+    "editItemLink" : "Изменить"
+}
