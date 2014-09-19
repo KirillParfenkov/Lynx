@@ -1,20 +1,30 @@
-<div>
+<div class="global-variable-list">
 	<nav class="navbar navbar-default"  role="navigation">
 		<div class="container-fluid">
 			<a class="navbar-brand">Глобальные переменные</a>
 		</div>
 	</nav>
-	<table class="table table-hover">
+	<table class="variables table table-hover">
 		<tr>
 			<th>ID</th>
 			<th>NAME</th>
 			<th>VALUE</th>
+            <th></th>
 		</tr>
 		<% _.each( variables,  function( variable ) { %>
 			<tr>
 				<td><%= variable.id %></td>
 				<td><%= variable.name %></td>
-				<td><%= variable.value %></td>
+				<td>
+                    <span class="view-value"><%= variable.value %></span>
+                    <input class="edit-value" type="text" value="<%= variable.value %>"/>
+                </td>
+                <td class="action icon-fond">
+                    <a class="save">&#xf1ac;</a>
+                    <a class="cancel">&#xf1a0;</a>
+                    <a class="edit">&#xf194;</a>
+                    <a class="delete">&#xf217;</a>
+                </td>
 			</tr>
 		<% });%>
 	</table>

@@ -14,3 +14,8 @@
 /* bootstrap*/
 @import url("bootstrap.min.css");
 /*@import url("bootstrap-theme.css");*/
+
+@font-face {
+    font-family: foundation-icons;
+    src : url(../fonts/foundation-icons/foundation-icons.woff);
+}
