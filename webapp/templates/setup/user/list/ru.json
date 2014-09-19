@@ -1,7 +1,7 @@
 {
     "userListHeader" : "Пользователи",
     "addUserLInk" : "Добавить",
-    "headerId" : "Id",
+    "headerId" : "ID",
     "headerEmail" : "Почта",
     "headerFirstName" : "Имя",
     "headerLastName" : "Фамилия",
