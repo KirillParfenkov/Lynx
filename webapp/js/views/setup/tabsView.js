@@ -2,21 +2,25 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'events',
+    'underi18n',
+    'messager',
     'libs/queue/queue',
     'models/tab',
     'collections/tabs',
     'text!templates/setup/tab/list/list.html',
     'less!templates/setup/tab/list/list.less'
-], function ($, _, Backbone, Events, Queue, Tab, Tabs, template) {
+], function ($, _, Backbone, underi18n, Messager, Queue, Tab, Tabs, template) {
 	var TabsView = Backbone.View.extend({
+        events: {
+            'click .tab-list .tabs .deleteLink' : 'delete'
+        },
+        tabs : null,
 		render : function ( src, callback ) {
             var view = this;
-            var tabs = null;
             var queue = new Queue([
                 function(queue) {
-                    tabs = new Tabs();
-                    tabs.fetch({
+                    view.tabs = new Tabs();
+                    view.tabs.fetch({
                         success : function () {
                             queue.next();
                         },
@@ -27,7 +31,7 @@ define([
                     });
                 },
                 function(queue) {
-                    $(view.el).html(_.template( underi18n.template(template, view.i18n), {tabs: tabs.toJSON()}));
+                    $(view.el).html(_.template( underi18n.template(template, view.i18n), {tabs: view.tabs.toJSON()}));
                     if ( callback ) {
                         callback();
                     }
@@ -55,6 +59,25 @@ define([
             }).fail( function( err ) {
                 done( err );
             });
+        },
+
+        delete : function( event ) {
+            var view = this;
+            var $link = $(event.currentTarget);
+            var id = $link.attr('value');
+            var tab = this.tabs.get( id );
+            var messager = new Messager( $('.tab-list .mesage-box') );
+            if (confirm(_.template(underi18n.template('<%_ deleteConfirm %>', this.i18n), {name : tab.get('name') }))) {
+                tab.destroy({
+                    success : function(model, response) {
+                        messager.success( underi18n.template('<%_ successDeleteMessage %>', view.i18n) );
+                        $link.parents('tr').remove();
+                    },
+                    error : function( err ) {
+                        messager.danger(  underi18n.template('<%_ errorDeleteMessage %>', view.i18n) );
+                    }
+                });
+            }
         }
     });
 	return TabsView;

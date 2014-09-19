@@ -8,13 +8,15 @@
         </div>
     </nav>
 
+    <div class="mesage-box"></div>
+
 	<table class="tabs table table-hover">
 		<tr>
 			<th><%_ headerID %></th>
 			<th><%_ headerName %></th>
 			<th><%_ headerLabel %></th>
 			<th><%_ headerLink %></th>
-			<th class="action"><%_ headerAction %></th>
+			<th></th>
 		</tr>
 		<% _.each( tabs,  function( tab ) { %>
 			<tr>
@@ -22,7 +24,10 @@
 				<td><%= tab.name %></td>
 				<td><%= tab.label %></td>
                 <td><%= tab.link %></td>
-				<td class="action"><a href='#/setup/tabEdit/<%=tab.id%>'><%_ editItemLink %></a></td>
+				<td class="action">
+                    <a style="cursor:pointer" class="deleteLink" value="<%= tab.id %>"><%_ deleteItemLink %></a> |
+                    <a href='#/setup/tabEdit/<%=tab.id%>'><%_ editItemLink %></a>
+                </td>
 			</tr>
 		<% });%>
 	</table>

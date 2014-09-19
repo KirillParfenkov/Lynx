@@ -6,5 +6,9 @@
     "headerLink" : "Ссылка",
     "headerAction" : "Действие",
     "addItemLink" : "Добавить",
-    "editItemLink" : "Изменить"
+    "editItemLink" : "Изменить",
+    "deleteItemLink" : "Удалить",
+    "deleteConfirm" : "Таб ${name} будет удален. Вы уверены в этом?",
+    "successDeleteMessage" : "<b>Таб</b> удален.",
+    "errorDeleteMessage" : "Но удалось удалить <b>таб</b>."
 }
