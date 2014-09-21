@@ -3,7 +3,7 @@ define(['jquery',
 		'backbone'
 ], function($, _, Backbone) {
 	var GlobalVariable = Backbone.Model.extend({
-		urlRoot : '/system/globalVariable'
+		urlRoot : '/system/globalVariables'
 	});
 	return GlobalVariable;
 });

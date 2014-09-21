@@ -6,7 +6,7 @@ define([
 ], function( $, _, Backbone, GlobalVariable ) {
 	 var GlobalVariables = Backbone.Collection.extend({
 	 	models: GlobalVariable,
-	 	url : '/system/GlobalVariables'
+	 	url : '/system/globalVariables'
 	 });
 	 return GlobalVariables;
 });

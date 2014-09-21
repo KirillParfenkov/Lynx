@@ -37,8 +37,10 @@ var GlobalVariablesDao = function ( configFile ) {
 	};
 
 	this.create = function( variable, done ) {
-		this.pool.query( INSERT_VARIABLE, [variable], function( err, variable ) {
-			done( err, variable );
+        var variableVar = variable;
+		this.pool.query( INSERT_VARIABLE, [variable], function( err, result ) {
+            variableVar['id'] = result.insertId;
+			done( err, variableVar);
 		});
 	};
 

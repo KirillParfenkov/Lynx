@@ -252,7 +252,7 @@ app.get( '/system/globalVariables', function( req, res ) {
 	});
 });
 
-app.get( '/system/globalVariable/:id', function( req, res) {
+app.get( '/system/globalVariables/:id', function( req, res) {
 	globalVariablesDao.get( req.params.id, function( err, variable ) {
 		if ( err || !variable ) {
 			res.json( 400, err ? err : { error : 'VariableNotExist' } );
@@ -262,7 +262,7 @@ app.get( '/system/globalVariable/:id', function( req, res) {
 	});
 });
 
-app.post( '/system/globalVariable', function( req, res ) {
+app.post( '/system/globalVariables', function( req, res ) {
 	globalVariablesDao.create( req.body, function( err, variable ) {
 		if ( err ) {
 			res.json( 400, err ? err : { error : 'VariableNotExist' } );
@@ -272,7 +272,7 @@ app.post( '/system/globalVariable', function( req, res ) {
 	});
 });
 
-app.put( '/system/globalVariable/:id', function( req, res) {
+app.put( '/system/globalVariables/:id', function( req, res) {
 	globalVariablesDao.update( req.body, function( err, variable ) {
 		if ( err ) {
 			res.json( 400, err );
@@ -282,7 +282,7 @@ app.put( '/system/globalVariable/:id', function( req, res) {
 	});
 });
 
-app.delete( '/system/globalVariable/:id', function( req, res ) {
+app.delete( '/system/globalVariables/:id', function( req, res ) {
 	globalVariablesDao.delete( req.params.id, function( err ) {
 		if ( err ) {
 			res.json( 400, err );
