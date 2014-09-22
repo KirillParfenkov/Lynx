@@ -242,6 +242,20 @@ app.post('/system/users', function( req, res ) {
 	});
 });
 
+app.post('/system/password', function( req, res ) {
+    userDao.changePassword({
+        id : req.body.id,
+        password : req.body.password,
+        repPassword : req.body.repPassword
+    }, function( err ) {
+        if ( err ) {
+            res.json( 400, err );
+        } else {
+            res.json( 200, {} );
+        }
+    });
+});
+
 app.get( '/system/globalVariables', function( req, res ) {
 	globalVariablesDao.getList( function( err, variables ) {
 		if ( err ) {

@@ -8,6 +8,7 @@ var UserDao = function ( configFile ) {
 	var SELECT_USER_BY_EMAIL = 'SELECT id, firstName, lastName, email, password, profile FROM users WHERE email = ?';
 	var CHECK_USER_EMAIL = 'SELECT email FROM users WHERE email = ?';
 	var INSERT_USER = 'INSERT INTO users SET ?';
+    var UPDATE_USER_PASSWORD = 'UPDATE users SET password = ? WHERE id = ?';
 
 	nconf.argv()
 		.env()
@@ -35,16 +36,52 @@ var UserDao = function ( configFile ) {
 		}
 
 		if ( userParams.password != userParams.repPassword ) {
-			return { err: 'passNotEqual', message: 'Passwords are not equal', field: ['profile', 'repPassword']};
+			return { err: 'passNotEqual', message: 'Passwords are not equal', field: ['password', 'repPassword']};
 		}
 
 		return { success: true }
 
 	};
 
+    var validatePassword = function( passwordParams ) {
+
+        if ( !passwordParams.password ) {
+            return { err: 'emptyField', message: 'field is empty', field: 'password'};
+        } else if ( !passwordParams.repPassword ) {
+            return { err: 'emptyField', message: 'field is empty', field: 'repPassword'};
+        }
+
+        if ( passwordParams.password != passwordParams.repPassword ) {
+            return { err: 'passNotEqual', message: 'Passwords are not equal', field: ['password', 'repPassword']};
+        }
+
+        return { success: true }
+
+    };
+
 	var createPassword = function( password ) {
 		return passwordHash.generate(password);
 	};
+
+    this.changePassword = function( passwordParams, done ) {
+
+        var validation = validatePassword( passwordParams );
+        var dao = this;
+        var password = createPassword( passwordParams.password );
+        var id = passwordParams.id;
+
+        if ( validation.success ) {
+            dao.pool.query( UPDATE_USER_PASSWORD, [password, id], function( err, row ) {
+                if ( err ) {
+                    done( err );
+                } else {
+                    done( null );
+                }
+            });
+        } else {
+            done( validation );
+        }
+    };
 
 	this.authorize = function( email, password, done ) {
 		this.pool.query( SELECT_USER_BY_EMAIL, [email], function(err, rows, fields) {
@@ -68,7 +105,7 @@ var UserDao = function ( configFile ) {
 				}
 			}
 		});
-	}
+	};
 
 	this.createUser = function( userParams, done ) {
 

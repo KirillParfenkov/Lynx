@@ -13,6 +13,7 @@ define([
   'views/setup/user/userEdit',
   'views/setup/user/userView',
   'views/setup/user/userAdd',
+  'views/setup/user/changePassword',
   'views/setup/tab/tabEdit',
   'views/setup/tab/tabView',
   'views/setup/globalVariables/globalVariablesView',
@@ -22,7 +23,7 @@ define([
   'views/setup/self/view/view',
   'text!templates/error.html'
 ], function ($, _, Backbone, Async, viewLoader, context, SetupMenu, UsersView, ProfilesView,
-             TabsView, UserEdit, UserView, UserAdd, TabEdit, TabView, GlobalVariablesView, 
+             TabsView, UserEdit, UserView, UserAdd, ChangePassword, TabEdit, TabView, GlobalVariablesView,
              GlobalVariablesEdit, ProfileEdit, ProfileView, SelfView, errorTemplate) {
   var AppRouter = Backbone.Router.extend({
     viewList : [],
@@ -59,6 +60,7 @@ define([
           router.setupViews['userEdit'] = new UserEdit();
           router.setupViews['userView'] = new UserView();
           router.setupViews['userAdd'] = new UserAdd();
+          router.setupViews['changePassword'] = new ChangePassword();
           router.setupViews['tabEdit'] = new TabEdit();
           router.setupViews['tabView'] = new TabView();
           router.setupViews['profileEdit'] = new ProfileEdit();
@@ -142,7 +144,7 @@ define([
     },
 
     selectSetupItem: function( view ) {
-      
+
       var router = this;
       var context = this.context;
 

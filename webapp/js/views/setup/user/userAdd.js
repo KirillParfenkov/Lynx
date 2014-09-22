@@ -17,7 +17,7 @@ define([
         },
         user : null,
         messager : new Messager(),
-            render : function ( src, callback ) {
+        render : function ( src, callback ) {
 
           var view = this;
 
