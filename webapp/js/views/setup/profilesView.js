@@ -2,12 +2,13 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'events',
+  'underi18n',
   'libs/queue/queue',
   'models/profile',
   'collections/profiles',
-  'text!templates/setup/profilesView.html'
-], function ($, _, Backbone, Events, Queue, Profile, Profiles, profilesViewTemplate) {
+  'text!templates/setup/profile/list/profilesView.html',
+  'less!templates/setup/profile/list/profilesView.less'
+], function ($, _, Backbone, underi18n, Queue, Profile, Profiles, profilesViewTemplate) {
 	var ProfilesView = Backbone.View.extend({
 		render : function ( src, callback ) {
             var view = this;
@@ -27,7 +28,7 @@ define([
             },
             function(queue) {
                 console.log( profiles.toJSON() );
-                $(view.el).html(_.template(profilesViewTemplate, {profiles: profiles.toJSON()}));
+                $(view.el).html(_.template(underi18n.template(profilesViewTemplate, view.i18n), {profiles: profiles.toJSON()}));
                 if ( callback ) {
                     callback();
                 }
@@ -44,6 +45,17 @@ define([
                 return false;
             }
             return true;
+        },
+
+        loadI18n : function ( i18n, done ) {
+            var path = '/templates/setup/profile/list/';
+            var view = this;
+            $.get( path + i18n + '.json', function( data ) {
+                view.i18n = underi18n.MessageFactory( data );
+                done( null, view.i18n );
+            }).fail( function( err ) {
+                done( err );
+            });
         }
 	});
 	return ProfilesView;
