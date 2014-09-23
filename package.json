@@ -4,7 +4,7 @@
   "scripts": {
     "start": "server.js"
   },
-  "version": "0.0.0-20",
+  "version": "0.2.0",
   "dependencies": {
     "express": "4.4.x",
     "connect": "3.x",
