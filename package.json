@@ -1,9 +1,16 @@
 {
-  "name": "simpleJ",
+  "name": "Linx",
+  "main" : "server.js",
   "author" : "Kiryl Parfiankou",
   "scripts": {
     "start": "server.js"
   },
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/KirillParfenkov/Lynx.git"
+  },
+
   "version": "0.2.0",
   "dependencies": {
     "express": "4.4.x",

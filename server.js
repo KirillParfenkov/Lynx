@@ -23,7 +23,7 @@ var express = require('express'),
 	LocalStrategy = require('passport-local').Strategy;
 
 
-var emailService = new EmailService('./config.json');
+/*var emailService = new EmailService('./config.json');
 
 emailService.sendMail({
 	to : 'Kirill.Parfenkov@gmail.com',
@@ -37,7 +37,7 @@ emailService.sendMail({
 		console.log( 'Email service work!' );
 		console.log( info );
 	}
-});
+});*/
 
 var dataLoader = new DataLoader('./config.json');
 dataLoader.initialize(function( err ) {

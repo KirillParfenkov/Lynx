@@ -1,4 +1,4 @@
-var nconf = require('n69f');
+var nconf = require('nconf');
 var mysql = require('mysql');
 var async = require('async');
 var passwordHash = require('password-hash')

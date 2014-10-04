@@ -66,7 +66,6 @@ var ProfileDao = function ( configFile, permissionSetsDir, casher ) {
 
 				if ( profile.id ) {
 					dao.dataLoader.putObject( PROFILE_TABLE, profile, profile.id, function( err, result ) {
-						console.log( 'err:' );
 						console.log( err );
 						done( err, result );
 					});
