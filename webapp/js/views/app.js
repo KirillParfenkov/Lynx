@@ -41,7 +41,6 @@ define([
       var path = '/templates/layout/';
       var view = this;
       $.get( path + i18n + '.json', function( data ) {
-        console.log(data);
         view.i18n = underi18n.MessageFactory( data );
         done( null, view.i18n );
       }).fail( function( err ) {

@@ -13,6 +13,7 @@
 
   "version": "0.2.0",
   "dependencies": {
+    "mongodb" :"1.4.x",
     "express": "4.4.x",
     "connect": "3.x",
     "nconf" : "x",
@@ -28,6 +29,7 @@
     "passport" : "0.2.x",
     "passport-local" : "1.x",
     "password-hash" : "1.2.x",
-    "nodemailer" : "1.2.2"
+    "nodemailer" : "1.2.2",
+    "mongoose" : "3.8.x"
   }
 }

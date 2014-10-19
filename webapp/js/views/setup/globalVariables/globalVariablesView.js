@@ -95,12 +95,12 @@ define([
                 success : function( variableVar ) {
                     viewVar.html( variableVar.get('value') );
                     viewName.html( variableVar.get('name') );
-                    viewId.html( variableVar.get('id') );
+                    viewId.html( variableVar.get('_id') );
                     view.finishEdit( event );
 
                     if ( !id ) {
                         view.globalVariables.add( variableVar );
-                        view.setItemId( row, variableVar.id );
+                        view.setItemId( row, variableVar._id );
                     }
                 },
                 error : function( err ) {
