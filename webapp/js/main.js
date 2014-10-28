@@ -9,6 +9,7 @@ require.config({
     async: 'libs/async/async',
     webix: 'libs/webix/webix',
     underi18n : 'libs/underi18n/underi18n',
+    tinymce: 'libs/tinymce/tinymce.min',
 
     // Require.js plugins
     text: 'libs/require/text',
