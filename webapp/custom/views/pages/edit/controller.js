@@ -20,6 +20,7 @@ define([
       console.log($('.page-editor'));
       tinymce.init({
         selector: 'textarea',
+        language: 'ru',
         plugins: [
          "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
          "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
