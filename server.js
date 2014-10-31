@@ -9,6 +9,7 @@ var express = require('express'),
 	mc = require('mc'),
 	UserDao = require('./modules/user-dao'),
 	GlobalVariablesDao = require('./modules/globalVariables-dao-tmp'),
+	ContentDao = require('./modules/content-dao'),
 	DataLoader = require('./modules/data-loader'),
 	ProfileDao = require('./modules/profile-dao'),
 	EmailService = require('./services/email-service');
@@ -45,7 +46,8 @@ dataLoader.initialize(function( err ) {
 });
 
 var userDao = new UserDao('./config.json');
-var globalVariablesDao = new GlobalVariablesDao('./config.json');
+var globalVariablesDao = new GlobalVariablesDao( './config.json' );
+var contentDao = new ContentDao( './config.json' );
 var profileDao = new ProfileDao( './config.json', 'content/permissionSets', false );
 profileDao.initialize(function( err ) {
 	if ( !err ) {
@@ -262,6 +264,42 @@ app.get( '/system/globalVariables', function( req, res ) {
 			res.json( 400, err );
 		} else {
 			res.json( 200, variables );
+		}
+	});
+});
+
+
+app.route('/service/content')
+  .get('/:id', function( req, res ) {
+	contentDao.get( req.params.id, function( err, content ) {
+		if ( err || !content) {
+			res.json( 400, err ? err : { error : 'ContentNotExist' } );
+		} else {
+			res.json( 200, content );
+		}
+	});
+}).post( function( req, res ) {
+	contentDao.create( req.body, function( err, content ) {
+		if ( err || !content) {
+			res.json( 400, err ? err : { error : 'ContentNotExist' } );
+		} else {
+			res.json( 200, content );
+		}
+	});
+}).put( '/:id', function( req, res ) {
+	contentDao.create( req.body, function( err, content ) {
+		if ( err || !content) {
+			res.json( 400 );
+		} else {
+			res.json( 200, content );
+		}
+	});
+}).delete( '/:id', function( req, res) {
+	contentDao.delete( req.params.id, function( err ) {
+		if ( err ) {
+			res.json( 400, err );
+		} else {
+			res.json( 200, {});
 		}
 	});
 });
