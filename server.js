@@ -21,7 +21,9 @@ var express = require('express'),
 	path = require('path'),
 	async = require('async'),
 	passport = require('passport'),
-	LocalStrategy = require('passport-local').Strategy;
+	methodOverride = require('method-override'),
+	LocalStrategy = require('passport-local').Strategy,
+	mongoConnector = require('./modules/db/mongo-connector');
 
 
 /*var emailService = new EmailService('./config.json');
@@ -39,6 +41,8 @@ emailService.sendMail({
 		console.log( info );
 	}
 });*/
+
+mongoConnector.connect();
 
 var dataLoader = new DataLoader('./config.json');
 dataLoader.initialize(function( err ) {
@@ -145,6 +149,7 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(methodOverride('_method'));
 app.use(serveStatic('public'));
 
 app.use(passport.initialize());
@@ -269,40 +274,50 @@ app.get( '/system/globalVariables', function( req, res ) {
 });
 
 
-app.route('/service/content')
-  .get('/:id', function( req, res ) {
-	contentDao.get( req.params.id, function( err, content ) {
-		if ( err || !content) {
-			res.json( 400, err ? err : { error : 'ContentNotExist' } );
-		} else {
-			res.json( 200, content );
-		}
+app.route('/services/contents')
+	.post( function( req, res ) {
+		contentDao.create( { name : req.body.name, body: req.body.body }, function( err, content, next ) {
+			if ( err || !content) {
+				res.json( 400, err ? err : { error : 'ContentNotExist' } );
+			} else {
+				res.json( 200, content );
+			}
+		});
+	}).get( function( req, res ) {
+		contentDao.getList( function( err, contents ) {
+			if ( err ) {
+				res.json( 400, err );
+			} else {
+				res.json( 200, contents );
+			}
+		});
 	});
-}).post( function( req, res ) {
-	contentDao.create( req.body, function( err, content ) {
-		if ( err || !content) {
-			res.json( 400, err ? err : { error : 'ContentNotExist' } );
-		} else {
-			res.json( 200, content );
-		}
+app.route('/services/contents/:id')
+	.get(function( req, res ) {
+		contentDao.get( req.params.id, function( err, content, next ) {
+			if ( err || !content) {
+				res.json( 400, err ? err : { error : 'ContentNotExist' } );
+			} else {
+				res.json( 200, content );
+			}
+		});
+	}).put( function( req, res ) {
+		contentDao.update( req.body, function( err, content ) {
+			if ( err ) {
+				res.json( 400, err );
+			} else {
+				res.redirect( 302, req.body._redirect);
+			}
+		});
+	}).delete( function( req, res, next) {
+		contentDao.delete( req.params.id, function( err ) {
+			if ( err ) {
+				res.json( 400, err );
+			} else {
+				res.json( 200, {});
+			}
+		});
 	});
-}).put( '/:id', function( req, res ) {
-	contentDao.create( req.body, function( err, content ) {
-		if ( err || !content) {
-			res.json( 400 );
-		} else {
-			res.json( 200, content );
-		}
-	});
-}).delete( '/:id', function( req, res) {
-	contentDao.delete( req.params.id, function( err ) {
-		if ( err ) {
-			res.json( 400, err );
-		} else {
-			res.json( 200, {});
-		}
-	});
-});
 
 app.get( '/system/globalVariables/:id', function( req, res) {
 	globalVariablesDao.get( req.params.id, function( err, variable ) {

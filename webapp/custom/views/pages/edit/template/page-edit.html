@@ -1,5 +1,11 @@
 <div>
-	<form method="post">
-		<textarea class="page-editor"></textarea>
+	<form method="post" action="/services/contents/<%= content._id %>?_method=PUT">
+		<div style="margin-bottom: 20px;">
+			<label for="contentName">Name</label>
+			<input id="contentName" name="name" type="text" value="<%= content.name %>"/>
+		</div>
+		<textarea name="body" class="page-editor"><%= content.body %></textarea>
+		<input name="id" type="hidden" value="<%= content._id %>">
+		<input name="_redirect" type="hidden" value="/#/view/pages.edit.controller/<%= content._id %>">
 	</form>
 </div>

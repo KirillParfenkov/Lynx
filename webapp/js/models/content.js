@@ -4,7 +4,7 @@ define(['jquery',
 ], function($, _, Backbone) {
 	var Content = Backbone.Model.extend({
 		idAttribute: "_id",
-		urlRoot : '/service/content'
+		urlRoot : '/services/contents'
 	});
 	return Content;
 });

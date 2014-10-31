@@ -24,17 +24,6 @@ contentSchema.set('toJSON', {
 var ContentDao = function ( configFile, finish ) {
 
 	this.db = mongoose.connection;
-
-	mongoose.connect('188.226.143.131', 'lynx', 27017, {
-		user : 'lynx',
-		pass : 'erbnruqp'
-	});
-
-	this.db.on('error', console.error.bind(console, 'connection error:'));
-	this.db.once('open', function callback () {
-    	console.log("Connected to DB!");
-	});
-
 	this.Content = mongoose.model( 'Content', contentSchema );
 
 

@@ -1,11 +1,11 @@
 define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'events',
-  'async',
-  'collections/geoobjects',
-  'text!custom/templates/geoobject/list.html'
+	'jquery',
+	'underscore',
+	'backbone',
+	'events',
+	'async',
+	'collections/geoobjects',
+	'text!custom/templates/geoobject/list.html'
 ], function ($, _, Backbone, Events, Async, Geoobjects, contentTemplate) {
 	var ContentView = Backbone.View.extend({
 		el : '.content',
