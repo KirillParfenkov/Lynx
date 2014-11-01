@@ -280,7 +280,7 @@ app.route('/services/contents')
 			if ( err || !content) {
 				res.json( 400, err ? err : { error : 'ContentNotExist' } );
 			} else {
-				res.json( 200, content );
+				res.redirect( 302, req.body._redirect + '/' + content._id );
 			}
 		});
 	}).get( function( req, res ) {

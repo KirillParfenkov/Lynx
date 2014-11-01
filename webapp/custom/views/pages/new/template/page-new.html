@@ -1,7 +1,7 @@
-<div class="content-edit">
+<div class="content-new">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
-            <a class="navbar-brand"><%_ editContentHeader %></a>
+            <a class="navbar-brand"><%_ newContentHeader %></a>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#/view/pages.list.controller"><b><%_ toListLink %></b></a></li>
                 <li><a href="#/view/pages.list.controller"><b><%_ cancelLink %></b></a></li>
@@ -13,7 +13,7 @@
     <div class="panel panel-default">
         <div class="panel-heading"></div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form" method="post" action="/services/contents/<%= content._id %>?_method=PUT">
+            <form class="form-horizontal" role="form" method="post" action="/services/contents?_method=POST">
                 <div class="form-group">
                     <label for="contentName" class="col-sm-2 control-label"><%_ nameLabel %></label>
                     <div class="col-sm-8">
@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <input name="id" type="hidden" value="<%= content._id %>">
-				<input name="_redirect" type="hidden" value="/#/view/pages.edit.controller/<%= content._id %>">
+				<input name="_redirect" type="hidden" value="/#/view/pages.edit.controller">
             </form>
         </div>
     </div>
