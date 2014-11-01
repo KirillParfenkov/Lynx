@@ -1,4 +1,4 @@
-<div class="profile-list">
+<div class="content-list">
     <nav class="navbar navbar-default"  role="navigation">
         <div class="container-fluid">
             <a class="navbar-brand"><%_ contentListHeader %></a>
@@ -19,7 +19,7 @@
 				<td><%= content.name %></td>
 				<td class="action">
                     <a href='#/view/pages.edit.controller/<%=content._id%>'><%_ editLink %></a> |
-                    <a href='#' id="<%=content._id%>"><%_ deleteLink %></a>
+                    <a href='#' id="<%=content._id%>" class="deleteLink"><%_ deleteLink %></a>
                 </td>
 			</tr>
 		<% });%>

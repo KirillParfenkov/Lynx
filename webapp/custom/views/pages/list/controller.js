@@ -17,6 +17,10 @@ define([
     contents : null,
     messager : new Messager(),
 
+    events : {
+      'click .content-list .deleteLink' : 'delete'
+    },
+
     render : function ( src, callback ) {
       var view = this;
       view.contents = new Contents();
@@ -28,6 +32,23 @@ define([
           console.log( err );
         }
       });
+    },
+
+    delete : function( e ) {
+      var view = this;
+      e.preventDefault();
+      if ( confirm("Are you sure?") ) {
+        var id = $( e.target ).attr('id');
+        var content = view.contents.get( id );
+        content.destroy({
+          success : function( model, response ) {
+            view.render();
+          },
+          error : function( err ) {
+            console.log( err );
+          }
+        });
+      }
     },
 
     loadI18n : function ( i18n, done ) {
