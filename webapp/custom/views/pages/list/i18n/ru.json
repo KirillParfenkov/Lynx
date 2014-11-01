@@ -4,5 +4,6 @@
     "idHeader" : "ID",
     "nameHeader" : "Название",
     "viewLink" : "Просмотреть",
-    "editLink" : "Изменить"
+    "editLink" : "Изменить",
+    "deleteLink" : "Удалить"
 }
