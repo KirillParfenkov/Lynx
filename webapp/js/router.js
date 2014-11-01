@@ -128,7 +128,6 @@ define([
         }
 
       }, function( err, results ) {
-        console.log( err );
         router.context = results.context;
         doneInit( err );
       });
@@ -205,21 +204,37 @@ define([
       $('.header-menu-container').html('');
     },
 
+    renderView : function( view, src, i18nVar ) {
+      if ( view.loadI18n ) {
+        view.loadI18n( i18nVar, function( err ) {
+          view.render( src );
+        });
+      } else {
+        view.render( src );
+      }
+    },
+
     selectView: function( name, id ) {
       var router = this;
+
+      var i18nVar = router.context.globalVariables['system']['i18n'];
+
       viewLoader.load( name, function( view ) {
 
         var src = { context: router.context, id: id };
 
         if ( view.hasPermission ) {
           var systemPermissionSet = this.context.currentProfile.permissionSet.system;
+
           if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
-            view.render( {id: id, context: this.context} );
+            router.renderView( view, src, i18nVar );
+
           } else {
             $(view.el).html(_.template( errorTemplate ));
+
           }
         } else {
-          view.render( {id: id, context: this.context} );
+          router.renderView( view, src, i18nVar );
         }
       });
     }
