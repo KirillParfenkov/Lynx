@@ -28,21 +28,14 @@ define([
           check_callback : true,
           data : {
             url : function( node ) {
-              console.log('url');
-              console.log( node );
               return '/files';
             },
             data : function( node ) {
-              console.log('data');
-              console.log( node.load_node );
-              console.log( 'jstree.load_node: ' );
-              //console.log( jstree.load_node );
               return { 'id' : node.id };
             }
           }
         }
       }).bind('before_open.jstree', function( e, data ) {
-        console.log( 'before_open.jstree' );
         var childrens = data.node.children;
         for ( var i = 0; i < childrens.length; i++ ) {
           explorer.jstree('load_node', childrens[i] );
@@ -53,7 +46,16 @@ define([
         for ( var i = 0; i < root.children.length; i++ ) {
           explorer.jstree('load_node', root.children[i] );
         }
-      });
+      }).bind('select_node.jstree', function( e, data) {
+        var node = data.node;
+        if ( node.original.isFile ) {
+          view.showImage( node.id );
+        }
+      });;
+    },
+
+    showImage : function( id ) {
+      
     }
   });
   return FilesList;

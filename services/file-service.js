@@ -40,6 +40,7 @@ var FileService = function( configFile ) {
 						fileStat = fs.statSync( service.rootDir + path + '/' + files[i] );
 						if ( fileStat.isFile() ) {
 							file.icon = 'glyphicon glyphicon-leaf';
+							file.isFile = true;
 						}
 
 						filelist.push( file );
