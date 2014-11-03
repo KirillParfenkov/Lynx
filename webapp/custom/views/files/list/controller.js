@@ -10,18 +10,22 @@ define([
   'collections/contents',
   'text!./template/files-list.html',
   'text!./template/image.html',
+  'text!./template/upload.html',
   'text!templates/error.html',
   'less!./css/files-list.less'
-], function ( module, $, jstree, _, Backbone, underi18n, async, Messager, Contents, template, imageTemplate, errorTemplate ) {
+], function ( module, $, jstree, _, Backbone, underi18n, async, Messager, Contents, template, imageTemplate, uploadTemplate, errorTemplate ) {
   var FilesList = Backbone.View.extend({
     el : '.content',
     imageEl : '.content .image-box',
+    uploadEl : '.content .upload-box',
     contents : null,
     messager : new Messager(),
 
     render : function ( src, callback ) {
       var view = this;
       $(view.el).html(_.template( template ));
+      $(view.uploadEl).html(_.template( uploadTemplate ));
+
       var explorer = $('#file-explorer');
       explorer.jstree({
         plugins : [ 'contextmenu' ],
@@ -34,6 +38,21 @@ define([
             },
             data : function( node ) {
               return { 'id' : node.id };
+            }
+          }
+        },
+        contextmenu : {
+          items : function( node ) {
+            return {
+              createDir : {
+                label : 'Создать Коталог'
+              },
+              renameItem : {
+                label : 'Переименовать'
+              },
+              deleteItem : {
+                label : 'Удалить'
+              }
             }
           }
         }
