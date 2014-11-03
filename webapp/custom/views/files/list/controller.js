@@ -9,11 +9,13 @@ define([
   'messager',
   'collections/contents',
   'text!./template/files-list.html',
+  'text!./template/image.html',
   'text!templates/error.html',
   'less!./css/files-list.less'
-], function ( module, $, jstree, _, Backbone, underi18n, async, Messager, Contents, template, errorTemplate ) {
+], function ( module, $, jstree, _, Backbone, underi18n, async, Messager, Contents, template, imageTemplate, errorTemplate ) {
   var FilesList = Backbone.View.extend({
     el : '.content',
+    imageEl : '.content .image-box',
     contents : null,
     messager : new Messager(),
 
@@ -53,9 +55,8 @@ define([
         }
       });;
     },
-
     showImage : function( id ) {
-      
+      $(this.imageEl).html(_.template( imageTemplate, { path : id } ));
     }
   });
   return FilesList;
