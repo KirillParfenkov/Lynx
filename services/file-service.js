@@ -12,8 +12,6 @@ var FileService = function( configFile ) {
 	//nconf.get('file:sender'),
 
 	this.getFiles = function( path, done ) {
-		console.log( 'Get Files:');
-		console.log( 'path', path );
 		var service = this;
 		var path = path;
 		var filelist = [];
@@ -23,19 +21,35 @@ var FileService = function( configFile ) {
 			path = '';
 		}
 
-		fs.readdir( service.rootDir + path, function( err, files ) {
-			if ( !err ) {
-				for( var i = 0; ( i < files.length ) && ( i < 10 ); i++ ) {
-					filelist.push( {
-						text : files[i],
-						id : path + '/' + files[i],
-						parent : parentId
-					});
+		var stat = fs.statSync( service.rootDir + path); 
+
+		if ( stat.isDirectory() ) {
+			var fileStat;
+			var icon;
+			var file;
+			// TODO make asynchronous
+			fs.readdir( service.rootDir + path, function( err, files ) {
+				if ( !err ) {
+					for( var i = 0; i < files.length; i++ ) {
+
+						file = {
+							text : files[i],
+							id : path + '/' + files[i],
+							parent : parentId
+						};
+						fileStat = fs.statSync( service.rootDir + path + '/' + files[i] );
+						if ( fileStat.isFile() ) {
+							file.icon = 'glyphicon glyphicon-leaf';
+						}
+
+						filelist.push( file );
+					}
 				}
-			}
-			console.log( filelist );
-			done( err, filelist );
-		});
+				done( err, filelist );
+			});	
+		} else {
+			done( null, filelist );
+		}
 	}
 }
 
