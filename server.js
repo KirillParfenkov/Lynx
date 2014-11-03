@@ -440,10 +440,10 @@ app.delete('/api/:table/:id', function(req, res) {
 });
 
 app.get('/files', function( req, res ) {
-	console.log( 'q: ' );
 	fileService.getFiles( req.query.id, function( err, files ) {
 		if ( err ) {
-			res.json( 400, { error: 'SQL error' } );
+			console.log( err );
+			res.json( 400, err );
 		} else {
 			res.json( 200, files );
 		}

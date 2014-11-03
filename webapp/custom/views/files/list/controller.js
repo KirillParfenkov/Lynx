@@ -20,7 +20,8 @@ define([
     render : function ( src, callback ) {
       var view = this;
       $(view.el).html(_.template( template ));
-      $('#file-explorer').jstree({
+      var explorer = $('#file-explorer');
+      explorer.jstree({
         plugins : [ 'contextmenu' ],
         core : {
           animation : 0,
@@ -40,8 +41,18 @@ define([
             }
           }
         }
-      }).bind('select_node.jstree', function( node ) {
-        console.log( node );
+      }).bind('before_open.jstree', function( e, data ) {
+        console.log( 'before_open.jstree' );
+        var childrens = data.node.children;
+        for ( var i = 0; i < childrens.length; i++ ) {
+          explorer.jstree('load_node', childrens[i] );
+        }
+      }).bind('loaded.jstree', function( e, data ) {
+        explorer.jstree('load_all');
+        var root = $('#file-explorer').jstree( 'get_node', '#' );
+        for ( var i = 0; i < root.children.length; i++ ) {
+          explorer.jstree('load_node', root.children[i] );
+        }
       });
     }
   });
