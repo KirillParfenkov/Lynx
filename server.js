@@ -12,7 +12,8 @@ var express = require('express'),
 	ContentDao = require('./modules/content-dao'),
 	DataLoader = require('./modules/data-loader'),
 	ProfileDao = require('./modules/profile-dao'),
-	EmailService = require('./services/email-service');
+	EmailService = require('./services/email-service'),
+	FileService = require('./services/file-service'),
 	url = require('url'),
 	formidable = require('formidable'),
 	multiparty = require('connect-multiparty'),
@@ -25,6 +26,8 @@ var express = require('express'),
 	LocalStrategy = require('passport-local').Strategy,
 	mongoConnector = require('./modules/db/mongo-connector');
 
+
+var fileService = new FileService();
 
 /*var emailService = new EmailService('./config.json');
 
@@ -274,6 +277,7 @@ app.get( '/system/globalVariables', function( req, res ) {
 });
 
 
+
 app.route('/services/contents')
 	.post( function( req, res ) {
 		contentDao.create( { name : req.body.name, body: req.body.body }, function( err, content, next ) {
@@ -431,6 +435,17 @@ app.delete('/api/:table/:id', function(req, res) {
 			res.json( 400, {error: 'SQL error'} );
 		} else {
 			res.json( 200, result );
+		}
+	});
+});
+
+app.get('/files', function( req, res ) {
+	console.log( 'q: ' );
+	fileService.getFiles( req.query.id, function( err, files ) {
+		if ( err ) {
+			res.json( 400, { error: 'SQL error' } );
+		} else {
+			res.json( 200, files );
 		}
 	});
 });
