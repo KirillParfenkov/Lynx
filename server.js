@@ -468,6 +468,19 @@ app.post('/services/fileExplorer/loadFile', multiparty(), function( req, res ) {
 	});
 });
 
+app.delete('/services/fileExplorer', function( req, res ) {
+
+	console.log( 'path: ' + req.body.path );
+
+	fileService.delete( { path : req.body.path }, function( err, result ) {
+		if ( err ) {
+			res.send( 400 );
+		} else {
+			res.send( 200 );
+		}
+	});
+});
+
 app.post('/file/:table/:id', multiparty(), function(req, res) {
 
 	var table = req.params.table;

@@ -12,12 +12,31 @@ var FileService = function( configFile ) {
 
 	//nconf.get('file:sender'),
 
+	this.delete = function( src, done ) {
+		var service = this;
+		var stat = fs.statSync( service.rootDir + src.path);
+
+		if ( stat.isDirectory() ) {
+			fs.rmdir( service.rootDir + src.path, function( err ) {
+				done( err );
+				console.log( 'Server: ' );
+				console.log( err );
+			});
+		} else {
+		fs.unlink( service.rootDir + src.path, function( err ) {
+				done( err );
+				console.log( 'Server: ' );
+				console.log( err );
+			});
+		}
+	};
+
 	this.loadFile = function( src, done ) {
 		// TODO make asynchronous
 		var dirPath = src.dirPath;
 		var filePath = src.filePath;
 		var fileName = src.fileName;
-		var dirForUpload = "content/files" + dirPath;
+		var dirForUpload = service.rootDir + dirPath;
 
 		fs.readFile( filePath, function( err,  loadData ) {
 			if ( err ) {
@@ -36,7 +55,7 @@ var FileService = function( configFile ) {
 			}
 		});
 
-	}
+	};
 
 	this.getFiles = function( path, done ) {
 		var service = this;
@@ -78,7 +97,7 @@ var FileService = function( configFile ) {
 		} else {
 			done( null, filelist );
 		}
-	}
+	};
 }
 
 module.exports = FileService;

@@ -27,7 +27,7 @@ define([
       $(view.uploadEl).html(_.template( uploadTemplate ));
 
       var explorer = $('#file-explorer');
-      explorer.jstree({
+      var explorerVar = explorer.jstree({
         plugins : [ 'contextmenu' ],
         core : {
           animation : 0,
@@ -51,7 +51,16 @@ define([
                 label : 'Переименовать'
               },
               deleteItem : {
-                label : 'Удалить'
+                label : 'Удалить',
+                action : function( obj ) {
+                  view.delete( node, function( err, result ) {
+                    if ( !err ) {
+                      explorer.jstree('delete_node', node );  
+                    } else {
+                      console.log( err );
+                    }
+                  });
+                }
               }
             }
           }
@@ -69,14 +78,44 @@ define([
         }
       }).bind('select_node.jstree', function( e, data) {
         var node = data.node;
+        view.selectFolder( node );
         if ( node.original.isFile ) {
           view.showImage( node.id );
         }
-      });;
+      });
     },
+
     showImage : function( id ) {
       $(this.imageEl).html(_.template( imageTemplate, { path : id } ));
+    },
+
+    selectFolder : function( node ) {
+      var view = this;
+      var uploadPath = '/';
+      if ( node.original.isFile ) {
+        uploadPath = node.parent;
+      } else {
+        uploadPath = node.id;
+      }
+
+      $( view.uploadEl ).find( 'input.path-input' ).val( uploadPath );
+    },
+
+    delete : function( node, done ) {
+      $.ajax({
+        type : 'DELETE',
+        url: '/services/fileExplorer',
+        data : { path : node.id },
+        success : function( result ) {
+          done( null, result );
+        },
+        error : function( err ) {
+          done( err );
+        }
+      });
+      
     }
+
   });
   return FilesList;
 });
