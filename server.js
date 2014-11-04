@@ -450,6 +450,24 @@ app.get('/files', function( req, res ) {
 	});
 });
 
+
+app.post('/services/fileExplorer/loadFile', multiparty(), function( req, res ) {
+
+	var ref = req.query.ref;
+
+	fileService.loadFile( {
+		filePath : req.files.file.path,
+		dirPath : req.body.path,
+		fileName : req.files.file.originalFilename
+	}, function( err, result ) {
+		if ( err ) {
+			res.send( 400 );
+		} else {
+			res.send( 200 );
+		}
+	});
+});
+
 app.post('/file/:table/:id', multiparty(), function(req, res) {
 
 	var table = req.params.table;

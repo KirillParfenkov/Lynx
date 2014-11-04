@@ -1,5 +1,6 @@
 var nconf = require('nconf'),
-    fs = require('fs');
+    fs = require('fs'),
+    mkpath = require('mkpath');
 
 var FileService = function( configFile ) {
 
@@ -10,6 +11,32 @@ var FileService = function( configFile ) {
 		.file({file: configFile});*/
 
 	//nconf.get('file:sender'),
+
+	this.loadFile = function( src, done ) {
+		// TODO make asynchronous
+		var dirPath = src.dirPath;
+		var filePath = src.filePath;
+		var fileName = src.fileName;
+		var dirForUpload = "content/files" + dirPath;
+
+		fs.readFile( filePath, function( err,  loadData ) {
+			if ( err ) {
+				done( err );
+			} else {
+				mkpath( dirForUpload, function( err ) {
+					if ( !err ) {
+						fs.writeFile( dirForUpload + '/' + fileName, loadData, function( err ){
+							done( err );
+						});	
+					} else {
+						done( err );
+					}
+					
+				});
+			}
+		});
+
+	}
 
 	this.getFiles = function( path, done ) {
 		var service = this;
