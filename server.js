@@ -451,11 +451,11 @@ app.get('/files', function( req, res ) {
 });
 
 
-app.post('/services/fileExplorer/loadFile', multiparty(), function( req, res ) {
+app.post('/services/fileExplorer/uploadFile', multiparty(), function( req, res ) {
 
 	var ref = req.query.ref;
 
-	fileService.loadFile( {
+	fileService.uploadFile( {
 		filePath : req.files.file.path,
 		dirPath : req.body.path,
 		fileName : req.files.file.originalFilename

@@ -102,20 +102,20 @@ define([
     },
 
     delete : function( node, done ) {
-      $.ajax({
-        type : 'DELETE',
-        url: '/services/fileExplorer',
-        data : { path : node.id },
-        success : function( result ) {
-          done( null, result );
-        },
-        error : function( err ) {
-          done( err );
-        }
-      });
-      
+      if ( confirm( 'Вы действительно хотите удалить этот элемент?' ) ) {
+        $.ajax({
+          type : 'DELETE',
+          url: '/services/fileExplorer',
+          data : { path : node.id },
+          success : function( result ) {
+            done( null, result );
+          },
+          error : function( err ) {
+            done( err );
+          }
+        });
+      }
     }
-
   });
   return FilesList;
 });

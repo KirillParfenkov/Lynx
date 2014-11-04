@@ -1,6 +1,7 @@
 var nconf = require('nconf'),
     fs = require('fs'),
-    mkpath = require('mkpath');
+    mkpath = require('mkpath'),
+    rimraf = require('rimraf');
 
 var FileService = function( configFile ) {
 
@@ -17,22 +18,22 @@ var FileService = function( configFile ) {
 		var stat = fs.statSync( service.rootDir + src.path);
 
 		if ( stat.isDirectory() ) {
-			fs.rmdir( service.rootDir + src.path, function( err ) {
+			/*fs.rmdir( service.rootDir + src.path, function( err ) {
 				done( err );
-				console.log( 'Server: ' );
-				console.log( err );
+			});*/
+			rimraf( service.rootDir + src.path, function( err ) {
+				done( err );
 			});
 		} else {
 		fs.unlink( service.rootDir + src.path, function( err ) {
 				done( err );
-				console.log( 'Server: ' );
-				console.log( err );
 			});
 		}
 	};
 
-	this.loadFile = function( src, done ) {
+	this.uploadFile = function( src, done ) {
 		// TODO make asynchronous
+		var service = this;
 		var dirPath = src.dirPath;
 		var filePath = src.filePath;
 		var fileName = src.fileName;
