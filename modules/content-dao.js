@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 
 var contentSchema = new Schema({
 	name : String,
+	title : String,
 	body : String
 }, {
 	collection : 'Contents',

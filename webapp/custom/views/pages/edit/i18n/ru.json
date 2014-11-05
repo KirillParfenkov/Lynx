@@ -1,7 +1,8 @@
 {
-    "editContentHeader" : "Редактирование Контента",
+    "newContentHeader" : "Новый Контента",
     "toListLink" : "К Списку",
     "cancelLink" : "Отмена",
     "saveLink" : "Сохранить",
-    "nameLabel" : "Наименование"
+    "nameLabel" : "Наименование",
+    "titleLabel" : "Заголовок"
 }

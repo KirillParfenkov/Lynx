@@ -3,5 +3,6 @@
     "toListLink" : "To List",
     "cancelLink" : "Cansel",
     "saveLink" : "Save",
-    "nameLabel" : "Name"
+    "nameLabel" : "Name",
+    "nameLabel" : "Title"
 }

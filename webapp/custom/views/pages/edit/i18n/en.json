@@ -1,7 +1,8 @@
 {
-    "editContentHeader" : "Edit Content",
+    "newContentHeader" : "New Content",
     "toListLink" : "To List",
     "cancelLink" : "Cansel",
     "saveLink" : "Save",
-    "nameLabel" : "Name"
+    "nameLabel" : "Name",
+    "titleLabel" : "Title"
 }
