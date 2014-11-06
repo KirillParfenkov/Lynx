@@ -5,5 +5,6 @@
     "nameHeader" : "Label",
     "viewLink" : "View",
     "editLink" : "Edit",
-    "deleteLink" : "Delete"
+    "deleteLink" : "Delete",
+    "titleHeader" : "Title"
 }

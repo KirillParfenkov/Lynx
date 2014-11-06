@@ -10,12 +10,14 @@
 	<table class="profiles table table-hover">
 		<tr>
 			<th><%_ idHeader %></th>
+			<th><%_ titleHeader %></th>
             <th><%_ nameHeader %></th>
 			<th></th>
 		</tr>
 		<% _.each( contents,  function( content ) { %>
 			<tr>
 				<td><%= content.id %></td>
+				<td><%= content.title %></td>
 				<td><%= content.name %></td>
 				<td class="action">
                     <a href='#/view/pages.edit.controller/<%=content._id%>'><%_ editLink %></a> |
