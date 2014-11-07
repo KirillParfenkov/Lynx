@@ -206,10 +206,13 @@ define([
 
     renderView : function( view, src, i18nVar ) {
       if ( view.loadI18n ) {
+        console.log( 'view.loadI18n' );
         view.loadI18n( i18nVar, function( err ) {
+          console.log('render');
           view.render( src );
         });
       } else {
+        console.log( '!view.loadI18n' );
         view.render( src );
       }
     },
@@ -224,16 +227,20 @@ define([
         var src = { context: router.context, id: id };
 
         if ( view.hasPermission ) {
-          var systemPermissionSet = this.context.currentProfile.permissionSet.system;
+          console.log( 'view.hasPermission' );
+          var systemPermissionSet = router.context.currentProfile.permissionSet.system;
 
-          if ( this.setupViews[view].hasPermission( systemPermissionSet ) ) {
+          if ( view.hasPermission( systemPermissionSet ) ) {
+            console.log( 'view.hasPermission( systemPermissionSet )' );
             router.renderView( view, src, i18nVar );
 
           } else {
+            console.log( '!view.hasPermission( systemPermissionSet )' );
             $(view.el).html(_.template( errorTemplate ));
 
           }
         } else {
+          console.log( '!view.hasPermission' );
           router.renderView( view, src, i18nVar );
         }
       });

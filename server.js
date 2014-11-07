@@ -9,6 +9,7 @@ var express = require('express'),
 	mc = require('mc'),
 	UserDao = require('./modules/user-dao'),
 	GlobalVariablesDao = require('./modules/globalVariables-dao-tmp'),
+	VariablesDao = require('./modules/variables-dao'),
 	ContentDao = require('./modules/content-dao'),
 	DataLoader = require('./modules/data-loader'),
 	ProfileDao = require('./modules/profile-dao'),
@@ -54,6 +55,7 @@ dataLoader.initialize(function( err ) {
 
 var userDao = new UserDao('./config.json');
 var globalVariablesDao = new GlobalVariablesDao( './config.json' );
+var variablesDao = new VariablesDao( './config.json' );
 var contentDao = new ContentDao( './config.json' );
 var profileDao = new ProfileDao( './config.json', 'content/permissionSets', false );
 profileDao.initialize(function( err ) {
@@ -266,17 +268,6 @@ app.post('/system/password', function( req, res ) {
     });
 });
 
-app.get( '/system/globalVariables', function( req, res ) {
-	globalVariablesDao.getList( function( err, variables ) {
-		if ( err ) {
-			res.json( 400, err );
-		} else {
-			res.json( 200, variables );
-		}
-	});
-});
-
-
 
 app.route('/services/contents')
 	.post( function( req, res ) {
@@ -323,6 +314,66 @@ app.route('/services/contents/:id')
 		});
 	});
 
+
+// START Variables Rest API
+app.route('/services/variables')
+	.get( function( req, res ) {
+		variablesDao.getList( function( err, variables ) {
+			if ( err ) {
+				res.json( 400, err );
+			} else {
+				res.json( 200, variables );
+			}
+		});
+	}).post( function( req, res ) {
+		variablesDao.create( req.body, function( err, variable ) {
+			if ( err ) {
+				res.json( 400, err );
+			} else {
+				res.json( 200, variable );
+			}
+		});
+	});
+
+app.route('/services/variables/:id')
+	.get( function( req, res) {
+		variablesDao.get( req.params.id, function( err, variable ) {
+			if ( err || !variable ) {
+				res.json( 400, err ? err : { error : 'VariableNotExist' } );
+			} else {
+				res.json( 200, variable );
+			}
+		});
+	}).put( function( req, res) {
+		variablesDao.update( req.body, function( err, variable ) {
+			if ( err ) {
+				res.json( 400, err );
+			} else {
+				res.json( 200, variable );
+			}
+		});
+	}).delete( function( req, res ) {
+		variablesDao.delete( req.params.id, function( err ) {
+			if ( err ) {
+				res.json( 400, err );
+			} else {
+				res.json( 200, {});
+			}
+		});
+	});
+// END Variables Rest API
+
+// START Global Variables Rest API
+app.get( '/system/globalVariables', function( req, res ) {
+	globalVariablesDao.getList( function( err, variables ) {
+		if ( err ) {
+			res.json( 400, err );
+		} else {
+			res.json( 200, variables );
+		}
+	});
+});
+
 app.get( '/system/globalVariables/:id', function( req, res) {
 	globalVariablesDao.get( req.params.id, function( err, variable ) {
 		if ( err || !variable ) {
@@ -362,6 +413,7 @@ app.delete( '/system/globalVariables/:id', function( req, res ) {
 		}
 	});
 });
+// END Global Variables Rest API
 
 app.get('/logout', function(req, res) {
 
